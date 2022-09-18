@@ -3,6 +3,7 @@ import loggerSystem from "./config/logger";
 import initKafka from "./kafka/initKafka";
 import { Consumer, Producer } from "kafkajs";
 import { db } from "./database/db";
+import server from './console/server'
 
 export default class {
     consumer!: Consumer
@@ -10,6 +11,7 @@ export default class {
     logger: any;
     configs: any;
     db: any;
+    server: any;
     
     constructor(configs: any){
         const { role, id, logs } = configs;
@@ -21,6 +23,7 @@ export default class {
         try{
             const {role, id, webconsole} = this.configs;
             const {consumer, producer} = await initKafka(this);
+            this.server = server(this.configs, this, this.db);
             this.db = await db(this.configs.db, this.logger);
             this.consumer = consumer;
             this.producer = producer;

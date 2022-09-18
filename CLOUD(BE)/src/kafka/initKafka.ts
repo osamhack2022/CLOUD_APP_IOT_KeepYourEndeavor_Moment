@@ -6,16 +6,22 @@ export default async function (ky2: any) {
         clientId: '',
         brokers: ['172.24.255.31:29092']
     });
-
+    
     const admin = kafkaClient.admin()
     await admin.connect()
-    await admin.createTopics({
-        waitForLeaders: true,
-        topics: [
-          { topic: 'test-topic' },
-        ],
-    })
 
+    const topicList = await admin.listTopics();
+
+    if(topicList.indexOf('test-topic') === -1){
+        ky2.logger.info('Create Test Topic!');
+        await admin.createTopics({
+            waitForLeaders: true,
+            topics: [
+              { topic: 'test-topic' },
+            ],
+        })
+    }
+    
     const producer = kafkaClient.producer()
     const consumer = kafkaClient.consumer({ groupId: 'test-group' })
     await consumer.connect()
