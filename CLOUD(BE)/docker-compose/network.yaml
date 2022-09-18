@@ -1,0 +1,9 @@
+version: '3.0'
+
+networks:
+  mainnet:
+    name: mainnet
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.24.255.0/24
