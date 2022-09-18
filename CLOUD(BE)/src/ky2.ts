@@ -49,9 +49,6 @@ export default class {
 
     async addBlockToLedger(data: any) {
         try {
-          // Get db model instance
-          //const db = this.db;
-          // Check if block is valid
           const valid = isValidBlock(this.logger, data);
           if (!valid) {
             const invalidMsg = (data && data.id) ? `Skipping invalid block ${data.id}.` : 'Skipping an invalid block.';
@@ -87,8 +84,7 @@ export default class {
     async sendNewBlock(data: any) {
         try {
           const { organization } = this.configs;
-          // Generate block
-          // const serializedData = this.serialize(data);
+
           const newblock = generateNextBlock(organization, data);
           this.logger.info(`Building a block for the transaction ${newblock.id} sended by organization ${organization}.`);
           this.logger.debug('Built new block', newblock);
@@ -107,7 +103,7 @@ export default class {
             const serialized = this.serialize(data);
 
             return this.producer.send({
-                topic: 'quickstart-events',
+                topic: topic,
                 messages: [
                   { value: serialized },
                 ],

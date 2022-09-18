@@ -8,20 +8,21 @@ require("dotenv-safe").config({
 
 const config = {
   env: process.env.NODE_ENV,
-  port: 5001,
+  port: 5000,
   id: '123',
   role: 'peer',
   console: false,
+  organization: 'army',
   db: {
     host: process.env.DATABASE_HOST,
-    buket: process.env.DATABASE_TESTBUKET,
+    buket: process.env.DATABASE_BUKET,
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
   },
   kafka: {
     broker: process.env.KAFKA_HOST,
     topics: {
-      pending: 'blockchain.blocks.pending',
+      pending: 'test-topic',
       ledger: 'blockchain.blocks.ledger'
     },
     consumer: {

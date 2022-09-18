@@ -7,10 +7,13 @@ services:
       context: ../
       dockerfile: Dockerfile
     ports:
-      - "5001:5001"
+      - "5000:5000"
     environment:
-      HTTP_PORT: 5001
-      P2P_PORT: 6001
+      DATABASE_USERNAME=Administrator
+      DATABASE_PASSWORD=ab2953
+      DATABASE_HOST=couchbase://172.24.255.20
+      DATABASE_BUKET=testBuket
+      KAFKA_HOST=http://172.24.255.31:29092
     stdin_open: true
     tty: true
 
@@ -21,9 +24,9 @@ services:
       context: ../
       dockerfile: Dockerfile
     environment:
-      HTTP_PORT: 5002
+      HTTP_PORT: 5001
       P2P_PORT: 6002
     ports:
-      - "5002:5002"
+      - "5001:5001"
     stdin_open: true
     tty: true

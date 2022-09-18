@@ -24,7 +24,10 @@ export default async function (ky2: any) {
     
     const producer = kafkaClient.producer()
     const consumer = kafkaClient.consumer({ groupId: 'test-group' })
+    
     await consumer.connect()
+    await producer.connect()
+
     await consumer.subscribe({ topic: 'test-topic', fromBeginning: true })
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
