@@ -2,12 +2,14 @@ import { generateNextBlock, isValidBlock } from "./blockChain";
 import loggerSystem from "./config/logger";
 import initKafka from "./kafka/initKafka";
 import { Consumer, Producer } from "kafkajs";
+import { db } from "./database/db";
 
 export default class {
     consumer!: Consumer
     producer!: Producer
     logger: any;
     configs: any;
+    db: any;
     
     constructor(configs: any){
         const { role, id, logs } = configs;
@@ -18,8 +20,8 @@ export default class {
     async start() {
         try{
             const {role, id, webconsole} = this.configs;
-
             const {consumer, producer} = await initKafka(this);
+            this.db = await db(this.configs.db, this.logger);
             this.consumer = consumer;
             this.producer = producer;
 
@@ -55,7 +57,7 @@ export default class {
           }
           this.logger.debug(`Received block ${data.id}.`);
           // Store block on db
-          //await db.Ledger.AddBlock(data);
+          await this.db.addBlock(data);
           this.logger.info(`Added new block ${data.id}.`);
           this.logger.debug('Added new block', data);
           // Return the new block

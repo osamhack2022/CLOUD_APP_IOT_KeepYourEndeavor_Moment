@@ -12,7 +12,14 @@ const config = {
   id: '123',
   role: 'peer',
   console: false,
+  db: {
+    host: process.env.DATABASE_HOST,
+    buket: process.env.DATABASE_TESTBUKET,
+    username: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+  },
   kafka: {
+    broker: process.env.KAFKA_HOST,
     topics: {
       pending: 'blockchain.blocks.pending',
       ledger: 'blockchain.blocks.ledger'

@@ -4,7 +4,7 @@ export default async function (ky2: any) {
     //TODO: Config File로 대체예정
     const kafkaClient = new Kafka({
         clientId: '',
-        brokers: ['localhost:29092']
+        brokers: ['172.24.255.31:29092']
     });
 
     const admin = kafkaClient.admin()

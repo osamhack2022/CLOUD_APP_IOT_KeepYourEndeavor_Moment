@@ -11,6 +11,10 @@ services:
       ZOOKEEPER_SYNC_LIMIT: 2
     ports:
       - "22181:2181"
+    networks:
+      mainnet:
+        ipv4_address: "172.24.255.30"
+    
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -26,3 +30,6 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    networks:
+      mainnet:
+        ipv4_address: "172.24.255.31"

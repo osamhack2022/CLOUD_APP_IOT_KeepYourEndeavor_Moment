@@ -3,18 +3,28 @@ import ledger from './ledger';
 
 export let ottoman = getDefaultInstance();
 
-export const db = async () => {
+type configType = {
+    host: string,
+    buket: string,
+    username: string,
+    password: string,
+}
+
+export const db = async (config: configType, logger: any) => {
+    const {host, buket, username, password} = config;
 
     if (!ottoman) {
         ottoman = new Ottoman({collectionName: '_default'});
     }
 
     await ottoman.connect({
-        connectionString: 'couchbase://172.24.255.20', // with default port 8091
-        bucketName: 'testBuket',
-        username: 'Administrator',
-        password: 'ab2953'
+        connectionString: host, // with default port 8091
+        bucketName: buket,
+        username: username,
+        password: password
     });
+
+    logger.info("DB Connection is Success!")
 
     const BlockModel = ottoman.model('Block', {
         id: String,
