@@ -3,7 +3,7 @@ import loggerSystem from "./config/logger";
 import initKafka from "./kafka/initKafka";
 import { Consumer, Producer } from "kafkajs";
 import { db } from "./database/db";
-import server from './console/server'
+import server from '../console/server'
 
 export default class {
     consumer!: Consumer
