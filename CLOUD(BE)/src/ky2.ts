@@ -23,8 +23,8 @@ export default class {
         try{
             const {role, id, webconsole} = this.configs;
             const {consumer, producer} = await initKafka(this);
-            this.server = server(this.configs, this, this.db);
             this.db = await db(this.configs.db, this.logger);
+            this.server = server(this.configs, this, this.db);
             this.consumer = consumer;
             this.producer = producer;
 
