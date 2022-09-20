@@ -6,7 +6,7 @@ import path from 'path';
 const server = async(config: any, sdk: any, db: any) => {
     const app = express();
 
-    app.use('/', express.static(path.resolve(__dirname, '../frontend/build')));
+    app.use('/', express.static(path.join(__dirname, '../../../console/frontend/build')));
 
 
     app.use(express.urlencoded({ extended: true }));

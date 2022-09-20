@@ -19,9 +19,9 @@
   },
   "include": [
     "src/**/*"
-  , "console"  ],
+  , "console/server/**/*"  ],
   "exclude": [
-    "./console/frontend",
+    "./console/frontend/*",
     "node_modules"
   ]
  }

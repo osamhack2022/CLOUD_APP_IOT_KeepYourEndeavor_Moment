@@ -7,7 +7,11 @@ const indexJs = path.basename(__filename);
 
 router.get("/status", (req, res) => res.send("OK!"));
 router.get('/dashboard', async(req, res)=> {
-  res.sendFile(path.resolve(__dirname, '../frontend/build/index.html'));
+  try{
+    res.sendFile(path.join(__dirname, '../../../../console/frontend/build/index.html'));
+  }catch(e){
+    console.log(e);
+  }
 });
 
 console.log(fs.readdirSync(__dirname), indexJs);
