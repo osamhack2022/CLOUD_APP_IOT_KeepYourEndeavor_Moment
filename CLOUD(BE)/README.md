@@ -1,5 +1,9 @@
 
-<img align="center" src='../images/logo.png'/>
+<p align="center">
+  <a href="https://github.com/osamhack2022/CLOUD_WEB_IOT_KeepYourEndeavor_Moment" target="_blank" rel="noopener noreferrer">
+    <img src="../images/logo.png" alt="KY2 Chain Logo">
+  </a>
+</p>
 <h1 align="center">KY2 Chain</h1>
 <h4 align="center">빠르고 안전한 군 전용 프라이빗 블록체인</h4>
 <br/>
