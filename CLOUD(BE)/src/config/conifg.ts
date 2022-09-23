@@ -20,9 +20,13 @@ const config = {
     password: process.env.DATABASE_PASSWORD,
   },
   kafka: {
+    id: 'blockchain',
     broker: process.env.KAFKA_HOST,
+    group: {
+      id: 'test-group'
+    },
     topics: {
-      pending: 'test-topic',
+      pending: 'blockchain.blocks.pending',
       ledger: 'blockchain.blocks.ledger'
     },
     consumer: {

@@ -88,7 +88,7 @@ const Main = () => {
                     <div>
 
                     </div>
-                    <img src='./logo.png'/>
+                    <img src='/logo.png'/>
                     <Button secondary>
                         로그아웃
                     </Button>

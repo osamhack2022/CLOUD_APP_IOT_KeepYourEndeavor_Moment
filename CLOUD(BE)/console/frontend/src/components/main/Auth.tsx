@@ -43,7 +43,7 @@ const Auth = () => {
         <AuthBlock>
             
             <div className='container'>
-            <img src='logo.png'></img>
+            <img src='/logo.png'></img>
                 <Input placeholder='아이디를 입력해주세요' name='password' onChange={onChange} ></Input>
                 <Input placeholder='비밀번호를 입력해주세요' name='password' onChange={onChange} ></Input>
                 <Button secondary>로그인</Button>

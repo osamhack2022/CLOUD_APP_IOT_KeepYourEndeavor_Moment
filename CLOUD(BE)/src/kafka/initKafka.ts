@@ -1,10 +1,11 @@
 import { Kafka } from "kafkajs";
 
 export default async function (ky2: any) {
-    //TODO: Config File로 대체예정
+    const kafkaConfig = ky2.configs.kafka;
+
     const kafkaClient = new Kafka({
-        clientId: '',
-        brokers: ['172.24.255.31:29092']
+        clientId: kafkaConfig.id,
+        brokers: [kafkaConfig.broker]
     });
     
     const admin = kafkaClient.admin()
@@ -17,18 +18,18 @@ export default async function (ky2: any) {
         await admin.createTopics({
             waitForLeaders: true,
             topics: [
-              { topic: 'test-topic' },
+              { topic: kafkaConfig.topics.pending },
             ],
         })
     }
     
     const producer = kafkaClient.producer()
-    const consumer = kafkaClient.consumer({ groupId: 'test-group' })
+    const consumer = kafkaClient.consumer({ groupId: kafkaConfig.group.id })
     
     await consumer.connect()
     await producer.connect()
 
-    await consumer.subscribe({ topic: 'test-topic', fromBeginning: true })
+    await consumer.subscribe({ topic: kafkaConfig.topics.pending, fromBeginning: true })
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
             await ky2.onMessage(topic, message.value);
