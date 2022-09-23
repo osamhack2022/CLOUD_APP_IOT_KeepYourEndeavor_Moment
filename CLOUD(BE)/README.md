@@ -1,4 +1,5 @@
 
+<img align="center" src='../images/logo.png'/>
 <h1 align="center">KY2 Chain</h1>
 <h4 align="center">빠르고 안전한 군 전용 프라이빗 블록체인</h4>
 <br/>
