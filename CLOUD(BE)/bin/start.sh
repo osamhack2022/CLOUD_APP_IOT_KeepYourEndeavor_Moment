@@ -1,1 +1,0 @@
-echo -e "Starting dockerized environment for development.";
