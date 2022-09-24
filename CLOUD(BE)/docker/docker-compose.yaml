@@ -1,0 +1,32 @@
+version: '3.0'
+
+services:
+  peer1:
+    container_name: peer1
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_USERNAME=Administrator
+      DATABASE_PASSWORD=ab2953
+      DATABASE_HOST=couchbase://172.24.255.20
+      DATABASE_BUKET=testBuket
+      KAFKA_HOST=http://172.24.255.31:29092
+    stdin_open: true
+    tty: true
+
+
+  peer2:
+    container_name: peer2
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    environment:
+      HTTP_PORT: 5001
+      P2P_PORT: 6002
+    ports:
+      - "5001:5001"
+    stdin_open: true
+    tty: true
