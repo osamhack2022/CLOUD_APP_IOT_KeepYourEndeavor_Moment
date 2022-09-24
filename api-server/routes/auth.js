@@ -12,15 +12,14 @@ require('../db/sqlCon.js')()
 router.post('/signup', async (req, res, next) => {
 	const user = req.body;
   try {
-		const [rowUser, fieldUser] = await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?)', [user.id, user.pwd, user.class, user.name, user.authority, user.position, null, null]);
-		const [rowAff, fieldAff] = await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?)', [null, user.id, user.div, user.br, user.bn, user.co, user.etc, null, null]);
+		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?)', [user.id, user.pwd, user.class, user.name, user.authority, user.position, null, null]);
+		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?)', [null, user.id, user.div, user.br, user.bn, user.co, user.etc, null, null]);
 		res.status(200).json(
 			{
 				message : "회원가입에 성공했습니다."
 			}
 		);
 	} catch (err) {
-		console.log(err);
 		res.status(406).json(
 			{
 				error : "Not Acceptable", 
@@ -33,16 +32,18 @@ router.post('/signup', async (req, res, next) => {
 
 router.post('/signin', async (req, res, next) => {
 	const userInfo = req.body;
-	console.log(userInfo);
 	try {
 		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM user WHERE id = ?', [userInfo.id]);
-		if (userInfo.pwd === rowUser[0].pwd) {
+		const recordedUserInfo = rowUser[0];
+		if (userInfo.pwd === recordedUserInfo.pwd) {
+			
 			const token = jwt.sign({
 				id: userInfo.id,
 				auth: rowUser[0].authority
 			}, process.env.JWT_SECRET, {
 				issuer: 'api-server'
 			});
+			
 			res.status(200).json(
 				{
 					message : "로그인 성공! 토큰 발행",
@@ -59,13 +60,12 @@ router.post('/signin', async (req, res, next) => {
 		}
 		
 	} catch (err) {
-		console.error(err);
 		res.status(406).json(
-				{
-					error : "Not Acceptable",
-					message : "회원 가입되지 않은 회원입니다."
-				}
-			);
+			{
+				error : "Not Acceptable",
+				message : "회원 가입되지 않은 회원입니다."
+			}
+		);
 	}
 });
 

@@ -6,12 +6,14 @@ exports.verifyToken = (req, res, next) => {
 		return next();
 	} catch (err) {
 		if (err.name == "TokenExpiredError") {
-			return res.status(419).json({
-				message: '토큰이 만료됐습니다.'
-			});
+			return res.status(401).json({
+					error : 'Unauthorized HTTP',
+					message: '토큰이 만료됐습니다.'
+				});
 		}
 		return res.status(401).json({
-			message: '유효하지 않은 토큰입니다.'
-		});
+					error : 'Unauthorized HTTP',
+					message: '유효하지 않은 토큰입니다.'
+				});
 	}
 }
