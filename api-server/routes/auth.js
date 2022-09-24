@@ -12,8 +12,12 @@ require('../db/sqlCon.js')()
 router.post('/signup', async (req, res, next) => {
 	const user = req.body;
   try {
-		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?)', [user.id, user.pwd, user.class, user.name, user.authority, user.position, null, null]);
-		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?)', [null, user.id, user.div, user.br, user.bn, user.co, user.etc, null, null]);
+		const userInfo = [user.id, user.pwd, user.class, user.name, user.authority, user.position, null, null];
+		const affInfo = [null, user.id, user.div, user.br, user.bn, user.co, user.etc, null, null];
+		
+		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?)', userInfo);
+		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?)', affInfo);
+		
 		res.status(200).json(
 			{
 				message : "회원가입에 성공했습니다."
@@ -35,8 +39,8 @@ router.post('/signin', async (req, res, next) => {
 	try {
 		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM user WHERE id = ?', [userInfo.id]);
 		const recordedUserInfo = rowUser[0];
+		
 		if (userInfo.pwd === recordedUserInfo.pwd) {
-			
 			const token = jwt.sign({
 				id: userInfo.id,
 				auth: rowUser[0].authority
@@ -50,6 +54,7 @@ router.post('/signin', async (req, res, next) => {
 					token
 				}
 			);	
+			
 		} else {
 			res.status(406).json(
 				{
@@ -67,6 +72,7 @@ router.post('/signin', async (req, res, next) => {
 			}
 		);
 	}
+	
 });
 
 module.exports = router;

@@ -48,3 +48,10 @@ ALTER TABLE `notice` ADD FOREIGN KEY (`author`) REFERENCES `user` (`id`);
 ALTER TABLE `representative_application` ADD FOREIGN KEY (`notice_id`) REFERENCES `notice` (`id`);
 
 ALTER TABLE `representative_application` ADD FOREIGN KEY (`rep_id`) REFERENCES `user` (`id`);
+
+ALTER TABLE `affiliation` ADD CONSTRAINT FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE `notice` ADD CONSTRAINT FOREIGN KEY (`author`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE `representative_application` ADD CONSTRAINT FOREIGN KEY (`notice_id`) REFERENCES `notice`(`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `representative_application` ADD CONSTRAINT FOREIGN KEY (`rep_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE;
