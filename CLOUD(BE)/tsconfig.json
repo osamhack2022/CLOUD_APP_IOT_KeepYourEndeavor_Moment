@@ -18,10 +18,11 @@
     "rootDir": "./",
   },
   "include": [
-    "src/**/*"
-  , "console/server/**/*"  ],
+    "src/**/*",
+    "console/server/**/*"
+],
   "exclude": [
-    "./console/frontend/*",
+    "console/frontend/**/*",
     "node_modules"
   ]
  }

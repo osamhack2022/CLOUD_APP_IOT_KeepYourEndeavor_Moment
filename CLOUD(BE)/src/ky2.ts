@@ -1,9 +1,10 @@
-import { generateNextBlock, isValidBlock } from "./blockChain";
+import { generateNextBlock, getGenesisBlock, isValidBlock } from "./blockChain";
 import loggerSystem from "./config/logger";
 import initKafka from "./kafka/initKafka";
 import { Consumer, Producer } from "kafkajs";
 import { db } from "./database/db";
 import server from '../console/server'
+import { Block } from "./block";
 
 export default class {
     consumer!: Consumer
@@ -27,18 +28,28 @@ export default class {
             this.server = server(this.configs, this, this.db);
             this.consumer = consumer;
             this.producer = producer;
-
+            this.initBlockchain();
             this.logger.info(`The ${role} with id ${id} is ready.`);
         }catch(err){
             this.logger.error(err);
         }
     }
 
-    private serialize(data:string) {
-        return JSON.stringify(data);
+    async initBlockchain() {
+      const {rows} = await this.db.getBlock();
+
+     if(rows.length === 0 ){ // Blockchain이 비어있다면
+        const genesisBlock = getGenesisBlock();
+        await this.db.addBlock(genesisBlock);
+        this.logger.info("Add Genesis Block!");
+      }
     }
 
-    private deserialize(data: string) {
+    private serialize(block:Block) {
+        return JSON.stringify(block);
+    }
+
+    private deserialize(data: string):Block {
         return JSON.parse(data);
     }
 
@@ -47,21 +58,21 @@ export default class {
         return role === r;
     }
 
-    async addBlockToLedger(data: any) {
+    async addBlockToLedger(block: Block) {
         try {
-          const valid = isValidBlock(this.logger, data);
+          const valid = isValidBlock(this.db, this.logger, block);
           if (!valid) {
-            const invalidMsg = (data && data.id) ? `Skipping invalid block ${data.id}.` : 'Skipping an invalid block.';
+            const invalidMsg = (block && block.header.index) ? `Skipping invalid block ${block.header.index}.` : 'Skipping an invalid block.';
             this.logger.error(invalidMsg);
             return false;
           }
-          this.logger.debug(`Received block ${data.id}.`);
+          this.logger.debug(`Received block ${block.header.index}.`);
           // Store block on db
-          await this.db.addBlock(data);
-          this.logger.info(`Added new block ${data.id}.`);
-          this.logger.debug('Added new block', data);
+          await this.db.addBlock(block);
+          this.logger.info(`Added new block ${block.header.index}.`);
+          this.logger.debug('Added new block', block.header.index);
           // Return the new block
-          return data.id;
+          return block.header.index;
         } catch(err) {
           this.logger.error(err);
         }
@@ -69,11 +80,11 @@ export default class {
 
     async onMessage(topic:any, data: string) {
         const { topics } = this.configs.kafka;
-        const deserialized = this.deserialize(data);
+        const block = this.deserialize(data);
         switch(topic) {
           case topics.pending:
             if (this.hasRole('peer')) {
-              return await this.addBlockToLedger(deserialized);
+              return await this.addBlockToLedger(block);
             }
             return false;
           default:
@@ -85,22 +96,22 @@ export default class {
         try {
           const { organization } = this.configs;
 
-          const newblock = generateNextBlock(organization, data);
-          this.logger.info(`Building a block for the transaction ${newblock.id} sended by organization ${organization}.`);
+          const newblock = await generateNextBlock(this.db, organization, data);
+          this.logger.info(`Building a block for the transaction ${newblock.header.index} sended by organization ${organization}.`);
           this.logger.debug('Built new block', newblock);
           // Publish block
           const topic = this.configs.kafka.topics.pending;
           await this.__produce(topic, newblock);
           // Return the new block
-          return newblock.id;
+          return newblock.header.index;
         } catch(err) {
           this.logger.error(err);
         }
     }
 
-    async __produce(topic: string, data: any) {
+    async __produce(topic: string, block: Block) {
         try {
-            const serialized = this.serialize(data);
+            const serialized = this.serialize(block);
 
             return this.producer.send({
                 topic: topic,

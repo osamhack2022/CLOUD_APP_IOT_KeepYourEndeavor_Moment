@@ -56,14 +56,15 @@ const getGenesisBlock = (): Block => {
 }
 
 const getCurrentVersion = () => {
-  const packageJson: any = fs.readFileSync("../package.json");
-  const currentVersion = JSON.parse(packageJson).version;
-  return currentVersion;
+  //const packageJson: any = fs.readFileSync("./../../package.json");
+  //const currentVersion = JSON.parse(packageJson).version;
+  return '1.0.0';
 }
 
 // Generate a block
-const generateNextBlock = (db: any, organization: string, data: any):Block => {
-  const previousBlock: Block = db.getLeastBlock();
+const generateNextBlock = async(db: any, organization: string, data: any):Promise<Block> => {
+  const previousBlock: Block = await db.getLeastBlock();
+  console.log(previousBlock);
   const currentVersion = getCurrentVersion();
   const nextIndex = previousBlock.header.index + 1;
   const previousHash = calculateHashForBlock(previousBlock);
@@ -81,8 +82,8 @@ const generateNextBlock = (db: any, organization: string, data: any):Block => {
 }
 
 // Check if a block is valid
-const isValidBlock = (db: any, logger: any, block: Block) => {
-  const previousBlock: Block = db.getLeastBlock();
+const isValidBlock = async(db: any, logger: any, block: Block) => {
+  const previousBlock: Block = await db.getLeastBlock();
   if(previousBlock.header.index + 1 !== block.header.index) {
     logger.error('Invaild index');
     return false;
