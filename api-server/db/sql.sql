@@ -55,3 +55,11 @@ ALTER TABLE `notice` ADD CONSTRAINT FOREIGN KEY (`author`) REFERENCES `user`(`id
 
 ALTER TABLE `representative_application` ADD CONSTRAINT FOREIGN KEY (`notice_id`) REFERENCES `notice`(`id`) ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE `representative_application` ADD CONSTRAINT FOREIGN KEY (`rep_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+INSERT INTO notice VALUES (null, "테스트공지1", "20-14000", "테스트과목1", 20221017000000, null, null);
+INSERT INTO notice VALUES (null, "테스트공지2", "20-14000", "테스트과목2", 20221017000000, null, null);
+INSERT INTO notice VALUES (null, "테스트공지3", "20-14000", "테스트과목3", 20221017000000, null, null);
+INSERT INTO notice VALUES (null, "테스트공지4", "20-14000", "테스트과목4", 20221017000000, null, null);
+INSERT INTO notice VALUES (null, "테스트공지5", "20-14000", "테스트과목5", 20221017000000, null, null);
+INSERT INTO notice VALUES (null, "테스트공지6", "20-14000", "테스트과목6", 20221017000000, null, null);
+INSERT INTO notice VALUES (null, "테스트공지7", "20-14000", "테스트과목7", 20221017000000, null, null);
