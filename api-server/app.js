@@ -5,12 +5,19 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const nunjucks = require('nunjucks');
 const session = require('express-session');
+const bodyParser = require('body-parser');
 const app = express();
 
 
 require('dotenv').config();
 app.set('port', process.env.PORT || 3000);
 
+const cors = require('cors');
+
+app.use(cors({
+	origin : '*',
+	credential: true
+}));
 
 // view engine setup
 app.set('view engine', 'html');
@@ -33,6 +40,11 @@ app.use(session({
 	httpOnly : true
   }
 }));
+// for postman 
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
 
 
 
@@ -53,7 +65,7 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = process.env.ENV === 'development' ? err : {};
-
+  console.error(err);
   // render the error page
   res.status(err.status || 500);
   res.render('error');
