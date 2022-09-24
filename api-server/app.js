@@ -36,8 +36,10 @@ app.use(session({
 
 
 
-const indexRouter = require('./routes/index');
-app.use('/', indexRouter);
+const homeRouter = require('./routes/home.js');
+const authRouter = require('./routes/auth.js');
+app.use('/home', homeRouter);
+app.use('/auth', authRouter);
 
 
 
