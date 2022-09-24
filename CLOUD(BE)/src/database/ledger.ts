@@ -1,42 +1,31 @@
-import { ModelTypes, Ottoman } from "ottoman";
-
-export type BlockModel = {
-    id: string;
-    event_id: string;
-    organization: string;
-    generated_time: number;
-    data: string;
-}
+import { Ottoman } from "ottoman";
+import { Block } from "../block";
+import { BlockModel } from "./BlockModel";
 
 export default class {
     ottoman: Ottoman;
-    BlockModel: ModelTypes<any, any>;
 
-    constructor(ottoman: Ottoman, BlockModel: ModelTypes<any, any>){
+    constructor(ottoman: Ottoman){
         this.ottoman = ottoman;
-        this.BlockModel = BlockModel;
     }
 
     async getBlock(): Promise<any>{
-        return await this.BlockModel.find();
+        return await BlockModel.find();
+    }
+
+    async getLeastBlock(): Promise<any>{
+        return await BlockModel.findOne({}, {sort:{generated_time: 'ASC'}})
     }
     
-    async addBlock(block: BlockModel ){
-       //TODO: DB 연결 부분 수정 할것
-        
-        const myBlock = new this.BlockModel({
-            id: block.id,
-            event_id: block.event_id,
-            oragnization: block.organization,
-            generated_time: block.generated_time,
-            data: block.data,
-        })
+    async addBlock(block: Block){
+        const myBlock = new BlockModel(block);
+
         const runAsync = async () => {
             await myBlock.save();
-            console.log(`SUCCESS: user ${block.id} added!`);
-          }
+            console.log(`SUCCESS: user ${block.header.index} added!`);
+        }
           
-          this.ottoman.start()
+        this.ottoman.start()
             .then(runAsync)
             .catch((error) => console.log('An error happened: ' + JSON.stringify(error)))
     }
