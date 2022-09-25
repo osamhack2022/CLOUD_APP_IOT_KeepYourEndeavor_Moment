@@ -11,6 +11,7 @@ import {
   } from 'semantic-ui-react'
 import useBlock from '../../hooks/block/useBlock';
 import moment  from 'moment';
+import { json } from 'express';
 
 const MainBlock = styled.div`
     background-color: rgba(0, 0, 0, 0.03);
@@ -58,25 +59,20 @@ const MainBlock = styled.div`
     }
     
 `;
-type BlockType = {
-    data: string
-    event_id: string
-    generated_time: number
-    id: string
-    _type: string
-}
 const Main = () => {
     const {blocks} = useBlock();
 
-    const blockList = blocks.map((block: BlockType) => {
-        const {id, event_id, generated_time, data} = block;
-
+    const blockList = blocks.map((block: any) => {
+        const {id, header, data} = block;
+        const {event_id, generated_time, version} = header;
+        
+        
         return (
             <Table.Row key={id}>
                 <Table.Cell>{id}</Table.Cell>
-                <Table.Cell>{moment(new Date(1663501152631)).format('YYYY-MM-DD hh:mm:ss')}</Table.Cell>
+                <Table.Cell>{moment(new Date(generated_time*1000)).format('YYYY-MM-DD hh:mm:ss')}</Table.Cell>
                 <Table.Cell>{event_id}</Table.Cell>
-                <Table.Cell>{data}</Table.Cell>
+                <Table.Cell>{JSON.stringify(data)}</Table.Cell>
             </Table.Row>
         )
     });

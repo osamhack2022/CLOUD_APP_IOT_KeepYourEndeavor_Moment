@@ -6,8 +6,7 @@ export default function useBlock(){
 
     useEffect(()=>{
         getBlockList();
-        
-    });
+    }, []);
 
     const getBlockList = async() => {
         const {data} = await getBlocks();
