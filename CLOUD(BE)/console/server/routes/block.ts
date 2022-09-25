@@ -27,4 +27,17 @@ router.get('/', async(req: any, res) => {
     }
 });
 
+router.get('/least', async(req: any, res) => {
+    try{
+        const block = await req.db.getLeastBlock();
+
+        return res.json({
+            block
+        });
+    }catch(err){
+        console.log(err);
+    }
+});
+
+
 export default router;

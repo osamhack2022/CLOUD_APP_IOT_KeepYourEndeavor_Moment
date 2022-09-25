@@ -2,8 +2,8 @@ import path from "path";
 
 require("dotenv-safe").config({
   allowEmptyValues: true,
-  path: path.join(__dirname, "../../.env"),
-  sample: path.join(__dirname, "../../.env.example")
+  path: path.join(__dirname, "../../../.env"),
+  sample: path.join(__dirname, "../../../.env.example")
 });
 
 const config = {
@@ -20,9 +20,13 @@ const config = {
     password: process.env.DATABASE_PASSWORD,
   },
   kafka: {
+    id: 'blockchain',
     broker: process.env.KAFKA_HOST,
+    group: {
+      id: process.env.KAFKA_GROUP
+    },
     topics: {
-      pending: 'test-topic',
+      pending: 'blockchain.blocks.add',
       ledger: 'blockchain.blocks.ledger'
     },
     consumer: {

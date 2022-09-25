@@ -1,25 +1,23 @@
 {
-  "name": "chain",
+  "name": "ky2",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc && node dist/main.js"
+    "start": "tsc && node dist/src/main.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/body-parser": "^1.19.2",
+    "@types/cors": "^2.8.12",
     "@types/crypto-js": "^4.1.1",
     "@types/elliptic": "^6.4.14",
     "@types/express": "^4.17.13",
     "@types/merkle": "^0.6.1",
     "@types/random": "^3.0.1",
-    "@types/ws": "^8.5.3",
-    "create-react-app": "^5.0.1",
-    "crypto": "^1.0.1",
+    "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
     "dotenv-safe": "^8.2.0",
     "elliptic": "^6.5.4",

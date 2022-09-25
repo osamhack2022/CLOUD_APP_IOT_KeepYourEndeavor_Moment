@@ -1,7 +1,7 @@
-import {getDefaultInstance, Ottoman} from 'ottoman';
+import {getDefaultInstance, Ottoman, start} from 'ottoman';
 import ledger from './ledger';
 
-export let ottoman = getDefaultInstance();
+let ottoman = getDefaultInstance();
 
 type configType = {
     host: string,
@@ -23,16 +23,9 @@ export const db = async (config: configType, logger: any) => {
         username: username,
         password: password
     });
-
+    
+    //await start();
     logger.info("DB Connection is Success!")
 
-    const BlockModel = ottoman.model('Block', {
-        id: String,
-        event_id: String,
-        organization: String,
-        generated_time: Number,
-        data: String,
-    });
-
-    return new ledger(ottoman, BlockModel);
+    return new ledger(ottoman);
 }

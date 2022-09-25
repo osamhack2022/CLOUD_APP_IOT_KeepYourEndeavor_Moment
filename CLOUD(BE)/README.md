@@ -1,4 +1,9 @@
 
+<p align="center">
+  <a href="https://github.com/osamhack2022/CLOUD_WEB_IOT_KeepYourEndeavor_Moment" target="_blank" rel="noopener noreferrer">
+    <img src="../images/logo.png" alt="KY2 Chain Logo">
+  </a>
+</p>
 <h1 align="center">KY2 Chain</h1>
 <h4 align="center">빠르고 안전한 군 전용 프라이빗 블록체인</h4>
 <br/>
@@ -96,3 +101,11 @@ http://localhost:5000/block
 ```json
 true
 ```
+## Blockchain Explorer
+블록체인 데이터를 손쉽게 조회하고 상태를 확인할 수 있는 탐색기를 제공합니다. 
+탐색기는 `React`를 사용해서 개발했습니다.
+
+#### 로그인 페이지
+![](../images/bc-explorer2.png)
+#### 메인페이지
+![](../images/bc-explorer1.png)
