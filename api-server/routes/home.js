@@ -69,14 +69,23 @@ router.get('/notice/:noticeId', verifyToken, async (req, res, next) => {
 
 router.post('/notice/:noticeId', verifyToken, async (req, res, next) => {
 	try {
-		console.log(req.body);
+		const noticeId = req.params.noticeId.slice(1);
+		const applicants = JSON.stringify(JSON.parse(req.body.applicant).users);
+		const rep_applicant = JSON.parse(req.body.rep_applicant)
+		const message = req.body.message;
+		const group = [null,noticeId ,rep_applicant.id, applicants, message,null,null];
+
+		await conn.execute('INSERT INTO representative_application VALUES (?,?,?,?,?,?,?)', group);
 		
 		res.json({
-			message:"success"
+			message:"success"  
 		});
 		
 	} catch (err) {
-		
+		console.log(err);
+		res.status(500).json({
+			message:err
+		})
 	}
 });
 
