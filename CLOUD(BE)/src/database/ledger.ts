@@ -1,4 +1,4 @@
-import { Ottoman } from "ottoman";
+import { Ottoman, start, close } from "ottoman";
 import { Block } from "../block";
 import { BlockModel } from "./BlockModel";
 
@@ -10,14 +10,22 @@ export default class {
     }
 
     async getBlock(): Promise<any>{
-        return await BlockModel.find();
+        await start();
+        const data = await BlockModel.find();
+        await close();
+
+        return data; 
     }
 
     async getLeastBlock(): Promise<any>{
-        return await BlockModel.findOne({}, {sort:{generated_time: 'ASC'}})
+        await start();
+        const data = await BlockModel.findOne({}, {sort:{generated_time: 'ASC'}})
+        await close();
+        return data;
     }
     
     async addBlock(block: Block){
+
         const myBlock = new BlockModel(block);
 
         const runAsync = async () => {
@@ -28,5 +36,7 @@ export default class {
         this.ottoman.start()
             .then(runAsync)
             .catch((error) => console.log('An error happened: ' + JSON.stringify(error)))
+        
+        await close();
     }
 }

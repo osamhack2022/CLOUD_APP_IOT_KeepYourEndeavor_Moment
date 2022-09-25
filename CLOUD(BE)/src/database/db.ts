@@ -1,4 +1,4 @@
-import {getDefaultInstance, Ottoman} from 'ottoman';
+import {getDefaultInstance, Ottoman, start} from 'ottoman';
 import ledger from './ledger';
 
 let ottoman = getDefaultInstance();
@@ -23,7 +23,8 @@ export const db = async (config: configType, logger: any) => {
         username: username,
         password: password
     });
-
+    
+    //await start();
     logger.info("DB Connection is Success!")
 
     return new ledger(ottoman);
