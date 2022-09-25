@@ -23,10 +23,10 @@ const config = {
     id: 'blockchain',
     broker: process.env.KAFKA_HOST,
     group: {
-      id: 'test-group'
+      id: process.env.KAFKA_GROUP
     },
     topics: {
-      pending: 'blockchain.blocks.pending',
+      pending: 'blockchain.blocks.add',
       ledger: 'blockchain.blocks.ledger'
     },
     consumer: {

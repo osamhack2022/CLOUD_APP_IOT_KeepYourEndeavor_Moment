@@ -25,10 +25,10 @@ export default class {
             const {role, id, webconsole} = this.configs;
             const {consumer, producer} = await initKafka(this);
             this.db = await db(this.configs.db, this.logger);
-            this.server = server(this.configs, this, this.db);
+            this.server = await server(this.configs, this, this.db);
             this.consumer = consumer;
             this.producer = producer;
-            this.initBlockchain();
+            await this.initBlockchain();
             this.logger.info(`The ${role} with id ${id} is ready.`);
         }catch(err){
             this.logger.error(err);
@@ -36,12 +36,16 @@ export default class {
     }
 
     async initBlockchain() {
-      const {rows} = await this.db.getBlock();
-
-     if(rows.length === 0 ){ // Blockchain이 비어있다면
-        const genesisBlock = getGenesisBlock();
-        await this.db.addBlock(genesisBlock);
-        this.logger.info("Add Genesis Block!");
+      try{
+        const {rows} = await this.db.getBlock();
+        console.log(rows);
+      if(rows.length === 0 ){ // Blockchain이 비어있다면
+          const genesisBlock = getGenesisBlock();
+          await this.db.addBlock(genesisBlock);
+          this.logger.info("Add Genesis Block!");
+        }
+      }catch(err){
+        console.log("init error: " + err);
       }
     }
 

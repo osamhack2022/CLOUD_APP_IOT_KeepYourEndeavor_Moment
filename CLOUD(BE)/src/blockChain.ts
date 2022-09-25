@@ -3,7 +3,6 @@ import CryptoJS from 'crypto-js';
 import moment from 'moment';
 import merkle from 'merkle';
 import { Block, BlockHeader } from './block';
-import fs from 'fs';
 
 // Get UTC timestamp
 const utcTimestamp = () => moment().utc().valueOf();
@@ -20,6 +19,7 @@ const calculateHashForBlock = (block: Block) => {
     block.data,
   )
 }
+
 const calculateHash = (
   version: string,
   index: number,
@@ -37,7 +37,7 @@ const getGenesisBlock = (): Block => {
   const version = '1.0.0';
   const index = 0;
   const previousHash = '0'.repeat(64);
-  const generated_time = 1663897055 // Fri Sep 23 2022 10:37:35 GMT+0900 (대한민국 표준시)
+  const generated_time = Math.floor(1663897055 / 1000) // Fri Sep 23 2022 10:37:35 GMT+0900 (대한민국 표준시)
   const data = [{
     rank: 'G',
     user: 'genesis',
@@ -64,7 +64,6 @@ const getCurrentVersion = () => {
 // Generate a block
 const generateNextBlock = async(db: any, organization: string, data: any):Promise<Block> => {
   const previousBlock: Block = await db.getLeastBlock();
-  console.log(previousBlock);
   const currentVersion = getCurrentVersion();
   const nextIndex = previousBlock.header.index + 1;
   const previousHash = calculateHashForBlock(previousBlock);
@@ -77,8 +76,6 @@ const generateNextBlock = async(db: any, organization: string, data: any):Promis
   const newBlockHeader: BlockHeader = {version:currentVersion, index:nextIndex, previousHash, generated_time, merkleRoot, event_id, organization}
 
   return {header:newBlockHeader, data}
-  //const id = calculateHash(event_id, organization, generated_time, data);
-  //return block(id, event_id, organization, generated_time, data);
 }
 
 // Check if a block is valid
