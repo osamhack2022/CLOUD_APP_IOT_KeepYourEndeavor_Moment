@@ -6,6 +6,9 @@ require('../db/sqlCon.js')()
 .then((res) => {
 	conn = res
 });
+let redisCon = "";
+require('../db/redisCon.js')().then((res) => redisCon = res);
+
 
 
 /* GET home page. */
@@ -39,7 +42,9 @@ router.post('/signin', async (req, res, next) => {
 	try {
 		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM user WHERE id = ?', [userInfo.id]);
 		const recordedUserInfo = rowUser[0];
-		
+		//del 도 됩니다!
+		const value = await redisCon.get('key');
+		console.log(value);
 		if (userInfo.pwd === recordedUserInfo.pwd) {
 			const token = jwt.sign({
 				id: userInfo.id,
@@ -65,6 +70,7 @@ router.post('/signin', async (req, res, next) => {
 		}
 		
 	} catch (err) {
+		console.log(err);
 		res.status(406).json(
 			{
 				error : "Not Acceptable",
