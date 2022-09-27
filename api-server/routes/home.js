@@ -46,11 +46,12 @@ router.get('/notice/:noticeId', verifyToken, async (req, res, next) => {
 	try {
 		const userToken = req.decoded;
 		const [user, fieldsUser] = await conn.execute('SELECT id, class, name, authority, position FROM user WHERE id = ?', [userToken.id]);
-
-		const noticeId = parseInt(req.params.noticeId.slice(1), 10);
+		
+		const noticeId = parseInt(req.params.noticeId, 10);
+		console.log(noticeId)
 		const [notice, fields] = await conn.execute('SELECT * FROM notice WHERE id = ?', [noticeId]);
 		
-		if (notice) {
+		if (notice.length === 0) {
 			throw new Error("존재하지 않는 Notice ID");
 		}
 		
@@ -69,7 +70,7 @@ router.get('/notice/:noticeId', verifyToken, async (req, res, next) => {
 
 router.post('/notice/:noticeId', verifyToken, async (req, res, next) => {
 	try {
-		const noticeId = req.params.noticeId.slice(1);
+		const noticeId = parseInt(req.params.noticeId,10);
 		const applicants = JSON.stringify(JSON.parse(req.body.applicant).users);
 		const rep_applicant = JSON.parse(req.body.rep_applicant)
 		const message = req.body.message;
@@ -77,14 +78,16 @@ router.post('/notice/:noticeId', verifyToken, async (req, res, next) => {
 
 		await conn.execute('INSERT INTO representative_application VALUES (?,?,?,?,?,?,?)', group);
 		
-		res.json({
-			message:"success"  
+		res.status(200).json({
+			message:`${rep_applicant} 회원 정보로 대표 신청 성공`,
+			noticeId
 		});
 		
 	} catch (err) {
 		console.log(err);
 		res.status(500).json({
-			message:err
+			error: "Internal Server Error",
+			message: "회원가입 되지 않은 회원은 시험에 응시할 수 없습니다. 신청 회원 정보를 확인하세요"
 		})
 	}
 });

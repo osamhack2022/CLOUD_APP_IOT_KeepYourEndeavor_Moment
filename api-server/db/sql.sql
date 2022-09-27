@@ -1,65 +1,106 @@
+create database osam default character set utf8 collate utf8_general_ci;
+
 CREATE TABLE `user` (
   `id` varchar(255) PRIMARY KEY,
   `pwd` varchar(255) NOT NULL,
   `class` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `authority` varchar(255) DEFAULT "normal",
-  `position` varchar(255) NOT NULL DEFAULT "normal" COMMENT 'squad leader,platoon leader...',
-  `created_at` timestamp DEFAULT now() COMMENT 'create time',
-  `updated_at` timestamp DEFAULT now() COMMENT 'update time'
+  `authority` varchar(255) NOT NULL,
+  `position` varchar(255) NOT NULL,
+  `created_at` timestamp DEFAULT now(),
+  `updated_at` timestamp NULL DEFAULT NULL
 );
 
 CREATE TABLE `affiliation` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
-  `user_id` varchar(255) COMMENT 'user.id is foreign key of this id',
-  `div` varchar(255) NOT NULL COMMENT 'division',
-  `br` varchar(255) NOT NULL COMMENT 'brigade',
-  `bn` varchar(255) NOT NULL COMMENT 'battalion',
-  `co` varchar(255) NOT NULL COMMENT 'company',
-  `etc` varchar(255) COMMENT 'platoon or picket ...',
-  `created_at` timestamp DEFAULT now() COMMENT 'create time',
-  `updated_at` timestamp DEFAULT now() COMMENT 'update time'
+  `user_id` varchar(255),
+  `cmd` varchar(255) NOT NULL,
+  `cps` varchar(255),
+  `div` varchar(255),
+  `br` varchar(255),
+  `bn` varchar(255),
+  `co` varchar(255),
+  `etc` varchar(255),
+  `created_at` timestamp DEFAULT now() ,
+  `updated_at` timestamp NULL DEFAULT NULL
 );
 
 CREATE TABLE `notice` (
-  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `id` varchar(255) PRIMARY KEY,
   `title` varchar(255) NOT NULL,
-  `author` varchar(255) NOT NULL COMMENT 'userId which authority is manager came',
-  `subject` varchar(255) NOT NULL COMMENT 'the subject for this notice wants to take an examination',
-  `deadline` timestamp NOT NULL,
-  `created_at` timestamp DEFAULT now() COMMENT 'create time',
-  `updated_at` timestamp DEFAULT now() COMMENT 'update time'
+  `issue_id` varchar(255),
+  `author_id` varchar(255) NOT NULL,
+  `test_date` timestamp NULL DEFAULT NULL,
+  `apply_date` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp DEFAULT now() ,
+  `updated_at` timestamp NULL DEFAULT NULL
 );
 
-CREATE TABLE `representative_application` (
+CREATE TABLE `issue` (
+  `id` varchar(255) PRIMARY KEY,
+  `type` varchar(255) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `issuer_id` varchar(255) NOT NULL,
+  `created_at` timestamp DEFAULT now(),
+  `updated_at` timestamp NULL DEFAULT NULL
+);
+
+CREATE TABLE `application` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
-  `notice_id` int COMMENT 'notice.id is a foreign key of this id',
-  `rep_id` varchar(255) NOT NULL COMMENT 'representative_application_id',
+  `issue_id` varchar(255) NOT NULL,
+  `rep_id` varchar(255) NOT NULL,
   `members` JSON NOT NULL,
   `message` TEXT,
-  `created_at` timestamp DEFAULT now() COMMENT 'create time',
-  `updated_at` timestamp DEFAULT now() COMMENT 'update time'
+  `created_at` timestamp DEFAULT now(),
+  `updated_at` timestamp NULL DEFAULT NULL
 );
 
-ALTER TABLE `affiliation` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+ALTER TABLE `affiliation` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE 
+ON DELETE CASCADE;
 
-ALTER TABLE `notice` ADD FOREIGN KEY (`author`) REFERENCES `user` (`id`);
+ALTER TABLE `notice` ADD FOREIGN KEY (`issue_id`) REFERENCES `issue` (`id`) ON UPDATE CASCADE 
+ON DELETE CASCADE;
 
-ALTER TABLE `representative_application` ADD FOREIGN KEY (`notice_id`) REFERENCES `notice` (`id`);
+ALTER TABLE `notice` ADD FOREIGN KEY (`author_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE 
+ON DELETE CASCADE;
 
-ALTER TABLE `representative_application` ADD FOREIGN KEY (`rep_id`) REFERENCES `user` (`id`);
+ALTER TABLE `issue` ADD FOREIGN KEY (`issuer_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE 
+ON DELETE CASCADE;
 
-ALTER TABLE `affiliation` ADD CONSTRAINT FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `application` ADD FOREIGN KEY (`issue_id`) REFERENCES `issue` (`id`) ON UPDATE CASCADE 
+ON DELETE CASCADE;
 
-ALTER TABLE `notice` ADD CONSTRAINT FOREIGN KEY (`author`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `application` ADD FOREIGN KEY (`rep_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE 
+ON DELETE CASCADE;
 
-ALTER TABLE `representative_application` ADD CONSTRAINT FOREIGN KEY (`notice_id`) REFERENCES `notice`(`id`) ON UPDATE CASCADE ON DELETE CASCADE;
-ALTER TABLE `representative_application` ADD CONSTRAINT FOREIGN KEY (`rep_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+INSERT INTO user VALUES ('21-00000000', '1q2w3e4r', '상병', '0번유저', '병사', '소총수', NULL, NULL); 
+INSERT INTO user VALUES ('21-00000001', '1q2w3e4r', '상병', '1번유저', '병사', '소총수', NULL, NULL);
+INSERT INTO user VALUES ('21-00000002', '1q2w3e4r', '상병', '2번유저', '병사', '소총수', NULL, NULL);
+INSERT INTO user VALUES ('21-00000003', '1q2w3e4r', '상병', '3번유저', '병사', '소총수', NULL, NULL);
+INSERT INTO user VALUES ('21-00000004', '1q2w3e4r', '상병', '4번유저','병사', '소총수', NULL, NULL);
+INSERT INTO user VALUES ('21-00000005', '1q2w3e4r', '상병', '5번유저','병사', '소총수', NULL, NULL);
+INSERT INTO user VALUES ('21-00000006', '1q2w3e4r', '상병', '6번유저','병사', '소총수', NULL, NULL);
+INSERT INTO user VALUES ('21-00000007', '1q2w3e4r', '상병', '7번유저','병사', '소총수', NULL, NULL);
+INSERT INTO user VALUES ('21-00000008', '1q2w3e4r', '상병', '8번유저','병사', '소총수', NULL, NULL);
 
-INSERT INTO notice VALUES (null, "테스트공지1", "20-14000", "테스트과목1", 20221017000000, null, null);
-INSERT INTO notice VALUES (null, "테스트공지2", "20-14000", "테스트과목2", 20221017000000, null, null);
-INSERT INTO notice VALUES (null, "테스트공지3", "20-14000", "테스트과목3", 20221017000000, null, null);
-INSERT INTO notice VALUES (null, "테스트공지4", "20-14000", "테스트과목4", 20221017000000, null, null);
-INSERT INTO notice VALUES (null, "테스트공지5", "20-14000", "테스트과목5", 20221017000000, null, null);
-INSERT INTO notice VALUES (null, "테스트공지6", "20-14000", "테스트과목6", 20221017000000, null, null);
-INSERT INTO notice VALUES (null, "테스트공지7", "20-14000", "테스트과목7", 20221017000000, null, null);
+
+INSERT INTO user VALUES ('10-00000000', '1q2w3e4r', '중사', '0번등록자','등록자', '등록부사관', NULL, NULL);
+INSERT INTO user VALUES ('10-00000001', '1q2w3e4r', '중사', '1번등록자','등록자', '등록부사관', NULL, NULL);
+INSERT INTO user VALUES ('10-00000002', '1q2w3e4r', '중사', '2번등록자','등록자', '등록부사관', NULL, NULL);
+
+INSERT INTO user VALUES ('05-00001', '1q2w3e4r', '대위', '1번개설자', '개설자', '1번개설자', NULL, NULL);
+
+INSERT INTO affiliation VALUES (NULL, '21-00000000', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
+INSERT INTO affiliation VALUES (NULL, '21-00000001', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
+INSERT INTO affiliation VALUES (NULL, '21-00000002', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
+INSERT INTO affiliation VALUES (NULL, '21-00000003', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
+INSERT INTO affiliation VALUES (NULL, '21-00000004', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
+INSERT INTO affiliation VALUES (NULL, '21-00000005', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
+INSERT INTO affiliation VALUES (NULL, '21-00000006', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
+INSERT INTO affiliation VALUES (NULL, '21-00000007', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
+INSERT INTO affiliation VALUES (NULL, '21-00000008', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
+INSERT INTO affiliation VALUES (NULL, '10-00000000', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
+INSERT INTO affiliation VALUES (NULL, '10-00000001', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
+INSERT INTO affiliation VALUES (NULL, '10-00000002', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
+INSERT INTO affiliation VALUES (NULL, '05-00001', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
+
