@@ -30,14 +30,16 @@ router.get('/notice', verifyToken, async (req, res, next) => {
 		const [notices, fields] = await conn.execute('SELECT * FROM notice');
 		const [user, fieldsUser] = await conn.execute('SELECT id, class, name, authority, position FROM user WHERE id = ?', [userToken.id]);
 		res.status(200).json({
+			message: '공지 사항들을 응답했습니다',
 			user,
 			notices
 		});
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({
-			message: "Internal Server Error"
-		})
+			error: "Internal Server Error",
+			message : "공지사항을 가져올 수 없습니다."
+		});
 	}
 	
 });
@@ -85,10 +87,10 @@ router.post('/notice/:noticeId', verifyToken, async (req, res, next) => {
 		
 	} catch (err) {
 		console.log(err);
-		res.status(500).json({
-			error: "Internal Server Error",
+		res.status(406).json({
+			error: "Not Acceptable",
 			message: "회원가입 되지 않은 회원은 시험에 응시할 수 없습니다. 신청 회원 정보를 확인하세요"
-		})
+		});
 	}
 });
 
