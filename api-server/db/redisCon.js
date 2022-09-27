@@ -7,7 +7,7 @@ module.exports = async () => {
 	//* Redis 연결
 	// redis[s]://[[username][:password]@][host][:port][/db-number]
 	const client = createClient({
-		 url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}/0`
+		 url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}/${process.env.REDIS_DB_NUM}`
 	});
 	client.on('connect', () => {
 		 console.info('Redis connected!');

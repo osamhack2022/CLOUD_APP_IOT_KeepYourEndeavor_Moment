@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const {verifyToken} = require('../middleware/verifyToken.js');
 let conn = "";
 require('../db/sqlCon.js')()
 .then((res) => {
@@ -42,9 +43,6 @@ router.post('/signin', async (req, res, next) => {
 	try {
 		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM user WHERE id = ?', [userInfo.id]);
 		const recordedUserInfo = rowUser[0];
-		//del 도 됩니다!
-		const value = await redisCon.get('key');
-		console.log(value);
 		if (userInfo.pwd === recordedUserInfo.pwd) {
 			const token = jwt.sign({
 				id: userInfo.id,
@@ -52,10 +50,11 @@ router.post('/signin', async (req, res, next) => {
 			}, process.env.JWT_SECRET, {
 				issuer: 'api-server'
 			});
-			
+			await redisCon.set(userInfo.id, token);
+			await redisCon.expire(userInfo.id, 259200) // 로그인 유호 시간 6시간
 			res.status(200).json(
 				{
-					message : "로그인 성공! 토큰 발행",
+					message : "로그인 성공! 토큰은 DB에 저장되어 관리됩니다. 로그인 유효시간은 6시간 입니다.",
 					token
 				}
 			);	
@@ -81,4 +80,20 @@ router.post('/signin', async (req, res, next) => {
 	
 });
 
+router.post('/logout',verifyToken, async (req, res) => {
+	const token = req.decoded;
+	try {
+		await redisCon.del(token.id);
+		res.status(200).json({
+			message : "로그아웃 되었습니다."
+		});
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({
+			error: "Interval server Error",
+			message : "예기치 못한 에러가 발생했습니다."
+		})
+	}
+});
 module.exports = router;
+

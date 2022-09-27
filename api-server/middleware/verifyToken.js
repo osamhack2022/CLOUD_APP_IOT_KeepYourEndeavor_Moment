@@ -1,9 +1,17 @@
 const jwt = require('jsonwebtoken');
+let redisCon = "";
+require('../db/redisCon.js')().then((res) => redisCon = res);
 
-exports.verifyToken = (req, res, next) => {
+exports.verifyToken = async (req, res, next) => {
 	try {
 		req.decoded = jwt.verify(req.headers.authorization, process.env.JWT_SECRET);
-		return next();
+		const DBSearchResult = await redisCon.get(req.decoded.id);
+		if (DBSearchResult !== null) {
+			return next();	
+		} else {
+			throw new Error('TokenExpiredError');
+		}
+		
 	} catch (err) {
 		if (err.name == "TokenExpiredError") {
 			return res.status(401).json({
@@ -17,3 +25,4 @@ exports.verifyToken = (req, res, next) => {
 				});
 	}
 }
+
