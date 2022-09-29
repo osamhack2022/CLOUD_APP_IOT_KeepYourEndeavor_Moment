@@ -2,11 +2,9 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const {verifyToken} = require('../middleware/verifyToken.js');
+
 let conn = "";
-require('../db/sqlCon.js')()
-.then((res) => {
-	conn = res
-});
+require('../db/sqlCon.js')().then((res) => conn = res);
 let redisCon = "";
 require('../db/redisCon.js')().then((res) => redisCon = res);
 

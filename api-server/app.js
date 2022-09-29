@@ -50,8 +50,10 @@ app.use(bodyParser.json());
 
 const homeRouter = require('./routes/home.js');
 const authRouter = require('./routes/auth.js');
+const profileRouter = require('./routes/profile.js');
 app.use('/home', homeRouter);
 app.use('/auth', authRouter);
+app.use('/profile', profileRouter);
 
 
 
