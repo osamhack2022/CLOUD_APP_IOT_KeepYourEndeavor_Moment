@@ -104,3 +104,12 @@ INSERT INTO affiliation VALUES (NULL, '10-00000001', '제2작전사령부', '00�
 INSERT INTO affiliation VALUES (NULL, '10-00000002', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
 INSERT INTO affiliation VALUES (NULL, '05-00001', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
 
+UPDATE Reservation
+
+SET RoomNum = 2002
+
+WHERE Name = '홍길동';
+ALTER TABLE users
+RENAME COLUMN id TO user_id;
+
+ALTER TABLE affiliation CHANGE COLUMN `div` `division` varchar(255);
