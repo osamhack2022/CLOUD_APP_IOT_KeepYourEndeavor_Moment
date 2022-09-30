@@ -98,7 +98,7 @@ router.post('/logout',verifyToken, async (req, res) => {
 		console.log(err);
 		res.status(500).json({
 			error: "Interval server Error",
-			message : "예기치 못한 에러가 발생했습니다."
+			message : "예기치 못한 에러가 발생했습니다. "
 		});
 	}
 });
