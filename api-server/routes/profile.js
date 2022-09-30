@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const {verifyToken} = require('../middleware/verifyToken.js');
+const {verifyToken} = require('../middleware/accessController.js');
+const moment = require('moment-timezone');
+moment.tz.setDefault('Asia/Seoul');
+
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
 let redisCon = "";
@@ -27,12 +30,19 @@ router.post('/edit', verifyToken, async (req, res) => {
 			}
 		});
 		
+		
 		for await (let inform of updateUserTable) {
+			const updateAt = moment().format("YYYY-M-D H:m:s"); //format("YYYY-M-D H:m:s");
 			await conn.execute(`UPDATE user SET ${inform[0]} = '${inform[1]}' WHERE id = '${inform[2]}'`);
+			await conn.execute(`UPDATE user SET updated_at = '${updateAt}' WHERE id = '${inform[2]}'`);
 		}
 		for await (let inform of updateAffTable) {
+			const updateAt =moment().format("YYYY-M-D H:m:s");
 			await conn.execute(`UPDATE affiliation SET ${inform[0]} = '${inform[1]}' WHERE user_id = '${inform[2]}'`);
+			await conn.execute(`UPDATE affiliation SET updated_at = '${updateAt}' WHERE id = '${inform[2]}'`);
 		}
+		
+		
 		
 		res.status(200).json({
 			message: '보내주신 내용대로 업데이트에 성공했습니다!'

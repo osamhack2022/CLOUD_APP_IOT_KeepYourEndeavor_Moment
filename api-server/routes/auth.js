@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const {verifyToken} = require('../middleware/verifyToken.js');
+const {verifyToken} = require('../middleware/accessController.js');
+const moment = require('moment-timezone');
+moment.tz.setDefault('Asia/Seoul');
 
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
@@ -14,11 +16,12 @@ require('../db/redisCon.js')().then((res) => redisCon = res);
 router.post('/signup', async (req, res, next) => {
 	const user = req.body;
   try {
-		const userInfo = [user.id, user.pwd, user.class, user.name, user.authority, user.position, null, null];
-		const affInfo = [null, user.id, user.div, user.br, user.bn, user.co, user.etc, null, null];
+		const createAt = moment().format("YYYY-M-D H:m:s");
+		const userInfo = [user.id, user.pwd, user.class, user.name, user.authority, user.position, createAt, null];
+		const affInfo = [null, user.id,user.cmd, user.cps ,user.division, user.br, user.bn, user.co, user.etc, createAt, null];
 		
 		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?)', userInfo);
-		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?)', affInfo);
+		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?,?,?)', affInfo);
 		
 		res.status(200).json(
 			{
@@ -26,6 +29,7 @@ router.post('/signup', async (req, res, next) => {
 			}
 		);
 	} catch (err) {
+		console.log(err);
 		res.status(406).json(
 			{
 				error : "Not Acceptable", 
@@ -91,42 +95,6 @@ router.post('/logout',verifyToken, async (req, res) => {
 			error: "Interval server Error",
 			message : "예기치 못한 에러가 발생했습니다."
 		});
-	}
-});
-
-router.post('/update', verifyToken, async (req, res) => {
-	try {
-		const token = req.decoded;
-		const userAllowKeys = ['pwd','class','name','authority','position'];
-		const affAllowKeys = ['cmd','cps','division','br','bn','co','etc'];
-		let updateUserTable = [];
-		let updateAffTable = [];
-		const clientRequestUpdateKey = Object.keys(req.body);
-		clientRequestUpdateKey.forEach((key) => {
-			if (userAllowKeys.includes(key)) {
-				updateUserTable.push([key, req.body[key], token.id]);
-			} else if (affAllowKeys.includes(key)) {
-				updateAffTable.push([key, req.body[key], token.id]);
-			} else {
-				throw new Error('Client request key is not matched to the db column name.');
-			}
-		});
-		
-		for await (let inform of updateUserTable) {
-			await conn.execute(`UPDATE user SET ${inform[0]} = '${inform[1]}' WHERE id = '${inform[2]}'`);
-		}
-		for await (let inform of updateAffTable) {
-			await conn.execute(`UPDATE affiliation SET ${inform[0]} = '${inform[1]}' WHERE user_id = '${inform[2]}'`);
-		}
-		
-		res.status(200).json({
-			message: '보내주신 내용대로 업데이트에 성공했습니다!'
-		});
-	} catch (err) {
-		res.status(500).json({
-			error: "Internal Server Error",
-			message: err.message
-		})
 	}
 });
 module.exports = router;
