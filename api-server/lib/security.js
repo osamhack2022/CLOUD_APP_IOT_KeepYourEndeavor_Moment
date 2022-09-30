@@ -1,6 +1,7 @@
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
 const crypto = require('crypto');
+require('dotenv').config();
 
 const createSalt = () =>
     new Promise((resolve, reject) => {
@@ -30,3 +31,11 @@ exports.makePasswordHashed = (userId, plainPassword) =>
             resolve(key.toString('base64'));
         });
     });
+
+exports.makeHashedValue = (notHashedValue) =>
+    new Promise(async (resolve, reject) => {
+        crypto.pbkdf2(notHashedValue, process.env.SECRET, 1, 12, 'sha512', (err, key) => {
+            if (err) reject(err);
+            resolve(key.toString('base64').replace('/',''));
+        });
+    }); 
