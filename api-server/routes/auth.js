@@ -21,7 +21,6 @@ router.post('/signup', async (req, res, next) => {
 		const { pwd, salt } = await createHashedPassword(user.pwd);
 		const userInfo = [user.id, pwd, user.class, user.name, user.authority, user.position, createAt, null, salt];
 		const affInfo = [null, user.id,user.cmd, user.cps ,user.division, user.br, user.bn, user.co, user.etc, createAt, null];
-		
 		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?,?)', userInfo);
 		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?,?,?)', affInfo);
 		
