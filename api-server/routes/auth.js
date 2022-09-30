@@ -5,27 +5,30 @@ const {verifyToken} = require('../middleware/accessController.js');
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
 
+
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
 let redisCon = "";
 require('../db/redisCon.js')().then((res) => redisCon = res);
 
-
+const { createHashedPassword, makePasswordHashed } = require('../lib/security.js');
 
 /* GET home page. */
 router.post('/signup', async (req, res, next) => {
 	const user = req.body;
   try {
 		const createAt = moment().format("YYYY-M-D H:m:s");
-		const userInfo = [user.id, user.pwd, user.class, user.name, user.authority, user.position, createAt, null];
+		const { pwd, salt } = await createHashedPassword(user.pwd);
+		const userInfo = [user.id, pwd, user.class, user.name, user.authority, user.position, createAt, null, salt];
 		const affInfo = [null, user.id,user.cmd, user.cps ,user.division, user.br, user.bn, user.co, user.etc, createAt, null];
 		
-		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?)', userInfo);
+		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?,?)', userInfo);
 		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?,?,?)', affInfo);
 		
 		res.status(200).json(
 			{
-				message : "회원가입에 성공했습니다."
+				message : "회원가입에 성공했습니다. 회원의 비밀번호는 암호화 처리됩니다.",
+				issue : "암호화 시간이 조금 소요될 수 있으니 기다려주세요."
 			}
 		);
 	} catch (err) {
@@ -45,18 +48,20 @@ router.post('/signin', async (req, res, next) => {
 	try {
 		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM user WHERE id = ?', [userInfo.id]);
 		const recordedUserInfo = rowUser[0];
-		if (userInfo.pwd === recordedUserInfo.pwd) {
+		const password = await makePasswordHashed(userInfo.id, userInfo.pwd);
+		if (recordedUserInfo.pwd === password) {
 			const token = jwt.sign({
-				id: userInfo.id,
+				id: recordedUserInfo.id,
 				auth: rowUser[0].authority
 			}, process.env.JWT_SECRET, {
 				issuer: 'api-server'
 			});
-			await redisCon.set(userInfo.id, token);
-			await redisCon.expire(userInfo.id, 259200) // 로그인 유호 시간 6시간
+			await redisCon.set(recordedUserInfo.id, token);
+			await redisCon.expire(recordedUserInfo.id, 259200) // 로그인 유호 시간 6시간
 			res.status(200).json(
 				{
 					message : "로그인 성공! 토큰은 DB에 저장되어 관리됩니다. 로그인 유효시간은 6시간 입니다.",
+					issue : "암호화 시간이 조금 소요될 수 있으니 기다려주세요.",
 					token
 				}
 			);	

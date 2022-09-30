@@ -14,7 +14,7 @@ router.get('/', verifyToken, normalAccess, async (req, res) => {
 	
 });
 
-router.post('/regist', verifyToken, async (req, res) => {
+router.post('/regist', verifyToken, supervisorAccess, async (req, res) => {
 	
 	
 	res.send("hello");
