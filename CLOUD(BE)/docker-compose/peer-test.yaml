@@ -12,10 +12,10 @@ services:
     volumes:
       - ../:/app
     environment:
-      - DATABASE_USERNAME=Administrator
-      - DATABASE_PASSWORD=ab2953
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - DATABASE_HOST=couchbase://172.24.255.21
-      - DATABASE_BUKET=test-buket
+      - DATABASE_BUKET=${DATABASE_BUKET}
       - KAFKA_HOST=172.24.255.31:29092
       - KAFKA_GROUP=peer2
     command: npm start
@@ -31,10 +31,10 @@ services:
     volumes:
       - ../:/app
     environment:
-      - DATABASE_USERNAME=Administrator
-      - DATABASE_PASSWORD=ab2953
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - DATABASE_HOST=couchbase://172.24.255.22
-      - DATABASE_BUKET=test-buket
+      - DATABASE_BUKET=${DATABASE_BUKET}
       - KAFKA_HOST=172.24.255.31:29092
       - KAFKA_GROUP=peer3
     command: npm start
