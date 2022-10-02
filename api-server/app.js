@@ -52,10 +52,12 @@ const homeRouter = require('./routes/home.js');
 const authRouter = require('./routes/auth.js');
 const profileRouter = require('./routes/profile.js');
 const issueRouter = require('./routes/issue.js');
+const noticeRouter = require('./routes/notice.js');
 app.use('/home', homeRouter);
 app.use('/auth', authRouter);
 app.use('/profile', profileRouter);
 app.use('/issue', issueRouter);
+app.use('/notice', noticeRouter);
 
 
 
