@@ -5,8 +5,6 @@ const jwt = require('jsonwebtoken');
 const axios = require('axios');
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
-let redisCon = "";
-require('../db/redisCon.js')().then((res) => redisCon = res);
 
 router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 	const peer = 'peer1';

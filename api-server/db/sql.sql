@@ -117,5 +117,6 @@ ALTER TABLE affiliation CHANGE COLUMN `div` `division` varchar(255);
 INSERT INTO issue VALUES (NULL, '05-00001', '제2작전사령부', '00군단', '00사단', '00여단' ,'00대대','00중대','00소대',NULL,NULL);
 
 ALTER TABLE `user` ADD `salt` varchar(255);
+ALTER TABLE `user` ADD `peer` varchar(255);
 
 ALTER TABLE `notice` ADD `description` TEXT;

@@ -9,8 +9,7 @@ const { makeHashedValue } = require('../lib/security.js');
 
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
-let redisCon = "";
-require('../db/redisCon.js')().then((res) => redisCon = res);
+
 
 router.get('/', verifyToken, managerAccess, async (req, res) => {
 	try {

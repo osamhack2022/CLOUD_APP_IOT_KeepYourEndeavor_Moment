@@ -9,8 +9,6 @@ const { timeChecker } = require('../lib/func.js');
 
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
-let redisCon = "";
-require('../db/redisCon.js')().then((res) => redisCon = res);
 
 
 
