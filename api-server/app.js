@@ -7,7 +7,7 @@ const nunjucks = require('nunjucks');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const app = express();
-
+const fs = require('fs');
 
 require('dotenv').config();
 app.set('port', process.env.PORT || 3000);
@@ -46,18 +46,12 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-
-
-const homeRouter = require('./routes/home.js');
-const authRouter = require('./routes/auth.js');
-const profileRouter = require('./routes/profile.js');
-const issueRouter = require('./routes/issue.js');
-const noticeRouter = require('./routes/notice.js');
-app.use('/home', homeRouter);
-app.use('/auth', authRouter);
-app.use('/profile', profileRouter);
-app.use('/issue', issueRouter);
-app.use('/notice', noticeRouter);
+// 라우터 부착
+fs.readdirSync(path.join(__dirname, '/routes'))
+    .filter(file => file.indexOf('.') !== 0  && file.slice(-3) === ".js")
+    .forEach(routeFile => {
+			app.use(`/${routeFile.split('.')[0]}`, require(`./routes/${routeFile}`));
+		});
 
 
 
