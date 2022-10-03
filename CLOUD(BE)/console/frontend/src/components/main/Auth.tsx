@@ -2,7 +2,7 @@ import React, { useState, } from 'react';
 import { Button, Input } from 'semantic-ui-react';
 import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
-import palette from '../../lib/styles/palette'
+import useAuth from '../../hooks/user/useAuth';
 const AuthBlock = styled.div`
     height: 100vh;
     
@@ -32,21 +32,23 @@ const AuthBlock = styled.div`
             width: 100%;
         }
     }
+    .error-message{
+        color: red;
+        margin-bottom: 1rem;
+    }
 `;
 
 const Auth = () => {
-    const onChange = () => {
-
-    }
-    
+    const {onChange, handdleLogin, input, error} = useAuth();
     return (
         <AuthBlock>
             
             <div className='container'>
             <img src='/logo.png'></img>
-                <Input placeholder='아이디를 입력해주세요' name='password' onChange={onChange} ></Input>
-                <Input placeholder='비밀번호를 입력해주세요' name='password' onChange={onChange} ></Input>
-                <Button secondary>로그인</Button>
+                <Input placeholder='아이디를 입력해주세요' name='id' onChange={onChange} ></Input>
+                <Input placeholder='비밀번호를 입력해주세요' type='password' name='password' onChange={onChange} ></Input>
+                <div className='error-message'>{error}</div>
+                <Button secondary onClick={()=>handdleLogin(input)}>로그인</Button>
             </div>
         </AuthBlock>
     )
