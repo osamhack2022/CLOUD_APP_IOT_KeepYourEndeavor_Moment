@@ -9,7 +9,7 @@ const { makeHashedValue } = require('../lib/security.js');
 
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
-
+const fireDB = require('../db/firestoreCon.js');
 
 router.get('/', verifyToken, managerAccess, async (req, res) => {
 	try {
@@ -29,13 +29,18 @@ router.get('/', verifyToken, managerAccess, async (req, res) => {
 router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
 	try {
 		const issueId = req.params.issueId;
-		console.log(issueId);
+		
 		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM issue WHERE id = ?', [issueId]);
+		const issue = rowUser[0];
+		const standard = await fireDB.collection(issue.type).doc(issue.subject).get();
+		console.log();
 		res.status(200).json({
 			message : "등록된 issue를 성공적으로 전송했습니다.",
-			issue : rowUser
+			issue : rowUser,
+			standard : standard._fieldsProto
 		});
 	} catch (err) {
+		console.error(err);
 		res.status(406).json({
 			error : "Not Acceptable", 
 			message: "잘못된 이슈 정보입니다."
@@ -50,7 +55,15 @@ router.post('/regist', verifyToken, supervisorAccess, async (req, res) => {
 		const id = await makeHashedValue(createAt);
 		const issueInfo = req.body;
 		const bind = [id, issueInfo.type, issueInfo.subject, token.id, createAt, null];
+		
+		
 		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?)', bind);
+		const standard = JSON.parse(req.body.standard);
+		const userRef = await fireDB.collection(issueInfo.type).doc(issueInfo.subject).get();
+		if (!userRef._fieldsProto) {
+			await fireDB.collection(issueInfo.type).doc(issueInfo.subject).set(standard);
+		}
+		
 		res.status(200).json(
 			{
 				message : "issue 등록이 완료됐습니다.",
@@ -58,6 +71,7 @@ router.post('/regist', verifyToken, supervisorAccess, async (req, res) => {
 			}
 		);
 	} catch (err) {
+		console.error(err);
 		res.status(406).json(
 			{
 				error : "Not Acceptable", 
@@ -72,10 +86,29 @@ router.post('/:issueId/edit', verifyToken, supervisorAccess, async (req, res) =>
 		const issueId = req.params.issueId;
 		const issueAllowKeys = ['type','subject'];
 		let updateIssueTable = [];
-
+		
+		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM issue WHERE id = ?', [issueId]);
+		const issue = rowUser[0];
+		console.log(issue);
+		const updateStandard = JSON.parse(req.body.standard);
+		const userRef = await fireDB.collection(issue.type).doc(issue.subject).get();
+		if (userRef._fieldsProto) {
+			await fireDB.collection(issue.type).doc(issue.subject).update(updateStandard);
+		} else {
+			return res.status(406).json(
+							{
+								error : "Not Acceptable", 
+								message: "잘못된 기준 정보이거나 기준이 잘못 생성됐습니다."
+							}
+						);
+		}
+		
+		
 		const clientRequestUpdateKey = Object.keys(req.body);
 		clientRequestUpdateKey.forEach((key) => {
-			if (issueAllowKeys.includes(key)) {
+			if (key === "standard") {
+				console.log();
+			} else if (issueAllowKeys.includes(key)) {
 				updateIssueTable.push([key, req.body[key], issueId]);
 			} else {
 				throw new Error('Client request key is not matched to the db column name.');

@@ -8,4 +8,4 @@ admin.initializeApp({
 
 const db = firestore.getFirestore();
 
-module.exports( db );
+module.exports = db ;
