@@ -26,7 +26,7 @@ router.post('/edit', verifyToken, async (req, res) => {
 			} else if (affAllowKeys.includes(key)) {
 				updateAffTable.push([key, req.body[key], token.id]);
 			} else {
-				throw new Error('Client request key is not matched to the db column name.');
+				throw new Error(' Client request key is not matched to the db column name. ');
 			}
 		});
 		
