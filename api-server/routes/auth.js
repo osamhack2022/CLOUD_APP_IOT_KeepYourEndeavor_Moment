@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const {verifyToken} = require('../middleware/accessController.js');
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
-
+const axios = require('axios');
 
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
@@ -17,17 +17,29 @@ const { createHashedPassword, makePasswordHashed } = require('../lib/security.js
 router.post('/signup', async (req, res, next) => {
 	const user = req.body;
   try {
+		const blockInfo = {
+			"id" : user.id,
+			"organization" : user.co,
+			"authentication" : ""
+		}
+		const peer_url = await axios.post("http://api.jerrykang.com/v1/peer",blockInfo);
+		const start_peer = await axios.post("http://api.jerrykang.com/v1/peer/start",{"id" : user.id});
 		const createAt = moment().format("YYYY-M-D H:m:s");
 		const { pwd, salt } = await createHashedPassword(user.pwd);
-		const userInfo = [user.id, pwd, user.class, user.name, user.authority, user.position, createAt, null, salt, user.peer];
+		const userInfo = [user.id, pwd, user.class, user.name, user.authority, user.position, createAt, null, salt, peer_url];
 		const affInfo = [null, user.id,user.cmd, user.cps ,user.division, user.br, user.bn, user.co, user.etc, createAt, null];
 		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?,?,?)', userInfo);
 		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?,?,?)', affInfo);
 		
+		
+		
+		
+		
 		res.status(200).json(
 			{
 				message : "회원가입에 성공했습니다. 회원의 비밀번호는 암호화 처리됩니다.",
-				issue : "암호화 시간이 조금 소요될 수 있으니 기다려주세요."
+				issue : "암호화 시간이 조금 소요될 수 있으니 기다려주세요.",
+				peer : `${start_peer} 가 시작됐습니다.`
 			}
 		);
 	} catch (err) {

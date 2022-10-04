@@ -13,7 +13,7 @@ const createSalt = () =>
 
 exports.createHashedPassword = (plainPassword) =>
     new Promise(async (resolve, reject) => {
-        const salt = await createSalt(); // 소금 만들어서 대입
+        const salt = await createSalt(); // key 만들어서 대입
         crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
             if (err) reject(err);
             resolve({ pwd: key.toString('base64'), salt });
