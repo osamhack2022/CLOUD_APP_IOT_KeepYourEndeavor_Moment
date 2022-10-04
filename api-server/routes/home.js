@@ -10,12 +10,13 @@ require('../db/sqlCon.js')().then((res) => conn = res);
 
 /* GET home page. */ 
 router.get('/', verifyToken ,normalAccess, async (req, res, next) => {
-	const peer = 'peer1';
+	
+	const peer = req.decoded.peer;
   try {
 		
-		const response = await axios.get(`http://${peer}.jerrykang.com/v1/block`);
+		const response = await axios.get(`${peer}/v1/block`);
 		const usersData = []
-		response.data.blocks.rows.forEach((data) => {
+		response.data.blocks.rows.forEach((data) =>{
 			usersData.push(data.data[0]);
 		});
 		

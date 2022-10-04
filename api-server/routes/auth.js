@@ -63,7 +63,8 @@ router.post('/signin', async (req, res, next) => {
 		if (recordedUserInfo.pwd === password) {
 			const token = jwt.sign({
 				id: recordedUserInfo.id,
-				auth: rowUser[0].authority
+				auth: rowUser[0].authority,
+				peer: rowUser[0].peer
 			}, process.env.JWT_SECRET, {
 				issuer: 'api-server'
 			});

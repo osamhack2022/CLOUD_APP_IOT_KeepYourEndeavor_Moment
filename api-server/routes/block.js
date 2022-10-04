@@ -7,9 +7,10 @@ let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
 
 router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
-	const peer = 'peer1';
   try {
 		const {user, result, issue_id} = req.body;
+		const [userInfo, fieldsUser] = await conn.execute('SELECT peer FROM user WHERE id = ?', [user]);
+		const peer = userInfo[0].peer;
 		const [issue, fieldsUser] = await conn.execute('SELECT * FROM issue WHERE id = ?', [issue_id]);
 		if (issue.length === 0) {
 			return res.status(406).json(
@@ -27,7 +28,7 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 			}]
 		}
 		
-		const response = await axios.post(`http://${peer}.jerrykang.com/v1/block`, userRecord);
+		const response = await axios.post(`${peer}/v1/block`, userRecord);
 
 		res.status(200).json(
 			{
@@ -39,7 +40,7 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 		res.status(406).json(
 			{
 				error:'Not Acceptable', 
-				message : `${peer} 원장이 존재하지 않습니다.`
+				message : `${peer} 가 존재하지 않거나 구동중이지 않습니다.`
 			}
 		);
 	}
