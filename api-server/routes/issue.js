@@ -90,18 +90,29 @@ router.post('/:issueId/edit', verifyToken, supervisorAccess, async (req, res) =>
 		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM issue WHERE id = ?', [issueId]);
 		const issue = rowUser[0];
 		console.log(issue);
-		const updateStandard = JSON.parse(req.body.standard);
-		const userRef = await fireDB.collection(issue.type).doc(issue.subject).get();
-		if (userRef._fieldsProto) {
-			await fireDB.collection(issue.type).doc(issue.subject).update(updateStandard);
+		
+		if (req.body.standard) {
+			const updateStandard = JSON.parse(req.body.standard);
+			const userRef = await fireDB.collection(issue.type).doc(issue.subject).get();
+			if (userRef._fieldsProto) {
+				await fireDB.collection(issue.type).doc(issue.subject).update(updateStandard);
+			} else {
+				return res.status(406).json(
+								{
+									error : "Not Acceptable", 
+									message: "잘못된 기준 정보이거나 기준이 잘못 생성됐습니다."
+								}
+							);
+			}
 		} else {
 			return res.status(406).json(
-							{
-								error : "Not Acceptable", 
-								message: "잘못된 기준 정보이거나 기준이 잘못 생성됐습니다."
-							}
-						);
+								{
+									error : "Not Acceptable", 
+									message: "원래의 기준값이라도 넣어주셔야 합니다."
+								}
+							);
 		}
+		
 		
 		
 		const clientRequestUpdateKey = Object.keys(req.body);
