@@ -225,8 +225,8 @@ $ npm start
 
 #### 로그인 페이지
 
-![](../images/bc-explorer2.png)
+![](../images/bc-explorer1.png)
 
 #### 메인페이지
 
-![](../images/bc-explorer1.png)
+![](../images/bc-explorer2.png)
