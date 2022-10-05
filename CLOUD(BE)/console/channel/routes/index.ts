@@ -11,7 +11,8 @@ const indexJs = path.basename(__filename);
 router.get("/status", (req, res) => res.send("OK good"));
 
 router.post('/peer', async(req: any, res) => {
-  const {id, organization} = req.body;
+  const length = fs.readdirSync('./docker-compose/peers').length;
+  const {id, organization, password} = req.body;
   try {
     const jsonObject = {
       version: "3.5",
@@ -19,7 +20,7 @@ router.post('/peer', async(req: any, res) => {
         [id]: {
           image: 'node:14',
           container_name: id,
-          volumes: ['../:/app'],
+          volumes: ['../../:/app'],
           environment: [
             'DATABASE_USERNAME=${DATABASE_USERNAME}',
             'DATABASE_PASSWORD=${DATABASE_PASSWORD}',
@@ -28,7 +29,9 @@ router.post('/peer', async(req: any, res) => {
             'KAFKA_HOST=172.24.255.31:29092',
             `KAFKA_GROUP=${id}`,
             'ROLE=peer',
-            `ORGANIZATION=${organization}`
+            `ORGANIZATION=${organization}`,
+            `PEERID=${id}`,
+            `PASSWORD=${password}`
           ],
           command: 'npm start',
           working_dir: '/app',
@@ -43,21 +46,20 @@ router.post('/peer', async(req: any, res) => {
 
   const doc:any = new YAML.Document();
   doc.contents = jsonObject;
-  await fs.writeFile(`docker-compose/${id}.yaml`, doc.toString(), function (err) {
+  await fs.writeFile(`docker-compose/peers/${id}.yaml`, doc.toString(), function (err) {
     if (err) throw err;
     console.log('It\'s saved!');
   });
   } catch(err) {
       console.log(err);
   }
-  res.send("ok");
+  res.send("ok"); 
 });
 
-router.post('/up', async(req: any, res) => {
-  const {id} = req.body;
-
+router.post('/peer/start', async(req: any, res) => {
   try {
-    await exec(`cd docker-compose && docker-compose --env-file ../.env -f ${id}.yaml -f network.yaml up`, (err: any, stdout: any, stderr: any) => {
+    const {id} = req.body;
+    await exec(`cd docker-compose && docker-compose --env-file ../.env -f ./peers/${id}.yaml -f network.yaml up`, (err: any, stdout: any, stderr: any) => {
       console.log(err);
       console.log(stdout);
       console.log(stderr);
@@ -68,9 +70,11 @@ router.post('/up', async(req: any, res) => {
   res.send("ok");
 });
 
-router.post('/down', async(req: any, res) => {
+router.post('/peer/down', async(req: any, res) => {
+  
   try {
-    await exec('cd docker-compose && docker-compose -f peer-test.yaml down', (err: any, stdout: any, stderr: any) => {
+    const {id} = req.body;
+    await exec(`cd docker-compose && docker-compose -f ${id}.yaml down`, (err: any, stdout: any, stderr: any) => {
       console.log(err);
       console.log(stdout);
       console.log(stderr);

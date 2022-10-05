@@ -24,7 +24,7 @@ export const db = async (config: configType, logger: any) => {
         password: password
     });
     
-    //await start();
+    await start();
     logger.info("DB Connection is Success!")
 
     return new ledger(ottoman);

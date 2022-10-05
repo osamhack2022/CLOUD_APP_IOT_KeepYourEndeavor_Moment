@@ -16,6 +16,7 @@ services:
       - KAFKA_GROUP=peer2
       - ROLE=peer
       - ORGANIZATION=amry
+      - PEERID=peer2
       - PASSWORD=ab2953
     command: npm start
     working_dir: /app
@@ -38,6 +39,7 @@ services:
       - KAFKA_GROUP=peer3
       - ROLE=peer
       - ORGANIZATION=amry
+      - PEERID=peer3
       - PASSWORD=ab2953
     command: npm start
     working_dir: /app
