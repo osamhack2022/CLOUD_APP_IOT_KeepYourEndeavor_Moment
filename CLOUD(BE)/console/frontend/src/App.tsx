@@ -9,6 +9,7 @@ const App: React.FC = () => {
       <Switch>
         <Route exact component={MainPage} path='/'></Route>
         <Route exact component={AuthPage} path='/login'></Route>
+
       </Switch>
     </div>
   );

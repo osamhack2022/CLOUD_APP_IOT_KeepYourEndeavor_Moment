@@ -10,17 +10,14 @@ export default class {
     }
 
     async getBlock(): Promise<any>{
-        await start();
         const data = await BlockModel.find();
-        await close();
 
         return data; 
     }
 
     async getLeastBlock(): Promise<any>{
-        await start();
         const data = await BlockModel.findOne({}, {sort:{generated_time: 'ASC'}})
-        await close();
+
         return data;
     }
     
@@ -37,6 +34,5 @@ export default class {
             .then(runAsync)
             .catch((error) => console.log('An error happened: ' + JSON.stringify(error)))
         
-        await close();
     }
 }

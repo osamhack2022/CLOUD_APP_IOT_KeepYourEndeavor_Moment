@@ -4,6 +4,7 @@ import initKafka from "./kafka/initKafka";
 import { Consumer, Producer } from "kafkajs";
 import { db } from "./database/db";
 import server from '../console/server'
+import channel from '../console/channel'
 import { Block } from "./block";
 
 export default class {
@@ -23,12 +24,17 @@ export default class {
     async start() {
         try{
             const {role, id, webconsole} = this.configs;
-            const {consumer, producer} = await initKafka(this);
-            this.db = await db(this.configs.db, this.logger);
-            this.server = await server(this.configs, this, this.db);
-            this.consumer = consumer;
-            this.producer = producer;
-            await this.initBlockchain();
+            if(role === 'peer'){
+              const {consumer, producer} = await initKafka(this);
+              this.db = await db(this.configs.db, this.logger);
+              this.server = await server(this.configs, this, this.db);
+              this.consumer = consumer;
+              this.producer = producer;
+              await this.initBlockchain();
+            }
+            else if(role === 'channel'){
+              this.server = await channel(this.configs);
+            }
             this.logger.info(`The ${role} with id ${id} is ready.`);
         }catch(err){
             this.logger.error(err);

@@ -9,10 +9,10 @@ require("dotenv-safe").config({
 const config = {
   env: process.env.NODE_ENV,
   port: 5000,
-  id: '123',
-  role: 'peer',
+  id: process.env.PEERID,
+  role: process.env.ROLE,
   console: false,
-  organization: 'army',
+  organization: process.env.ORGANIZATION,
   db: {
     host: process.env.DATABASE_HOST,
     buket: process.env.DATABASE_BUKET,

@@ -10,7 +10,7 @@ const server = async(config: any, sdk: any, db: any) => {
     app.use('/', express.static(path.join(__dirname, '../../../console/frontend/build')));
 
     let corsOptions = {
-        origin: 'http://game.jerrykang.com',
+        origin: ['http://game.jerrykang.com'],
         credentials: true
     }
     
