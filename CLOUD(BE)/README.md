@@ -111,8 +111,8 @@ curl -i -H 'Accept: application/json' http://localhost:7000/v1/block?user=USERID
         "_type": "Block",
         "data": {
 			"result": "S",
-			"user": "eunsol", // userUUID
-			"issue_id": "체력측정" // testUUID
+			"user": "eunsol", // 사용자
+			"issue_id": "체력측정" // 측정과목
 		},
         "header": {
           "version": "1.0.0",
@@ -127,13 +127,11 @@ curl -i -H 'Accept: application/json' http://localhost:7000/v1/block?user=USERID
       },
       {
         "_type": "Block",
-        "data": [
-          {
-            "rank": "G",
-            "user": "genesis",
-            "test": "genesis"
-          }
-        ],
+        "data" {
+			"result": "S",
+			"user": "eunsol", // 사용자
+			"issue_id": "체력측정" // 측정과목
+		}
         "header": {
           "version": "1.0.0",
           "index": 0,
@@ -152,11 +150,11 @@ curl -i -H 'Accept: application/json' http://localhost:7000/v1/block?user=USERID
 `POST` `/v1/block/`
 ```json
 {
-	"data": [{
-		"rank": "S",
-		"user": "eunsol", // userUUID
-		"test": "체력측정" // testUUID
-	}]
+	"data": {
+		"result": "S",
+		"user": "eunsol", // 사용자
+		"issue_id": "체력측정" // 측정과목
+	}
 }
 ```
 **Response**
@@ -173,9 +171,9 @@ curl -i -H 'Accept: application/json' http://localhost:7000/v1/block?user=USERID
   },
   "data": [
     {
-      "rank": "S",
+      "result": "S",
       "user": "eunsol",
-      "test": "체력측정"
+      "issue_id": "체력측정"
     }
   ],
   "id": "1d7a93ba-e495-44e7-9f96-ebb1d101531a",
