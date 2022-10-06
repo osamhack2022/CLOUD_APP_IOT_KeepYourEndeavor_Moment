@@ -23,13 +23,17 @@ exports.createHashedPassword = (plainPassword) =>
 exports.makePasswordHashed = (userId, plainPassword) =>
     new Promise(async (resolve, reject) => {
         // userId인자로 해당 유저 salt를 가져오는 부분
-        const [rowUser, fieldUser] = await conn.execute('SELECT salt FROM user WHERE id = ?', [userId]);
-				const salt = rowUser[0].salt;
-        // 위에서 가져온 salt와 plainPassword를 다시 해시 암호화 시킴. (비교하기 위해)
-        crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
-            if (err) reject(err);
-            resolve(key.toString('base64'));
-        });
+        try {
+					const [rowUser, fieldUser] = await conn.execute('SELECT salt FROM user WHERE id = ?', [userId]);
+					const salt = rowUser[0].salt;
+					// 위에서 가져온 salt와 plainPassword를 다시 해시 암호화 시킴. (비교하기 위해)
+					crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
+							if (err) reject(err);
+							resolve(key.toString('base64'));
+					});
+				} catch (err) {
+					reject(err);
+				}
     });
 
 exports.makeHashedValue = (notHashedValue) =>

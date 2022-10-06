@@ -33,6 +33,7 @@ router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
 		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM issue WHERE id = ?', [issueId]);
 		const issue = rowUser[0];
 		const standard = await fireDB.collection(issue.type).doc(issue.subject).get();
+		
 		console.log();
 		res.status(200).json({
 			message : "등록된 issue를 성공적으로 전송했습니다.",
@@ -55,15 +56,17 @@ router.post('/regist', verifyToken, supervisorAccess, async (req, res) => {
 		const id = await makeHashedValue(createAt);
 		const issueInfo = req.body;
 		const bind = [id, issueInfo.type, issueInfo.subject, token.id, createAt, null];
+		if (issueInfo.type === undefined || issueInfo.subject === undefined) {
+			throw new Error();
+		}
 		
 		
-		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?)', bind);
 		const standard = JSON.parse(req.body.standard);
 		const userRef = await fireDB.collection(issueInfo.type).doc(issueInfo.subject).get();
 		if (!userRef._fieldsProto) {
 			await fireDB.collection(issueInfo.type).doc(issueInfo.subject).set(standard);
 		}
-		
+		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?)', bind);
 		res.status(200).json(
 			{
 				message : "issue 등록이 완료됐습니다.",
@@ -104,16 +107,7 @@ router.post('/:issueId/edit', verifyToken, supervisorAccess, async (req, res) =>
 								}
 							);
 			}
-		} else {
-			return res.status(406).json(
-								{
-									error : "Not Acceptable", 
-									message: "원래의 기준값이라도 넣어주셔야 합니다."
-								}
-							);
 		}
-		
-		
 		
 		const clientRequestUpdateKey = Object.keys(req.body);
 		clientRequestUpdateKey.forEach((key) => {
