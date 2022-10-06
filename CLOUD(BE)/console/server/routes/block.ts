@@ -1,4 +1,5 @@
 import { Router } from "express";
+import qs from "qs";
 
 const router: Router = Router();
 
@@ -16,8 +17,11 @@ router.post('/', async(req: any, res) => {
 });
 
 router.get('/', async(req: any, res) => {
+    const data = qs.parse(req.query);
+    const offset =  req.header('offset');
+    const limit = req.header('limit');
     try{
-        const blocks = await req.db.getBlock();
+        const blocks = await req.db.getBlock(data.user, offset, limit);
 
         return res.json({
             blocks: blocks
