@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import CryptoJS from 'crypto-js';
 import moment from 'moment';
 import merkle from 'merkle';
-import { Block, BlockHeader } from './block';
+import { Block, BlockData, BlockHeader } from './block';
 
 // Get UTC timestamp
 const utcTimestamp = () => moment().utc().valueOf();
@@ -28,7 +28,7 @@ const calculateHash = (
   event_id: string, 
   organization: string, 
   generated_time: number, 
-  data: string,
+  data: BlockData,
 ) => {
   return CryptoJS.SHA256(version+ index+ previousHash+ merkleRoot+ event_id+ organization+ generated_time+ data).toString().toUpperCase();
 }
@@ -38,14 +38,14 @@ const getGenesisBlock = (): Block => {
   const index = 0;
   const previousHash = '0'.repeat(64);
   const generated_time = Math.floor(1663897055 / 1000) // Fri Sep 23 2022 10:37:35 GMT+0900 (대한민국 표준시)
-  const data = [{
-    rank: 'G',
+  const data = {
+    result: 'G',
     user: 'genesis',
-    test: 'genesis'
-  }];
+    issue_id: 'genesis'
+  };
   const event_id = '0';
   
-  const merkleTree = merkle("sha256").sync(data);
+  const merkleTree = merkle("sha256").sync([data]);
   const merkleRoot = merkleTree.root() || '0'.repeat(64);
 
   const organization = 'ky2'
@@ -56,7 +56,7 @@ const getGenesisBlock = (): Block => {
 }
 
 const getCurrentVersion = () => {
-  //const packageJson: any = fs.readFileSync("./../../package.json");
+  //const packageJson: any = fs.readFileSync("../../package.json");
   //const currentVersion = JSON.parse(packageJson).version;
   return '1.0.0';
 }
@@ -91,8 +91,8 @@ const isValidBlock = async(db: any, logger: any, block: Block) => {
   }
   else{
     if(
-      (block.data.length !== 0 && (merkle("sha256").sync(block.data).root() !== block.header.merkleRoot))
-      || (block.data.length === 0 && ('0'.repeat(64) !== block.header.merkleRoot))
+      (merkle("sha256").sync([block.data]).root() !== block.header.merkleRoot)
+      || ('0'.repeat(64) !== block.header.merkleRoot)
     ) {
       logger.error('Invaild merkleRoot');
       return false;
