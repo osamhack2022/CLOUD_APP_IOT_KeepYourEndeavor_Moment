@@ -25,10 +25,11 @@ router.get('/',verifyToken,normalAccess, async (req, res, next) => {
 		console.error(err);
 		return res.status(500).json({
 			error: "Interval server Error",
-			message : "예기치 못한 에러가 발생했습니다. "
+			message : "예기치 못한 에러가 발생했습니다."
 		});
 	}
 });
+
 
 router.get('/:noticeId/',verifyToken,normalAccess, async (req, res, next) => {
 	try {
@@ -61,9 +62,11 @@ router.post('/:noticeId/regist',verifyToken,normalAccess, async (req, res, next)
 				message: "잘못된 공지 정보입니다."
 			});
 		}
+		
 		const members = JSON.parse(req.body.members).members;
 		const message = req.body.message;
 		const createAt = moment().format("YYYY-M-D H:m:s");
+		
 		const bind = [null, issueId, token.id, members, message, createAt, null]
 		await conn.execute('INSERT INTO application VALUES (?,?,?,?,?,?,?)', bind);
 		
@@ -72,7 +75,7 @@ router.post('/:noticeId/regist',verifyToken,normalAccess, async (req, res, next)
 		});
 	
 	} catch (err) {
-		console.error(err);
+		
 		return res.status(500).json({
 			error: "Interval server Error",
 			message : "예기치 못한 에러가 발생했습니다. "
@@ -85,15 +88,25 @@ router.post('/:noticeId/edit',verifyToken,normalAccess, async (req, res, next) =
 		const rep_id = req.decoded.id
 		const noticeId = req.params.noticeId;
 		let issueId = await conn.execute('SELECT issue_id FROM notice WHERE id = ?', [noticeId]);
-		issueId = issueId[0][0].issue_id;
-		const members = JSON.parse(req.body.members).members
-		if (!members.includes(rep_id)) {
+		
+		if (issueId[0].length === 0) {
 			return res.status(406).json({
 				error : "Not Acceptable", 
-				message: "신청자 명단에 대표신청자는 반드시 포함돼야 합니다."
+				message: "잘못된 공지 정보입니다."
 			});
 		}
 		
+		issueId = issueId[0][0].issue_id;
+		const members = JSON.parse(req.body.members).members
+		
+		const [repResult, fields] = await conn.execute('SELECT * FROM application WHERE rep_id = ?',[rep_id]);
+	
+		if (repResult.length === 0) {
+			return res.status(406).json({
+				error : "Not Acceptable", 
+				message: "대표 신청자 아이디로 로그인 해주십시오."
+			});
+		}
 		const applicationAllowKeys = ['members','message'];
 		let updateApplicationTable = [];
 
@@ -117,9 +130,11 @@ router.post('/:noticeId/edit',verifyToken,normalAccess, async (req, res, next) =
 			message: '보내주신 내용대로 업데이트에 성공했습니다!'
 		});
 	} catch (err) {
+		console.log(err);
 		res.status(500).json({
+			
 			error: "Internal Server Error",
-			message: err.message
+			message: "예기치 못한 에러가 발생했습니다. "
 		})
 	}
 });

@@ -5,11 +5,12 @@ const jwt = require('jsonwebtoken');
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
 const { makeHashedValue } = require('../lib/security.js');
-const { timeChecker } = require('../lib/func.js'); 
+const { timeChecker } = require('../lib/func.js');
 
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
-
+let redisCon = "";
+require('../db/redisCon.js')().then((res) => redisCon = res);
 
 
 router.get('/', verifyToken, normalAccess, async(req, res) => {
@@ -31,16 +32,40 @@ router.post('/regist', verifyToken ,managerAccess, async (req, res, next) => {
 	try {
 		const token = req.decoded;
 		let {title, issue_id, test_date, apply_date, description} = req.body;
-		timeChecker(test_date, apply_date, res);
+		const testDate = moment(test_date).valueOf();
+		const applyDate = moment(apply_date).valueOf();
+		test_date = moment(test_date).format("YYYY-M-D H:m:s");
+		apply_date = moment(apply_date).format("YYYY-M-D H:m:s");
+		console.log(test_date, apply_date);
+		timeChecker(testDate, applyDate, res);
+		/*
+		if (!moment(test_date, "YYYY-M-D H:m:s").isValid() || !moment(apply_date, "YYYY-M-D H:m:s").isValid()) {
+			return res.status(406).json({
+				error : "Not Acceptable", 
+				message: "잘못된 날짜 정보입니다. 형식을 지켜주세요. `YYYY-M-D H:m:s`"
+			});
+		} else if (moment().valueOf() > Math.min(testDate, applyDate)) {
+			return res.status(406).json({
+				error : "Not Acceptable", 
+				message: "현재보다 이전 값을 공지 연관 신청일로 사용할 수 없습니다."
+			});
+		} else if ((testDate - applyDate) < 259200000) {
+			return res.status(406).json({
+				error : "Not Acceptable", 
+				message: "시험 날은 신청 날보다 최소 3일 후에 실시되어야 합니다."
+			});
+		}
+		*/
 		
+		// 테스트 해보고 위 주석 지울것
 		const id = await makeHashedValue(title); 
 		const bind = [id, title, issue_id, token.id, test_date, apply_date, moment().format("YYYY-M-D H:m:s"), null, description];
 		await conn.execute('INSERT INTO notice VALUES (?,?,?,?,?,?,?,?,?)', bind);
 		return res.status(200).json({
 			message:"공지를 성공적으로 등록했습니다."
 		});
-		
-		
+
+
 	} catch (err) {
 		console.error(err);
 		return res.status(500).json({
@@ -105,7 +130,8 @@ router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res, next
 		console.error(err);
 		res.status(500).json({
 			error: "Internal Server Error",
-			message: err.message
+			message: "예기치 못한 에러가 발생했습니다."
+
 		})
 	}
 });
@@ -127,8 +153,10 @@ router.post('/:noticeId/delete', verifyToken ,managerAccess, async (req, res, ne
 	} catch (err) {
 		res.status(500).json({
 			error: "Internal Server Error",
-			message: err.message
+			message: "예기치 못한 에러가 발생했습니다."
 		})
 	}
 });
+
+
 module.exports = router;

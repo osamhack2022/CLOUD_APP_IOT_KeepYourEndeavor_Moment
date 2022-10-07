@@ -16,7 +16,6 @@ router.get('/', verifyToken ,normalAccess, async (req, res, next) => {
 	
 	const peer = req.decoded.peer;
   try {
-		
 		//const response = await axios.get(`${peer}/v1/block?user=${req.decoded.id}`); 실제론 여기
 		const response = await axios.get(`http://api.jerrykang.com/v1/block?user=${req.decoded.id}`); // 테스트는 여기
 		console.log(response.data.blocks);
@@ -25,6 +24,7 @@ router.get('/', verifyToken ,normalAccess, async (req, res, next) => {
 			data.data["generated_time"] = data.header.generated_time
 			usersData.push(data.data);
 		});
+		
 		
 		res.status(200).json(
 			{
@@ -42,7 +42,6 @@ router.get('/', verifyToken ,normalAccess, async (req, res, next) => {
 		);
 	}
 });
-
 
 
 module.exports = router;
