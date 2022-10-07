@@ -20,23 +20,29 @@ router.post('/signup', async (req, res, next) => {
 		const blockInfo = {
 			"id" : user.id,
 			"organization" : user.co,
-			"authentication" : ""
+			"password" : user.pwd
 		}
-		//const peer_url = await axios.post("http://api.jerrykang.com/v1/peer",blockInfo);
-		//const start_peer = await axios.post("http://api.jerrykang.com/v1/peer/start",{"id" : user.id});
+		
+		// 테스트용
+		const peer_url = await axios.post("http://api.jerrykang.com/v1/peer",blockInfo);
+		const start_peer = await axios.post("http://api.jerrykang.com/v1/peer/start",{"id" : user.id});
+		
+		console.log(peer_url.data.url);
+		console.log(start_peer.data);
+		
 		const createAt = moment().format("YYYY-M-D H:m:s");
 		const { pwd, salt } = await createHashedPassword(user.pwd);
-		const userInfo = [user.id, pwd, user.class, user.name, user.authority, user.position, createAt, null, salt, "peer_url"];
+		const userInfo = [user.id, pwd, user.class, user.name, user.authority, user.position, createAt, null, salt, peer_url.data.url];
 		const affInfo = [null, user.id,user.cmd, user.cps ,user.division, user.br, user.bn, user.co, user.etc, createAt, null];
 		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?,?,?)', userInfo);
 		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?,?,?)', affInfo);
-		
 		
 		res.status(200).json(
 			{
 				message : "회원가입에 성공했습니다. 회원의 비밀번호는 암호화 처리됩니다.",
 				issue : "암호화 시간이 조금 소요될 수 있으니 기다려주세요.",
-				peer : `start_peer 가 시작됐습니다.`
+				start_url : `${peer_url.data.url} 가 생성됐습니다.`,
+				start_result : `${start_peer.data} 가 시작됐습니다.`,
 			}
 		);
 	} catch (err) {

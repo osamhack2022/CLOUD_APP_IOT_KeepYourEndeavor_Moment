@@ -3,6 +3,9 @@ const router = express.Router();
 const {verifyToken, normalAccess} = require('../middleware/accessController.js');
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
+const moment = require('moment-timezone');
+moment.tz.setDefault('Asia/Seoul');
+
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
 
@@ -14,10 +17,13 @@ router.get('/', verifyToken ,normalAccess, async (req, res, next) => {
 	const peer = req.decoded.peer;
   try {
 		
-		const response = await axios.get(`${peer}/v1/block`);
+		//const response = await axios.get(`${peer}/v1/block?user=${req.decoded.id}`); 실제론 여기
+		const response = await axios.get(`http://api.jerrykang.com/v1/block?user=${req.decoded.id}`); // 테스트는 여기
+		console.log(response.data.blocks);
 		const usersData = []
-		response.data.blocks.rows.forEach((data) =>{
-			usersData.push(data.data[0]);
+		response.data.blocks.forEach((data) =>{			
+			data.data["generated_time"] = data.header.generated_time
+			usersData.push(data.data);
 		});
 		
 		res.status(200).json(
