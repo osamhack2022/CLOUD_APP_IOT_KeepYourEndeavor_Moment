@@ -13,7 +13,7 @@ const fireDB = require('../db/firestoreCon.js');
 
 router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
   try {
-		const {user, result, issue_id} = req.body;
+		const {user, record, issue_id} = req.body;
 		const [userInfo, fieldsUser] = await conn.execute('SELECT peer FROM user WHERE id = ?', [user]);
 		const peer = userInfo[0].peer;
 		res.peerInfo = peer;
@@ -44,47 +44,46 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 			}
 		});
 		
-		let record = ""
+		let result = ""
 		if (type === "시간") {
-			const checkTime = moment(result,"m:s").valueOf();
+			const checkTime = moment(record,"m:s").valueOf();
 			standard.sort(function (a, b) { 
 				return a.data < b.data ? -1 : a.data > b.data ? 1 : 0;  
 			});
 			console.log(checkTime);
 			standard.some((std) => {
 				if (std.data >= checkTime) {
-					record = std.std;
+					result = std.std;
 					return true;
 				}
 			});
-			console.log(record);
+			console.log(result);
 		} else if ( type === "숫자" ) {
-			const check = parseInt(result,10);
+			const check = parseInt(record,10);
 			standard.sort(function (a, b) { 
 				return a.data < b.data ? -1 : a.data > b.data ? 1 : 0;  
 			});
 			standard.some((std) => {
 				if (std.data <= check) {
-					record = std.std;
+					result = std.std;
 					return true;
 				}
 			});
 		} else {
-			record = "Pass"
+			result = "Pass"
 		}
-		
 		
 
 		const userRecord = {
-			data : [{
+			data : {
 				user,
-				record,
+				result,
 				issue_id
-			}]
+			}
 		}
 		
-		// const response = await axios.post(`${peer}/v1/block`, userRecord);
-
+		//const response = await axios.post(`${peer}/v1/block`, userRecord); 실제론 여기로
+		const response = await axios.post(`http://api.jerrykang.com/v1/block`, userRecord); // 테스트에만 일로
 		res.status(200).json(
 			{
 				message : `${peer}에 해당 데이터를 온체인 시켰습니다.`,
