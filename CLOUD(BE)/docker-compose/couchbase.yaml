@@ -1,0 +1,26 @@
+version: "3.0"
+
+services:
+  db001:
+    image: couchbase
+    container_name: db001
+    user: couchbase
+    networks:
+      mainnet:
+        ipv4_address: "172.24.255.20"
+
+  db002:
+    image: couchbase
+    container_name: db002
+    user: couchbase
+    networks:
+      mainnet:
+        ipv4_address: "172.24.255.21"
+
+  db003:
+    image: couchbase
+    container_name: db003
+    user: couchbase
+    networks:
+      mainnet:
+        ipv4_address: "172.24.255.22"

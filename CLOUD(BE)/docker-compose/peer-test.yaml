@@ -1,0 +1,50 @@
+version: "3.5"
+
+services:
+  peer000:
+    image: node:14
+    container_name: peer000
+    user: "1000:1000"
+    volumes:
+      - ../:/app
+    environment:
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_HOST=couchbase://172.24.255.21
+      - DATABASE_BUKET=${DATABASE_BUKET}
+      - KAFKA_HOST=172.24.255.31:29092
+      - KAFKA_GROUP=peer2
+      - ROLE=peer
+      - ORGANIZATION=amry
+      - PEERID=peer2
+      - PASSWORD=ab2953
+    command: npm start
+    working_dir: /app
+    networks:
+      mainnet:
+        ipv4_address: "172.24.255.51"
+
+  peer001:
+    image: node:14
+    container_name: peer001
+    user: "1000:1000"
+    volumes:
+      - ../:/app
+    environment:
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_HOST=couchbase://172.24.255.22
+      - DATABASE_BUKET=${DATABASE_BUKET}
+      - KAFKA_HOST=172.24.255.31:29092
+      - KAFKA_GROUP=peer3
+      - ROLE=peer
+      - ORGANIZATION=amry
+      - PEERID=peer3
+      - PASSWORD=ab2953
+    command: npm start
+    working_dir: /app
+    depends_on:
+      - peer000
+    networks:
+      mainnet:
+        ipv4_address: "172.24.255.52"
