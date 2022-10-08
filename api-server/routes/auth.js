@@ -42,7 +42,7 @@ router.post('/signup', async (req, res, next) => {
 				message : "회원가입에 성공했습니다. 회원의 비밀번호는 암호화 처리됩니다.",
 				issue : "암호화 시간이 조금 소요될 수 있으니 기다려주세요.",
 				start_url : `${peer_url.data.url} 가 생성됐습니다.`,
-				start_result : `${start_peer.data} 가 시작됐습니다.`
+				start_result : `${start_peer.data}`
 			}
 		);
 	} catch (err) {

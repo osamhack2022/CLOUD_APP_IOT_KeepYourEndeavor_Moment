@@ -25,6 +25,8 @@ router.get('/', verifyToken ,normalAccess, async (req, res, next) => {
 			usersData.push(data.data);
 		});
 		
+		console.log(usersData);
+		
 		
 		res.status(200).json(
 			{
