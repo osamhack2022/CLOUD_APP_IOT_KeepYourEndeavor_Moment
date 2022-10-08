@@ -1,5 +1,5 @@
 # /issue
-## /issue/regist [POST]
+## /issue/regist [POST] 개설자 가능
 ### 이슈 등록 라우터입니다.
 이슈와 함께 해당 이슈에 해당하는 점수 기준도 함께 업로드합니다. <br>
 
@@ -8,7 +8,7 @@
 해당 subject에 대해 기준을 변경하고 싶으면 **이슈 변경 라우터** 로 이동합니다.
 
 #### body에 넣어주세요 
-```json
+```bash
 curl --location --request POST 'https://api-server.run.goorm.io/issue/regist' \ 
 --data-urlencode 'type=test' \ 
 --data-urlencode 'subject=팔굽혀펴기' \ 
@@ -21,7 +21,7 @@ curl --location --request POST 'https://api-server.run.goorm.io/issue/regist' \
 }'
 ```
 ##### standard type :  json 으로 보내주세요.
-##### standard는 5개급수 (특, 1,2,3, FAIL), 이수/미이수로만 이루어집니다.
+##### standard는 **`이수/미이수`** **`특/1급/2급/3급/FAIL`** 로 통일합니다
 ---
 #### 응답 내용
 
@@ -43,10 +43,10 @@ curl --location --request POST 'https://api-server.run.goorm.io/issue/regist' \
 }
 ```
 
-## /issue/ [GET]
+## /issue/ [GET] 매니저 이상
 ### 모든 이슈를 가져오는 라우터입니다.
 #### 이 곳으로 요청을 보내주세요 
-```json
+```bash
 curl --location --request GET 'https://api-server.run.goorm.io/issue/'
 ```
 ---
@@ -77,11 +77,11 @@ res.status(500).json({
 });
 ```
 
-## /issue/:issueId [GET]
+## /issue/:issueId [GET] 매니저 이상
 ### 특정 이슈의 정보를 가져오는 라우터입니다.
 
 #### 이 곳으로 요청을 보내주세요 
-```json
+```bash
 curl --location --request GET 'https://api-server.run.goorm.io/issue/:issueId'
 ```
 ---
@@ -136,12 +136,12 @@ curl --location --request GET 'https://api-server.run.goorm.io/issue/:issueId'
     "message": "잘못된 이슈 정보입니다."
 }
 ```
-## /issue/:issueId/edit [POST]
+## /issue/:issueId/edit [POST] 개설자 가능
 ###  이슈와 과목의 기준을 변경하는 라우터입니다.
 type과 subject만 변경하고, 기준은 변경하고 싶지 않을 땐, 기준을 **빈 데이터**로 보내주시면 됩니다.
 
 #### body에 넣어주세요
-```json
+```bash
 curl --location --request POST 'https://api-server.run.goorm.io/issue/:issueId/edit' \ 
 --data-urlencode 'type=test' \ 
 --data-urlencode 'subject=뜀걸음' \ 
@@ -166,10 +166,10 @@ res.status(500).json({
     message: err.message
 })
 ```
-## /issue/:issueId/delete [POST]
+## /issue/:issueId/delete [POST] 개설자 가능
 ### 이슈 삭제 라우터입니다.
 #### 이 곳으로 요청을 보내주세요 
-```json
+```bash
 curl --location --request POST 'https://api-server.run.goorm.io/issue/:issueId/delete'
 ```
 ---

@@ -1,10 +1,10 @@
 # /auth 
-## /auth/signup
+## /auth/signup [POST] 제한 없음
 ### 회원가입 라우터입니다.
 회원 가입의 기능과 더불어 해당 USER의 PEER에 해당하는 컨테이너를 생성 및 실행하는 기능도 담당합니다.
 
 #### body에 넣어주세요 
-```json
+```bash
 curl --location --request POST 'https://api-server.run.goorm.io/auth/signup/' \ 
 --data-urlencode 'id=user10' \ 
 --data-urlencode 'pwd=1q2w3e4r' \ 
@@ -21,6 +21,9 @@ curl --location --request POST 'https://api-server.run.goorm.io/auth/signup/' \
 --data-urlencode 'etc=통신소대'
 ```
 ##### authority 예시 :  **`(군무원, 병사, 간부, 등록자, 개설자)`**
+##### 군무원, 병사, 간부 : 일반 등급 
+##### 등록자 : 매니저
+##### 개설자 : 개설자
 ---
 #### 응답 내용
 ##### 성공시 stauts : 200
@@ -44,11 +47,11 @@ curl --location --request POST 'https://api-server.run.goorm.io/auth/signup/' \
 }
 ```
 
-## /auth/signin
+## /auth/signin [POST] 제한 없음
 ### 로그인 라우터입니다.
 
 #### body에 넣어주세요 
-```json
+```bash
 curl --location --request POST 'https://api-server.run.goorm.io/auth/signin' \ 
 --data-urlencode 'id=유저아이디' \ 
 --data-urlencode 'pwd=비밀번호'
@@ -83,11 +86,11 @@ curl --location --request POST 'https://api-server.run.goorm.io/auth/signin' \
 }
 ```
 
-## /auth/logout
+## /auth/logout [POST] 제한 없음
 ### 로그아웃 라우터입니다.
 
 #### 이 곳으로 요청을 보내주세요 
-```json
+```bash
 curl --location --request POST 'https://api-server.run.goorm.io/auth/logout'
 ```
 ---
