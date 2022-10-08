@@ -1,9 +1,9 @@
 # /notice
-## /notice/regist [POST]
+## /notice/regist [POST]  매니저 이상
 ### 공지 등록 라우터입니다.
 
 #### body에 넣어주세요 
-```json
+```bash
 curl --location --request POST 'https://api-server.run.goorm.io/notice/regist/' \
  --data-urlencode 'title=테스트공지3' \ 
  --data-urlencode 'issue_id=이슈아이디' \ 
@@ -58,11 +58,11 @@ curl --location --request POST 'https://api-server.run.goorm.io/notice/regist/' 
     "message": "예기치 못한 에러가 발생했습니다."
 }
 ```
-## /notice/ [GET]
+## /notice/ [GET] 제한 없음
 ### 모든 공지들을 보여주는 라우터입니다.
 
 #### 여기로 요청을 보내주세요
-```json
+```bash
 curl --location --request GET 'https://api-server.run.goorm.io/notice/'
 ```
 ---
@@ -86,10 +86,10 @@ curl --location --request GET 'https://api-server.run.goorm.io/notice/'
 }
 ```
 
-## /notice/:noticeId [GET]
+## /notice/:noticeId [GET] 제한 없음
 ### 특정 공지를 보여주는 라우터입니다.
 #### 여기로 요청을 보내주세요
-```json
+```bash
 curl --location --request GET 'https://api-server.run.goorm.io/notice/:noticeId'
 ```
 ---
@@ -122,10 +122,10 @@ curl --location --request GET 'https://api-server.run.goorm.io/notice/:noticeId'
 }
 ```
 
-## /notice/:noticeId/delete [POST]
+## /notice/:noticeId/delete [POST] 매니저 이상
 ### 공지 삭제 라우터입니다.
 #### 여기로 요청을 보내주세요
-```json
+```bash
 curl --location --request POST 'https://api-server.run.goorm.io/notice/:noticeId/delete'
 ```
 ---
@@ -156,10 +156,10 @@ curl --location --request POST 'https://api-server.run.goorm.io/notice/:noticeId
     "message" : "예기치 못한 에러가 발생했습니다."
 }
 ```
-## /notice/:noticeId/edit [POST]
+## /notice/:noticeId/edit [POST] 매니저 이상
 ### 공지 수정 라우터입니다.
 #### body에 넣어주세요
-```json
+```bash
 curl --location --request POST 'https://api-server.run.goorm.io/notice/GEqwQmOImWNSQcW/edit' \ 
 --data-urlencode 'description=테스트용으로 한번 수정해볼게요'
 ```

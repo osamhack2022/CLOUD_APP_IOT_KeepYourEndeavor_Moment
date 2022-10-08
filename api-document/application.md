@@ -1,9 +1,9 @@
 # /application
-## /application/ [GET]
+## /application/ [GET] 제한없음
 ### 모든 공지에 대한 신청자 목록을 보여주는 라우터입니다.
 
 #### 여기에 요청해 주세요
-```json
+```bash
 curl --location --request GET 'https://api-server.run.goorm.io/application/'
 ```
 
@@ -40,11 +40,11 @@ curl --location --request GET 'https://api-server.run.goorm.io/application/'
 }
 ```
 
-## /application/:noticeId [GET]
+## /application/:noticeId [GET] 제한 없음
 ### 특정 공지에 대한 신청자 목록을 보여주는 라우터입니다.
 
 #### 여기에 요청해 주세요
-```json
+```bash
 curl --location --request GET 'https://api-server.run.goorm.io/application/:noticeId'
 ```
 
@@ -78,12 +78,12 @@ curl --location --request GET 'https://api-server.run.goorm.io/application/:noti
 }
 ```
 
-## /application/:noticeId/regist [POST]
+## /application/:noticeId/regist [POST] 제한 없음
 ### 특정 공지에 대해 신청하는 라우터입니다.
 신청시 대표 신청자란은 반드시 채워져야 하나 해당 공지에 해당하는 과목에 신청할 의무는 없습니다.
 
 #### body에 넣어주세요
-```json
+```bash
 curl --location --request POST 'https://api-server.run.goorm.io/application/:noticeId/regist' \ 
 --data-urlencode 'members={"members" : ["21-44444444","21-55555555","21-66666666","21-12345678"]}' \ 
 --data-urlencode 'message=대표신청글 테스트 입니다.'
@@ -107,13 +107,13 @@ curl --location --request POST 'https://api-server.run.goorm.io/application/:not
     "message" : "예기치 못한 에러가 발생했습니다. "
 }
 ```
-## /application/:noticeId/edit [POST]
+## /application/:noticeId/edit [POST] 제한 없음
 ### 특정 공지에 대한 신청을 수정하는 라우터입니다.
 
 대표 아이디로 로그인해야 수정이 가능합니다.
 
 #### body에 넣어주세요
-```json
+```bash
 curl --location --request POST 'https://api-server.run.goorm.io/application/i79Vu13SaLVshbY6/edit' \ 
 --data-urlencode 'members={"members" : ["21-44444444","21-55555555","21-66666666","21-12345678"]}' \ 
 --data-urlencode 'message=수정할거임!'
@@ -152,13 +152,13 @@ throw new Error('Client request key is not matched to the db column name.');
     "message" : "예기치 못한 에러가 발생했습니다. "
 }
 ```
-## /application/:noticeId/delete [POST]
+## /application/:noticeId/delete [POST] 제한 없음
 ### 특정 공지에 대한 신청을 삭제하는
 
 대표 아이디로 신청한 모든 신청을 해당 공지에서 삭제합니다
 
 #### 여기에 요청해 주세요
-```json
+```bash
 curl --location --request POST 'https://api-server.run.goorm.io/application/:noticeId/delete'
 ```
 ---
