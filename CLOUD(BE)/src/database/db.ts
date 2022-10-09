@@ -11,21 +11,26 @@ type configType = {
 }
 
 export const db = async (config: configType, logger: any) => {
-    const {host, buket, username, password} = config;
+    try{
+        logger.info("Connecting DB...");
+        const {host, buket, username, password} = config;
 
-    if (!ottoman) {
-        ottoman = new Ottoman({collectionName: '_default'});
+        if (!ottoman) {
+            ottoman = new Ottoman({collectionName: '_default'});
+        }
+
+        await ottoman.connect({
+            connectionString: host, // with default port 8091
+            bucketName: buket,
+            username: username,
+            password: password
+        });
+        
+        await start();
+        logger.info("DB Connection is Success!")
+    }catch(error){
+        logger.error(error);
     }
-
-    await ottoman.connect({
-        connectionString: host, // with default port 8091
-        bucketName: buket,
-        username: username,
-        password: password
-    });
-    
-    //await start();
-    logger.info("DB Connection is Success!")
 
     return new ledger(ottoman);
 }

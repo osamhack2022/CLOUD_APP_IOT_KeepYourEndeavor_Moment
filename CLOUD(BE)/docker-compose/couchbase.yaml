@@ -1,10 +1,6 @@
 version: "3.0"
 
 services:
-  # -----------------------------------
-  # Couchdb server (Ports: 8091-8094:8091-8094)
-  # https://hub.docker.com/r/couchbase/server/
-  # -----------------------------------
   db001:
     image: couchbase
     container_name: db001

@@ -12,6 +12,8 @@ import {
 import useBlock from '../../hooks/block/useBlock';
 import moment  from 'moment';
 import { json } from 'express';
+import {Redirect} from 'react-router-dom'
+import useAuth from '../../hooks/user/useAuth';
 
 const MainBlock = styled.div`
     background-color: rgba(0, 0, 0, 0.03);
@@ -60,7 +62,15 @@ const MainBlock = styled.div`
     
 `;
 const Main = () => {
+
+
+
     const {blocks} = useBlock();
+    const {handleLogout} = useAuth();
+
+    if(localStorage.getItem('login') !== 'true'){
+        return <Redirect to='/login'/>
+    }
 
     const blockList = blocks.map((block: any) => {
         const {id, header, data} = block;
@@ -85,7 +95,7 @@ const Main = () => {
 
                     </div>
                     <img src='/logo.png'/>
-                    <Button secondary>
+                    <Button secondary onClick={()=>handleLogout()}>
                         로그아웃
                     </Button>
                 </header>

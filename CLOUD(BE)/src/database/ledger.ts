@@ -1,4 +1,4 @@
-import { Ottoman, start, close } from "ottoman";
+import { Ottoman, start, close, Query } from "ottoman";
 import { Block } from "../block";
 import { BlockModel } from "./BlockModel";
 
@@ -9,18 +9,29 @@ export default class {
         this.ottoman = ottoman;
     }
 
-    async getBlock(): Promise<any>{
-        await start();
-        const data = await BlockModel.find();
-        await close();
-
-        return data; 
+    async getBlock(user?: string, offset?: number, limit?: number): Promise<any>{
+        try{
+            if(!user){
+                const data = await BlockModel.find();
+                return data;
+            }
+            const query = new Query({}, 'test-buket t')
+                            .select('t.*')
+                            .where({ '`data`.`user`': user })
+                            .offset(offset ?? 0)
+                            .limit(limit ?? 10)
+                            .build();
+            const {rows} = await this.ottoman.query(query);
+            return rows; 
+        }catch(e){
+            console.log(e);
+            
+        }
     }
 
     async getLeastBlock(): Promise<any>{
-        await start();
         const data = await BlockModel.findOne({}, {sort:{generated_time: 'ASC'}})
-        await close();
+
         return data;
     }
     
@@ -37,6 +48,5 @@ export default class {
             .then(runAsync)
             .catch((error) => console.log('An error happened: ' + JSON.stringify(error)))
         
-        await close();
     }
 }
