@@ -1,6 +1,7 @@
 .env
 
 db/*.json
+db/*.sql
 
 LICENSE
 
