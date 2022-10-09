@@ -70,7 +70,7 @@ const generateNextBlock = async(db: any, organization: string, data: any):Promis
   const event_id = uuidv4()
   const generated_time = utcTimestamp();
 
-  const merkleTree = merkle("sha256").sync(data);
+  const merkleTree = merkle("sha256").sync([data]);
   const merkleRoot = merkleTree.root() || '0'.repeat(64);
 
   const newBlockHeader: BlockHeader = {version:currentVersion, index:nextIndex, previousHash, generated_time, merkleRoot, event_id, organization}
