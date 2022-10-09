@@ -15,4 +15,5 @@
 
 `application` : [어플리케이션 라우터에 대한 문서입니다.](https://github.com/osamhack2022/CLOUD_APP_WEB_IOT_KeepYourEndeavor_Moment/blob/server/api-document/application.md) <br>
 
+`standard` : [기준 라우터에 대한 문서입니다.](https://github.com/osamhack2022/CLOUD_APP_WEB_IOT_KeepYourEndeavor_Moment/blob/server/api-document/standard.md) <br>
 
