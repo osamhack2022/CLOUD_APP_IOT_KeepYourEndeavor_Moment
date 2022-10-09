@@ -1,6 +1,6 @@
 .env
 
-db/firebaseKey.json
+db/*.json
 
 LICENSE
 
