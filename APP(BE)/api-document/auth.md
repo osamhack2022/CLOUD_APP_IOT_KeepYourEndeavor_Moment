@@ -31,12 +31,12 @@ curl --location --request POST 'https://api-server.run.goorm.io/auth/signup/' \
 {
     "message": "회원가입에 성공했습니다. 회원의 비밀번호는 암호화 처리됩니다.",
     "issue": "암호화 시간이 조금 소요될 수 있으니 기다려주세요.",
-    "start_url" : `${peer_url.data.url} 가 생성됐습니다.`,
-    "start_result" : `${start_peer.data}`
+    "start_url": "http://20-500123.jerrykang.com 가 생성됐습니다.",
+    "start_result": "1"
 }
 ```
 ###### peer_url.data.url 예시 :  **`http://peer1.jerrykang.com`**
-###### start_peer.data 예시 :  **`ok`**
+###### start_peer.data 예시 :  **`1`**
 ---
 ##### 실패시 status : 406
 
