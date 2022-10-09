@@ -1,6 +1,6 @@
 # API 문서 
 ### 본 README 는 KYE api server에 대한 문서입니다.
-#### 총 7개의 API로 이루어진 본 서버는 DB간 유기적 CRUD를 위해 개설되었습니다.
+#### 총 8개의 API로 이루어진 본 서버는 DB간 유기적 CRUD를 위해 개설되었습니다.
 `auth` : [인증 라우터에 대한 문서입니다.](https://github.com/osamhack2022/CLOUD_APP_WEB_IOT_KeepYourEndeavor_Moment/blob/server/APP(BE)/api-document/auth.md) <br>
 
 `profile` : [유저 정보 라우터에 대한 문서입니다.](https://github.com/osamhack2022/CLOUD_APP_WEB_IOT_KeepYourEndeavor_Moment/blob/server/APP(BE)/api-document/profile.md) <br>

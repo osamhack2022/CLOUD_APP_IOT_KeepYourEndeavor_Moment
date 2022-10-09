@@ -42,7 +42,8 @@ npm start
 ```
 
 ## 서버 관계도
-<img src='https://github.com/osamhack2022/CLOUD_WEB_IOT_KeepYourEndeavor_Moment/raw/CLOUD/images/logo.png'/>
+<p align = 'center'><img src='https://github.com/osamhack2022/CLOUD_APP_WEB_IOT_KeepYourEndeavor_Moment/blob/main/APP(BE)/images/structure.jpg'/></p>
+
 
 ### APP(FE)
 - 사용자 front end server
@@ -60,10 +61,11 @@ npm start
 - Dashboard : 해당 peer에 저장된 데이터를 GUI로 보여준다
 - DB : peer 별로 생성되며 해당 peer의 block들을 보관한다
 
-## DB 구조도
-<img src='https://github.com/osamhack2022/CLOUD_WEB_IOT_KeepYourEndeavor_Moment/raw/CLOUD/images/logo.png'/>
+## MySQL DB 구조도
+<img src='https://github.com/osamhack2022/CLOUD_APP_WEB_IOT_KeepYourEndeavor_Moment/blob/main/APP(BE)/images/KYE.png'/>
 
 ## API 문서
 
 <br>
-문서 바로가기
+
+`api-document` : [문서 바로가기](https://github.com/osamhack2022/CLOUD_APP_WEB_IOT_KeepYourEndeavor_Moment/tree/main/APP(BE)/api-document)
