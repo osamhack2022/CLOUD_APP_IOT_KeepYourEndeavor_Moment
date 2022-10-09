@@ -42,7 +42,8 @@ npm start
 ```
 
 ## 서버 관계도
-<img src='https://github.com/osamhack2022/CLOUD_APP_WEB_IOT_KeepYourEndeavor_Moment/blob/main/APP(BE)/images/structure.jpg'/>
+<p align = 'center'><img src='https://github.com/osamhack2022/CLOUD_APP_WEB_IOT_KeepYourEndeavor_Moment/blob/main/APP(BE)/images/structure.jpg'/></p>
+
 
 ### APP(FE)
 - 사용자 front end server
