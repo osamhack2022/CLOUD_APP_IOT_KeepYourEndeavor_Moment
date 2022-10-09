@@ -61,7 +61,7 @@ npm start
 - Dashboard : 해당 peer에 저장된 데이터를 GUI로 보여준다
 - DB : peer 별로 생성되며 해당 peer의 block들을 보관한다
 
-## DB 구조도
+## MySQL DB 구조도
 <img src='https://github.com/osamhack2022/CLOUD_APP_WEB_IOT_KeepYourEndeavor_Moment/blob/main/APP(BE)/images/KYE.png'/>
 
 ## API 문서
