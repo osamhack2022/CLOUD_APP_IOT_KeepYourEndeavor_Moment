@@ -1,8 +1,7 @@
 //TODO: API 서버 Console로 변경 예정
 import express from 'express';
 import routes from './routes'
-const { createProxyMiddleware } = require("http-proxy-middleware");
-import fs from 'fs';
+const { execSync } = require('child_process');
 
 const channel = async(config: any) => {
     const app = express();
