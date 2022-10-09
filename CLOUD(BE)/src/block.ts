@@ -9,5 +9,10 @@ export interface BlockHeader {
 }
 export interface Block {
     header: BlockHeader;
-    data: any;
+    data: BlockData;
+}
+export interface BlockData {
+    user: string;
+    issue_id: string;
+    result: string;
 }

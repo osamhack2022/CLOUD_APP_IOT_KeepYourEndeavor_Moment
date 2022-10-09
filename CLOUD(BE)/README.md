@@ -9,8 +9,6 @@
 
 `KY2-Chain`은 **Keep Your Endeavor (블록체인 기반 공정한 병기본 솔루션)** 서비스의 데이터 무결성을 보증하기 위해 만들어진 허가형 블록체인 입니다.  타입스크립트를 기반으로 개발되었으며 메시징 서비스 `Kafka` 를 활용해 강력한 로드밸런싱과 빠른 속도를 보장합니다. 모든 데이터는 암호화 되어 `Couchbase`에 저장되여 네트워크가 허가된 사용자만이  자체적으로 제공하는 `KY2 Explorer`에서 블록데이터를 조회할 수 있습니다.
 
-
-
 ### 노드 종류
 노드 종류는 채널, 피어로 총 2가지 종류가 있습니다. 
 #### 피어 노드
@@ -101,30 +99,21 @@ $ npm start
 블록을 조회할 때 사용하는 API 입니다.
 
 **Request**
-`GET` `/v1/block/`
-```json
-{
-	"data": [{
-		"rank": "S",
-		"user": "eunsol", // userUUID
-		"test": "체력측정" // testUUID
-	}]
-}
+`GET` `/v1/block?user=USERID`
+```shell
+curl -i -H 'Accept: application/json' http://localhost:7000/v1/block?user=USERID
 ```
 **Response**
 ```json
 {
-  "blocks": {
-    "rows": [
-      {
+  "blocks": [
+	  {
         "_type": "Block",
-        "data": [
-          {
-            "rank": "S",
-            "user": "eunsol",
-            "test": "체력측정"
-          }
-        ],
+        "data": {
+			"result": "S",
+			"user": "eunsol", // 사용자
+			"issue_id": "체력측정" // 측정과목
+		},
         "header": {
           "version": "1.0.0",
           "index": 1,
@@ -138,13 +127,11 @@ $ npm start
       },
       {
         "_type": "Block",
-        "data": [
-          {
-            "rank": "G",
-            "user": "genesis",
-            "test": "genesis"
-          }
-        ],
+        "data" {
+			"result": "S",
+			"user": "eunsol", // 사용자
+			"issue_id": "체력측정" // 측정과목
+		}
         "header": {
           "version": "1.0.0",
           "index": 0,
@@ -156,42 +143,18 @@ $ npm start
         },
         "id": "ea8b5ef8-ccc7-475a-b740-73961afcdc73"
       }
-    ],
-    "meta": {
-      "requestId": "a7722236-d5d5-4f5f-85d6-c32c8a96378a",
-      "clientContextId": "0ddd9c100913eeed",
-      "status": "success",
-      "signature": {
-        "_type": "json",
-        "data": "json",
-        "header": "json",
-        "id": "json"
-      },
-      "warnings": [],
-      "metrics": {
-        "elapsedTime": 2.074171,
-        "executionTime": 2.008513,
-        "sortCount": 0,
-        "resultCount": 2,
-        "resultSize": 846,
-        "mutationCount": 0,
-        "errorCount": 0,
-        "warningCount": 0
-      }
-    }
-  }
-}
+  ]
 ```
 ### Add Block
 **Request**
 `POST` `/v1/block/`
 ```json
 {
-	"data": [{
-		"rank": "S",
-		"user": "eunsol", // userUUID
-		"test": "체력측정" // testUUID
-	}]
+	"data": {
+		"result": "S",
+		"user": "eunsol", // 사용자
+		"issue_id": "체력측정" // 측정과목
+	}
 }
 ```
 **Response**
@@ -208,9 +171,9 @@ $ npm start
   },
   "data": [
     {
-      "rank": "S",
+      "result": "S",
       "user": "eunsol",
-      "test": "체력측정"
+      "issue_id": "체력측정"
     }
   ],
   "id": "1d7a93ba-e495-44e7-9f96-ebb1d101531a",
@@ -225,8 +188,8 @@ $ npm start
 
 #### 로그인 페이지
 
-![](../images/bc-explorer1.png)
+![](../images/bc-explorer2.png)
 
 #### 메인페이지
 
-![](../images/bc-explorer2.png)
+![](../images/bc-explorer1.png)

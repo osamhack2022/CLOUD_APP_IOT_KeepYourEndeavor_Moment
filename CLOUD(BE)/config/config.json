@@ -1,0 +1,8 @@
+{
+  "listeners": {
+    "*:8070": {
+      "pass": "routes"
+    }
+  },
+  "routes": []
+}
