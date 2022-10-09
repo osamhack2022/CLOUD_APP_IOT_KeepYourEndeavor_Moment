@@ -1,5 +1,7 @@
 .env
 
-/api-server/db/firebaseKey.json
+/APP(BE)/db/firebaseKey.json
 
 LICENSE
+
+/APP(BE)/node_modules
