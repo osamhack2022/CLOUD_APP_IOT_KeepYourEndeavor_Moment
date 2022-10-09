@@ -12,11 +12,11 @@ const BlockSchema = new Schema({
         event_id: String,
         organization: String,
     },
-    data: [{
+    data: {
         user: String,
-        test: String,
-        rank: String,
-    }]
+        issue_id: String,
+        result: String,
+    }
 })
 
 export const BlockModel = ottoman.model('Block', BlockSchema);
