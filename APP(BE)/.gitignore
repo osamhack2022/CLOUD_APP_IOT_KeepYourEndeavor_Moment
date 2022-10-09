@@ -4,6 +4,10 @@
 
 LICENSE
 
+node_modules/
 
+db/*.json
+
+db/*.sql
 
 goorm.manifest
