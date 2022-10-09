@@ -1,9 +1,10 @@
 .env
 
-/db/firebaseKey.json
+db/*.json
+db/*.sql
 
 LICENSE
 
-/node_modules
+node_modules/
 
 goorm.manifest
