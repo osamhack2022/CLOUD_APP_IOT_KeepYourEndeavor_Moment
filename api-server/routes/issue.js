@@ -64,6 +64,7 @@ router.post('/regist', verifyToken, supervisorAccess, async (req, res) => {
 		const standard = JSON.parse(req.body.standard);
 		const userRef = await fireDB.collection(issueInfo.type).doc(issueInfo.subject).get();
 		if (!userRef._fieldsProto) {
+			await conn.execute('INSERT INTO type VALUES (?,?,?)', [issueInfo.type, null, null]);
 			await fireDB.collection(issueInfo.type).doc(issueInfo.subject).set(standard);
 		}
 		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?)', bind);
@@ -161,6 +162,8 @@ router.post('/:issueId/delete', verifyToken, supervisorAccess, async (req, res) 
 		})
 	}
 });
+
+
 module.exports = router;
 
 
