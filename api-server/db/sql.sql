@@ -55,6 +55,12 @@ CREATE TABLE `application` (
   `updated_at` timestamp NULL DEFAULT NULL
 );
 
+CREATE TABLE `type` (
+  `id` varchar(255) PRIMARY KEY,
+  `created_at` timestamp DEFAULT now(),
+  `updated_at` timestamp NULL DEFAULT NULL
+);
+
 ALTER TABLE `affiliation` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE 
 ON DELETE CASCADE;
 
