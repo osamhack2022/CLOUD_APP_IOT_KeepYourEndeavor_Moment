@@ -1,9 +1,9 @@
 .env
 
-APP(BE)/db/firebaseKey.json
+./db/firebaseKey.json
 
 LICENSE
 
-APP(BE)/node_modules
+./node_modules
 
 goorm.manifest
