@@ -55,6 +55,7 @@ router.post('/regist', verifyToken, supervisorAccess, async (req, res) => {
 		const createAt = moment().format("YYYY-M-D H:m:s");
 		const updateAt = moment().format("YYYY-M-D H:m:s");
 		const id = await makeHashedValue(createAt);
+		console.log(id);
 		const issueInfo = req.body;
 		const bind = [id, issueInfo.type, issueInfo.subject, token.id, createAt, updateAt];
 		if (issueInfo.type === undefined || issueInfo.subject === undefined) {
@@ -62,17 +63,29 @@ router.post('/regist', verifyToken, supervisorAccess, async (req, res) => {
 		}
 		
 		
-		const standard = JSON.parse(req.body.standard);
+		let flag = true
+		let resultOfStandard = ""
 		const userRef = await fireDB.collection(issueInfo.type).doc(issueInfo.subject).get();
 		if (!userRef._fieldsProto) {
+			const standard = JSON.parse(req.body.standard);
 			await conn.execute('INSERT INTO type VALUES (?,?,?)', [issueInfo.type, createAt, updateAt]);
 			await fireDB.collection(issueInfo.type).doc(issueInfo.subject).set(standard);
+		} else {
+			flag = false;
 		}
+		if (flag) {
+			resultOfStandard = true;
+		} else {
+			resultOfStandard = false;
+			flag = true;
+		}
+		
 		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?)', bind);
 		res.status(200).json(
 			{
 				message : "issue 등록이 완료됐습니다.",
-				issueId : id
+				issueId : id,
+				resultOfStandard
 			}
 		);
 	} catch (err) {
@@ -86,6 +99,8 @@ router.post('/regist', verifyToken, supervisorAccess, async (req, res) => {
 	}
 });
 
+
+/* issue의 삭제는 의미가 없어보인다. 고로 과감히 삭제 
 router.post('/:issueId/edit', verifyToken, supervisorAccess, async (req, res) => {
 	try {
 		const issueId = req.params.issueId;
@@ -96,20 +111,6 @@ router.post('/:issueId/edit', verifyToken, supervisorAccess, async (req, res) =>
 		const issue = rowUser[0];
 		console.log(issue);
 		
-		if (req.body.standard) {
-			const updateStandard = JSON.parse(req.body.standard);
-			const userRef = await fireDB.collection(issue.type).doc(issue.subject).get();
-			if (userRef._fieldsProto) {
-				await fireDB.collection(issue.type).doc(issue.subject).update(updateStandard);
-			} else {
-				return res.status(406).json(
-								{
-									error : "Not Acceptable", 
-									message: "잘못된 기준 정보이거나 기준이 잘못 생성됐습니다."
-								}
-							);
-			}
-		}
 		
 		const clientRequestUpdateKey = Object.keys(req.body);
 		clientRequestUpdateKey.forEach((key) => {
@@ -129,7 +130,22 @@ router.post('/:issueId/edit', verifyToken, supervisorAccess, async (req, res) =>
 			await conn.execute(`UPDATE issue SET updated_at = '${updateAt}' WHERE id = '${inform[2]}'`);
 		}
 		
-		
+		if (req.body.standard) {
+			const updateStandard = JSON.parse(req.body.standard);
+			console.log(updateStandard);
+			const userRef = await fireDB.collection(issue.type).doc(issue.subject).get();
+			console.log(userRef._fieldsProto);
+			if (userRef._fieldsProto) {
+				await fireDB.collection(issue.type).doc(issue.subject).update(updateStandard);
+			} else {
+				return res.status(406).json(
+								{
+									error : "Not Acceptable", 
+									message: "잘못된 기준 정보이거나 없는 기준입니다. issue 생성시 기준도 같이 생성해주세요"
+								}
+							);
+			}
+		}
 		
 		res.status(200).json({
 			message: '보내주신 내용대로 업데이트에 성공했습니다!'
@@ -137,10 +153,11 @@ router.post('/:issueId/edit', verifyToken, supervisorAccess, async (req, res) =>
 	} catch (err) {
 		res.status(500).json({
 			error: "Internal Server Error",
-			message: err.message
+			message: "예기치 못한 에러가 발생했습니다."
 		})
 	}
 });
+*/
 
 router.post('/:issueId/delete', verifyToken, supervisorAccess, async (req, res) => {
 	try {
@@ -159,7 +176,7 @@ router.post('/:issueId/delete', verifyToken, supervisorAccess, async (req, res) 
 	} catch (err) {
 		res.status(500).json({
 			error: "Internal Server Error",
-			message: err.message
+			message: "예기치 못한 에러가 발생했습니다."
 		})
 	}
 });
