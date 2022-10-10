@@ -67,3 +67,7 @@ node_modules/
 /dist
 
 wallet
+
+config/config.json
+
+docker-compose/peers/
