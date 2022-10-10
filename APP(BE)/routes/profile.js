@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const {verifyToken} = require('../middleware/accessController.js');
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
-
+const axios = require('axios');
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
 let redisCon = "";
@@ -58,6 +58,7 @@ router.post('/edit', verifyToken, async (req, res) => {
 router.post('/delete', verifyToken, async (req, res) => {
 	try {
 		const token = req.decoded;
+		await axios.delete(`http://api.jerrykang.com/v1/peer/${token.id}`);
 		await conn.execute(`DELETE FROM user WHERE id = '${token.id}'`);
 		await redisCon.del(token.id);
 		res.status(200).json({
