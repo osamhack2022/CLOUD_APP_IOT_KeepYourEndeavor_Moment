@@ -66,8 +66,8 @@ router.post('/:noticeId/regist',verifyToken,normalAccess, async (req, res, next)
 		const members = JSON.parse(req.body.members).members;
 		const message = req.body.message;
 		const createAt = moment().format("YYYY-M-D H:m:s");
-		
-		const bind = [null, issueId, token.id, members, message, createAt, null]
+		const updateAt = moment().format("YYYY-M-D H:m:s");
+		const bind = [null, issueId, token.id, members, message, createAt, updateAt]
 		await conn.execute('INSERT INTO application VALUES (?,?,?,?,?,?,?)', bind);
 		
 		res.status(200).json({

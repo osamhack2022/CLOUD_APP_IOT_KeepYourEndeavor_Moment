@@ -59,7 +59,7 @@ router.post('/regist', verifyToken ,managerAccess, async (req, res, next) => {
 		
 		// 테스트 해보고 위 주석 지울것
 		const id = await makeHashedValue(title); 
-		const bind = [id, title, issue_id, token.id, test_date, apply_date, moment().format("YYYY-M-D H:m:s"), null, description];
+		const bind = [id, title, issue_id, token.id, test_date, apply_date, moment().format("YYYY-M-D H:m:s"), moment().format("YYYY-M-D H:m:s"), description];
 		await conn.execute('INSERT INTO notice VALUES (?,?,?,?,?,?,?,?,?)', bind);
 		return res.status(200).json({
 			message:"공지를 성공적으로 등록했습니다."

@@ -31,9 +31,10 @@ router.post('/signup', async (req, res, next) => {
 		
 		
 		const createAt = moment().format("YYYY-M-D H:m:s");
+		const updateAt = moment().format("YYYY-M-D H:m:s");
 		const { pwd, salt } = await createHashedPassword(user.pwd);
-		const userInfo = [user.id, pwd, user.class, user.name, user.authority, user.position, createAt, null, salt, peer_url.data.url];
-		const affInfo = [null, user.id,user.cmd, user.cps ,user.division, user.br, user.bn, user.co, user.etc, createAt, null];
+		const userInfo = [user.id, pwd, user.class, user.name, user.authority, user.position, createAt, updateAt, salt, peer_url.data.url];
+		const affInfo = [null, user.id,user.cmd, user.cps ,user.division, user.br, user.bn, user.co, user.etc, createAt, updateAt];
 		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?,?,?)', userInfo);
 		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?,?,?)', affInfo);
 		

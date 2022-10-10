@@ -53,9 +53,10 @@ router.post('/regist', verifyToken, supervisorAccess, async (req, res) => {
 	try {
 		const token = req.decoded;
 		const createAt = moment().format("YYYY-M-D H:m:s");
+		const updateAt = moment().format("YYYY-M-D H:m:s");
 		const id = await makeHashedValue(createAt);
 		const issueInfo = req.body;
-		const bind = [id, issueInfo.type, issueInfo.subject, token.id, createAt, null];
+		const bind = [id, issueInfo.type, issueInfo.subject, token.id, createAt, updateAt];
 		if (issueInfo.type === undefined || issueInfo.subject === undefined) {
 			throw new Error();
 		}
@@ -64,7 +65,7 @@ router.post('/regist', verifyToken, supervisorAccess, async (req, res) => {
 		const standard = JSON.parse(req.body.standard);
 		const userRef = await fireDB.collection(issueInfo.type).doc(issueInfo.subject).get();
 		if (!userRef._fieldsProto) {
-			await conn.execute('INSERT INTO type VALUES (?,?,?)', [issueInfo.type, null, null]);
+			await conn.execute('INSERT INTO type VALUES (?,?,?)', [issueInfo.type, createAt, updateAt]);
 			await fireDB.collection(issueInfo.type).doc(issueInfo.subject).set(standard);
 		}
 		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?)', bind);
