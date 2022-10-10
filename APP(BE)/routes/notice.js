@@ -85,7 +85,7 @@ router.get('/:noticeId', verifyToken ,managerAccess, async (req, res, next) => {
 router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res, next) => {
 	try {
 		const noticeId = req.params.noticeId;
-		const noticeAllowKeys = ['title','issue_id','test_date','apply_date','description'];
+		const noticeAllowKeys = ['title','test_date','apply_date','description'];
 		let updateNoticeTable = [];
 
 		const clientRequestUpdateKey = Object.keys(req.body);
@@ -93,7 +93,8 @@ router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res, next
 			if (noticeAllowKeys.includes(key)) {
 				updateNoticeTable.push([key, req.body[key], noticeId]);
 			} else {
-				throw new Error('Client request key is not matched to the db column name.');
+				throw new Error('수정 컬럼 이름이 잘못됐습니다. 수정 가능한 컬럼 이름만 넣어주세요');
+				
 			}
 		});
 		timeChecker(req.body.test_date, req.body.apply_date, res);
@@ -113,7 +114,7 @@ router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res, next
 		console.error(err);
 		res.status(500).json({
 			error: "Internal Server Error",
-			message: "예기치 못한 에러가 발생했습니다."
+			message: "수정 컬럼 이름이 잘못됐을 가능성이 큰 오류입니다."
 
 		})
 	}

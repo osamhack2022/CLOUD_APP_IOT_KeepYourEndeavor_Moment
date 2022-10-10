@@ -16,6 +16,7 @@ require('../db/redisCon.js')().then((res) => redisCon = res);
 router.get('/', verifyToken, supervisorAccess,async (req, res) => {
 	try {
 		const [types, fields] = await conn.execute('SELECT id FROM type');
+		console.log(types);
 		const standards = {}
 		for await (let type of types) {
 				const snapshot = await fireDB.collection(type.id).get();

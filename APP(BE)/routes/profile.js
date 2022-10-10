@@ -26,7 +26,7 @@ router.post('/edit', verifyToken, async (req, res) => {
 			} else if (affAllowKeys.includes(key)) {
 				updateAffTable.push([key, req.body[key], token.id]);
 			} else {
-				throw new Error(' Client request key is not matched to the db column name. ');
+				throw new Error("요청 데이터의 형식이 잘못됐습니다. 요청 JSON을 확인해주세요.");
 			}
 		});
 		
@@ -48,23 +48,27 @@ router.post('/edit', verifyToken, async (req, res) => {
 			message: '보내주신 내용대로 업데이트에 성공했습니다!'
 		});
 	} catch (err) {
-		res.status(500).json({
-			error: "Internal Server Error",
+		return res.status(406).json({
+			error : "Not Acceptable", 
 			message: err.message
-		})
+		});
 	}
 });
 
 router.post('/delete', verifyToken, async (req, res) => {
 	try {
 		const token = req.decoded;
-		await axios.delete(`http://api.jerrykang.com/v1/peer/${token.id}`);
+		await axios.delete(`${token.peer}/v1/peer/${token.id}`);
 		await conn.execute(`DELETE FROM user WHERE id = '${token.id}'`);
+		await conn.execute(`DELETE FROM application WHERE rep_id = '${token.id}'`);
+		await conn.execute(`DELETE FROM issue WHERE issuer_id = '${token.id}'`);
+		await conn.execute(`DELETE FROM notice WHERE author_id = '${token.id}'`);
 		await redisCon.del(token.id);
 		res.status(200).json({
 			message: '회원 탈퇴가 완료됐습니다. 로그아웃합니다.'
 		});
 	} catch (err) {
+		console.error(err);
 		res.status(500).json({
 			error: "Internal Server Error",
 			message: err.message
