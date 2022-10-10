@@ -27,6 +27,7 @@ const SidebarBlock = styled.div`
     }
     .main{
         margin-left: 165px;
+        width: 100%;
     }
 `;
 
@@ -93,48 +94,27 @@ const Sidebar = ({children}) => {
     return (
         <SidebarBlock>
             <div className="sidebar">
-                <Nav select={select === 1 ? true : false } >
-                    <NavLink to='/data/analysis' className="main-nav" onClick={()=>{chagneSelect(1)}}>
-                        - 통계 데이터
+                <Nav select={select === 1 ? true : false }>
+                    <NavLink to='/user' className="main-nav" onClick={()=>{chagneSelect(1)}}>
+                        - 유저 목록
                     </NavLink>
-                    <div className="sub-nav" > 
-                        <NavList to='/data/analysis' onClick={()=>{setSubSelect(1)}} subselect={subSelect === 1 ? 1 : undefined }>
-                            - 분석 데이터
-                        </NavList>
-                        <NavList to='/data/country' onClick={()=>{setSubSelect(2)}} subselect={subSelect === 2 ? 2 : undefined }>
-                            - 국가별 데이터
-                        </NavList>
-                        <NavList to='/data/age' onClick={()=>{setSubSelect(3)}} subselect={subSelect === 3 ? 3 : undefined }>
-                            - 연령별 데이터
-                        </NavList>
-                    </div>
                 </Nav>
                 <Nav select={select === 2 ? true : false }>
-                    <NavLink to='/user' className="main-nav" onClick={()=>{chagneSelect(2)}}>
-                        - 회원 데이터
-                    </NavLink>
-                </Nav>
-                <Nav select={select === 3 ? true : false }>
-                    <NavLink to='/tooth/list' className="main-nav" onClick={()=>{chagneSelect(3)}}>
-                        - 치약관리
+                    <NavLink to='/issue/' className="main-nav" onClick={()=>{chagneSelect(2)}}>
+                        - 시험 관리
                     </NavLink>
                     <div className="sub-nav" > 
-                        <NavList to='/tooth/list'onClick={()=>{setSubSelect(1)}} subselect={subSelect === 1 ? 1 : undefined }>
-                            - 치약 목록
+                        <NavList to='/issue/'onClick={()=>{setSubSelect(1)}} subselect={subSelect === 1 ? 1 : undefined }>
+                            - 시험 목록
                         </NavList>
-                        <NavList to='/tooth/bundle' onClick={()=>{setSubSelect(2)}} subselect={subSelect === 2 ? 2 : undefined }>
-                            - 치약 일괄등록
+                        <NavList to='/issue/bundle' onClick={()=>{setSubSelect(2)}} subselect={subSelect === 2 ? 2 : undefined }>
+                            - 시험 일괄등록
                         </NavList>
                     </div>
                 </Nav>
-                <Nav select={select === 4 ? true : false }>
-                    <NavLink to='/info' className="main-nav" onClick={()=>{chagneSelect(4)}}>
-                        - 구강관리 정보
-                    </NavLink>
-                </Nav>
-                <Nav select={select === 5 ? true : false }>
-                    <NavLink to='/notice' className="main-nav" onClick={()=>{chagneSelect(5)}}>
-                        - 공지사항
+                <Nav select={select === 3 ? true : false }>
+                    <NavLink to='/notice' className="main-nav" onClick={()=>{chagneSelect(3)}}>
+                        - 일정관리
                     </NavLink>
                 </Nav>
             </div>

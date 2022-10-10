@@ -1,5 +1,5 @@
 import react, {useCallback, useEffect, useState} from 'react';
-import { login } from '../../lib/api';
+
 import { useRouter } from '../common/useRouter';
 
 export default function useAuth(){
@@ -20,14 +20,7 @@ export default function useAuth(){
     }
 
     const handdleLogin = async(input) => {
-        const {data} = await login(input);
-        if(data === true){
-            localStorage.setItem('login', 'true');
-            router.history.push('/')
-        }
-        else{
-            setError('로그인 정보를 다시 확인해주세요');
-        }
+        
     }
 
     const handleLogout = () => {

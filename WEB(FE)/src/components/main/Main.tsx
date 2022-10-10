@@ -1,18 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import {
     Button,
-    Card,
-    Header,
     Input,
     Pagination,
     Table,
   } from 'semantic-ui-react'
-import useBlock from '../../hooks/block/useBlock';
 import moment  from 'moment';
-import { json } from 'express';
-import {Redirect} from 'react-router-dom'
 import useAuth from '../../hooks/user/useAuth';
 
 const MainBlock = styled.div`
@@ -62,26 +57,8 @@ const MainBlock = styled.div`
     
 `;
 const Main = () => {
-
-
-
-    const {blocks} = useBlock();
     const {handleLogout} = useAuth();
 
-    const blockList = blocks.map((block: any) => {
-        const {id, header, data} = block;
-        const {event_id, generated_time, version} = header;
-        
-        
-        return (
-            <Table.Row key={id}>
-                <Table.Cell>{id}</Table.Cell>
-                <Table.Cell>{moment(new Date(generated_time*1000)).format('YYYY-MM-DD hh:mm:ss')}</Table.Cell>
-                <Table.Cell>{event_id}</Table.Cell>
-                <Table.Cell>{JSON.stringify(data)}</Table.Cell>
-            </Table.Row>
-        )
-    });
 
     return (
         <MainBlock>
@@ -122,7 +99,7 @@ const Main = () => {
                         </Table.Header>
 
                         <Table.Body>
-                            {blockList}
+ 
                         </Table.Body>
                     </Table>
                 </div>

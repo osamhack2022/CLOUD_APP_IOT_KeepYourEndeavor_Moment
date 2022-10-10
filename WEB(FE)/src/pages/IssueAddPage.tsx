@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import Header from '../components/common/Header';
 import Sidebar from '../components/common/Sidebar';
+import IssueAdd from '../components/issue/IssueAdd';
 
-import Main from '../components/main/Main';
-
-function MainPage() {
+function IssueAddPage() {
     return (
         <>
             <Header></Header>
             <Sidebar>
-                <Main></Main>
+                <IssueAdd></IssueAdd>
             </Sidebar>
         </>
     )
 }
 
-export default MainPage;
+export default IssueAddPage;

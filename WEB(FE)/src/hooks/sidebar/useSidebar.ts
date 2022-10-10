@@ -12,45 +12,30 @@ export default function useSidebar() {
     useEffect(() => {
         console.log(router.match.path);
         switch (router.match.path) {
-            case '/data/analysis' :
-                setSelect(1);
-                setSubSelect(1);
-                break;
-            case '/data/country' :
-                setSelect(1);
-                setSubSelect(2);
-                break;   
-            case '/data/age' :
-                setSelect(1);
-                setSubSelect(3);
-                break;   
             case '/user' :
-                setSelect(2);
+                setSelect(1);
                 break;
             case '/user/:id' :
-                setSelect(2);
+                setSelect(1);
                 break;
-            case '/tooth/list' : case '/tooth/list/:id' : case '/tooth/create' :
-                setSelect(3);
+            case '/issue' : case '/issue/detail/:id' : case '/issue/add' :
+                setSelect(2);
                 setSubSelect(1);
                 break;
-            case '/tooth/bundle':
-                setSelect(3);
+            case '/issue/bundle':
+                setSelect(2);
                 setSubSelect(2);
                 break;
-            case '/info' : case '/info/:id' :
-                setSelect(4)
-                break;
-            case '/notice': case '/notice/:id' :
-                setSelect(5)
+            case '/notice' : case '/notice/detail/:id' : case '/notice/add' :
+                setSelect(3)
                 break;
         }
     }, []);
 
     useEffect(()=>{
-        if ( sessionStorage.getItem('logged') !== "로그인"){
+        /*if ( sessionStorage.getItem('logged') !== "로그인"){
             router.history.push('/login');
-        }
+        }*/
     },[]);
     
     return {

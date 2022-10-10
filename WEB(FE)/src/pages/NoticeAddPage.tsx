@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import Header from '../components/common/Header';
 import Sidebar from '../components/common/Sidebar';
-
-import Main from '../components/main/Main';
+import NoticeAdd from '../components/main/NoticeAdd';
 
 function MainPage() {
     return (
         <>
             <Header></Header>
             <Sidebar>
-                <Main></Main>
+                <NoticeAdd></NoticeAdd>
             </Sidebar>
         </>
     )

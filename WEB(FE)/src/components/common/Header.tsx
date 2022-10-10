@@ -53,7 +53,7 @@ function Header() {
         <HeaderBlock>
             <Wrapper>
                 <div className="logo-box">
-                    <Link className="logo" to="/">Bluereo</Link>
+                    <Link className="logo" to="/">Keep Your Endeavor</Link>
                     <div className="title" >관리자페이지</div>
                 </div>
             </Wrapper>
