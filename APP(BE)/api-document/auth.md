@@ -1,3 +1,4 @@
+
 # /auth 
 ## /auth/signup [POST] 제한 없음
 ### 회원가입 라우터입니다.
@@ -31,12 +32,11 @@ curl --location --request POST 'https://api-server.run.goorm.io/auth/signup/' \
 {
     "message": "회원가입에 성공했습니다. 회원의 비밀번호는 암호화 처리됩니다.",
     "issue": "암호화 시간이 조금 소요될 수 있으니 기다려주세요.",
-    "start_url": "http://20-500123.jerrykang.com 가 생성됐습니다.",
-    "start_result": "1"
+    "start_url": "http://20-500123.jerrykang.com 가 생성됐습니다."
 }
 ```
 ###### peer_url.data.url 예시 :  **`http://peer1.jerrykang.com`**
-###### start_peer.data 예시 :  **`1`**
+
 ---
 ##### 실패시 status : 406
 
@@ -64,9 +64,13 @@ curl --location --request POST 'https://api-server.run.goorm.io/auth/signin' \
 {
     "message": "로그인 성공! 토큰은 DB에 저장되어 관리됩니다. 로그인 유효시간은 6시간 입니다.",
     "issue": "암호화 시간이 조금 소요될 수 있으니 기다려주세요.",
-    "token": "사용자 id , 사용자 권한, 사용자의 peer 도메인이 암호회 되어 응답됩니다."
+    "token": "사용자 id , 사용자 권한, 사용자의 peer 도메인이 암호화 되어 응답됩니다.",
+    "start_result" : "peer start의 결과가 들어옵니다."
 }
 ```
+
+###### start_peer.data 예시 :  **`1`**
+
 ---
 ##### 비밀번호 미일치 status : 406
 
