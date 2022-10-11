@@ -68,7 +68,7 @@ router.post('/post',  verifyToken, supervisorAccess,async (req, res) => {
 		return res.status(406).json(
 				{
 					error:'Not Acceptable', 
-					message : '이미 존재하는 기준입니다.'
+					message : '이미 존재하는 기준입니다. 변경을 원할 시 삭제 후 재생성해주세요'
 				}
 			);
 	}

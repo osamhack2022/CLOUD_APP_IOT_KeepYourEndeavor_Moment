@@ -67,9 +67,7 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 		let resultOfStandard = ""
 		const userRef = await fireDB.collection(issueInfo.type).doc(issueInfo.subject).get();
 		if (!userRef._fieldsProto) {
-			const standard = JSON.parse(req.body.standard);
 			await conn.execute('INSERT INTO type VALUES (?,?,?)', [issueInfo.type, createAt, updateAt]);
-			//await fireDB.collection(issueInfo.type).doc(issueInfo.subject).set(standard); // issue #85
 		} else {
 			flag = false;
 		}
