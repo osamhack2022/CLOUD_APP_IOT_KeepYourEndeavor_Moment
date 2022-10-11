@@ -32,7 +32,7 @@ router.get('/', verifyToken, normalAccess, async(req, res) => {
 router.post('/regist', verifyToken ,managerAccess, async (req, res, next) => {
 	try {
 		const token = req.decoded;
-		let {title, issue_id, test_date, apply_date, description} = req.body;
+		let {title, issue_id, manager_id ,test_date, apply_date, description} = req.body;
 		const testDate = moment(test_date).valueOf();
 		const applyDate = moment(apply_date).valueOf();
 		test_date = moment(test_date).format("YYYY-M-D H:m:s");
@@ -41,8 +41,8 @@ router.post('/regist', verifyToken ,managerAccess, async (req, res, next) => {
 		timeChecker(testDate, applyDate, res);
 		
 		const id = await makeHashedValue(title); 
-		const bind = [id, title, issue_id, token.id, test_date, apply_date, moment().format("YYYY-M-D H:m:s"), moment().format("YYYY-M-D H:m:s"), description];
-		await conn.execute('INSERT INTO notice VALUES (?,?,?,?,?,?,?,?,?)', bind);
+		const bind = [id, title, issue_id,manager_id ,token.id, test_date, apply_date, moment().format("YYYY-M-D H:m:s"), moment().format("YYYY-M-D H:m:s"), description];
+		await conn.execute('INSERT INTO notice VALUES (?,?,?,?,?,?,?,?,?,?)', bind);
 		return res.status(200).json({
 			message:"공지를 성공적으로 등록했습니다."
 		});
