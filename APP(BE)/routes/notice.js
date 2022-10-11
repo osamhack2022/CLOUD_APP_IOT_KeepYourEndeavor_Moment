@@ -114,7 +114,7 @@ router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res, next
 		console.error(err);
 		res.status(500).json({
 			error: "Internal Server Error",
-			message: "수정 컬럼 이름이 잘못됐을 가능성이 큰 오류입니다."
+			message: err.message
 
 		})
 	}

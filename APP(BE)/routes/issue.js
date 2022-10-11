@@ -49,7 +49,7 @@ router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
 	}
 });
 
-router.post('/regist', verifyToken, supervisorAccess, async (req, res) => {
+router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 	try {
 		const token = req.decoded;
 		const createAt = moment().format("YYYY-M-D H:m:s");
@@ -69,14 +69,14 @@ router.post('/regist', verifyToken, supervisorAccess, async (req, res) => {
 		if (!userRef._fieldsProto) {
 			const standard = JSON.parse(req.body.standard);
 			await conn.execute('INSERT INTO type VALUES (?,?,?)', [issueInfo.type, createAt, updateAt]);
-			await fireDB.collection(issueInfo.type).doc(issueInfo.subject).set(standard);
+			//await fireDB.collection(issueInfo.type).doc(issueInfo.subject).set(standard); // issue #85
 		} else {
 			flag = false;
 		}
 		if (flag) {
-			resultOfStandard = true;
+			resultOfStandard = `collection = ${issueInfo.type}, subject = ${issueInfo.subject}(으)로 기준을 생성해야 합니다.`;
 		} else {
-			resultOfStandard = false;
+			resultOfStandard = `기준은 이미 생성돼 있습니다.`;
 			flag = true;
 		}
 		

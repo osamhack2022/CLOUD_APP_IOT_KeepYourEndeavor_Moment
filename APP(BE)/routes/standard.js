@@ -13,24 +13,25 @@ require('../db/redisCon.js')().then((res) => redisCon = res);
 
 
 
-router.get('/', verifyToken, supervisorAccess,async (req, res) => {
+router.get('/', verifyToken, supervisorAccess, async (req, res) => {
 	try {
 		const [types, fields] = await conn.execute('SELECT id FROM type');
 		console.log(types);
 		const standards = {}
 		for await (let type of types) {
 				const snapshot = await fireDB.collection(type.id).get();
+				standards[type.id] = []
 				snapshot.forEach((doc) => {
+					console.log(doc.id);
 					if (doc.id === "merkle"){
 						console.log(doc.id);
 					} else {
 						const detail = {};
 						detail[doc.id] = doc.data();
-						standards[type.id] = detail;
+						standards[type.id].push(detail);
 					}
 				});
 			}
-		console.log(standards);
 		res.status(200).json({
 			message: "standard 들을 모두 보냅니다",
 			standards
@@ -41,6 +42,38 @@ router.get('/', verifyToken, supervisorAccess,async (req, res) => {
 			message : "예기치 못한 에러가 발생했습니다."
 		});
 	}
+});
+
+router.post('/post',  verifyToken, supervisorAccess,async (req, res) => {
+	const standardInfo = req.body;
+	const [rowType, fieldType] = await conn.execute('SELECT * FROM type WHERE id = ?', [standardInfo.type]);
+	if (rowType.length === 0) {
+		return res.status(406).json(
+				{
+					error:'Not Acceptable', 
+					message : '잘못된 type 종류입니다. type의 종류를 확인해주세요'
+				}
+			);
+	}
+	const standardRef = await fireDB.collection(standardInfo.type).doc(standardInfo.subject).get();
+	
+	if (!standardRef._fieldsProto) {
+			const standard = JSON.parse(standardInfo.standard);
+			await fireDB.collection(standardInfo.type).doc(standardInfo.subject).set(standard);
+			return res.status(200).json({
+				message: "기준 생성에 성공했습니다.",
+				standard
+			});
+	} else {
+		return res.status(406).json(
+				{
+					error:'Not Acceptable', 
+					message : '이미 존재하는 기준입니다.'
+				}
+			);
+	}
+	
+	
 });
 
 router.post('/delete', verifyToken, supervisorAccess,async (req, res) => {
