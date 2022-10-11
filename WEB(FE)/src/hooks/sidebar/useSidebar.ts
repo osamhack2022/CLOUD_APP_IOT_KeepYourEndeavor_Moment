@@ -26,7 +26,7 @@ export default function useSidebar() {
                 setSelect(2);
                 setSubSelect(2);
                 break;
-            case '/notice' : case '/notice/detail/:id' : case '/notice/add' :
+            case '/notice' : case '/notice/:id' : case '/notice/add' :
                 setSelect(3)
                 break;
         }
