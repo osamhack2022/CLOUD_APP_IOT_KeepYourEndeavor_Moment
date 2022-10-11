@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import Header from '../components/common/Header';
 import Sidebar from '../components/common/Sidebar';
-import Notice from '../components/notice/Notice';
+import NoticeDetail from '../components/notice/NoticeDetail';
 
-function NoticePage() {
+function NoticeDetailPage() {
     return (
         <>
             <Header></Header>
             <Sidebar>
-                <Notice></Notice>
+                <NoticeDetail></NoticeDetail>
             </Sidebar>
         </>
     )
 }
 
-export default NoticePage;
+export default NoticeDetailPage;
