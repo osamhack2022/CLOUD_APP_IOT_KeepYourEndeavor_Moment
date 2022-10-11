@@ -5,12 +5,12 @@ const IssueModalBlock = styled.div`
     
 `;
 
-const IssueModal = ({open, setOpen, onChangeInput}) => (
+const IssueModal = ({open, onClickModal, onChangeInput, name}) => (
     
     <IssueModalBlock>
         <Modal
-            onClose={() => setOpen(false)}
-            onOpen={() => setOpen(true)}
+            onClose={() => onClickModal(name)}
+            onOpen={() => onClickModal(name)}
             open={open}
         >
             <Modal.Header>시험추가</Modal.Header>
@@ -72,7 +72,7 @@ const IssueModal = ({open, setOpen, onChangeInput}) => (
                     content="추가하기"
                     labelPosition='right'
                     icon='checkmark'
-                    onClick={() => setOpen(false)}
+                    onClick={() => onClickModal(name)}
                     positive />
             </Modal.Actions>
         </Modal>
