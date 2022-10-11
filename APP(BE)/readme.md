@@ -1,6 +1,6 @@
  <p  align="center">
 <a  href="https://github.com/osamhack2022/CLOUD_WEB_IOT_KeepYourEndeavor_Moment"  target="_blank"  rel="noopener noreferrer">
-<img width="700px" height = "300px" src='https://github.com/osamhack2022/CLOUD_WEB_IOT_KeepYourEndeavor_Moment/raw/CLOUD/images/logo.png'/>
+<img width="700px" height = "300px" src='https://github.com/osamhack2022/CLOUD_APP_WEB_IOT_KeepYourEndeavor_Moment/blob/server/APP(BE)/images/logo.png'/>
 </a>
 </p>
 <h1  align="center">KY2 API SERVER</h1>
