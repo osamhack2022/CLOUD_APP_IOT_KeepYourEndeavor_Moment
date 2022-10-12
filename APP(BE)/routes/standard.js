@@ -98,7 +98,7 @@ router.post('/delete', verifyToken, supervisorAccess,async (req, res) => {
 		} else {
 			await fireDB.collection(standardInfo.collection).doc(standardInfo.doc).delete();
 			return res.status(200).json({
-				message : '성공적으로 기준을 삭제했습니다.'
+				message : ' 성공적으로 기준을 삭제했습니다. '
 			});
 		}
 	} catch (err) {
