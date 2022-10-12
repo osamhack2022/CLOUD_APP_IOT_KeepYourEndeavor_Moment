@@ -58,7 +58,7 @@ router.post('/post',  verifyToken, supervisorAccess,async (req, res) => {
 	const standardRef = await fireDB.collection(standardInfo.type).doc(standardInfo.subject).get();
 	
 	if (!standardRef._fieldsProto) {
-			const standard = JSON.parse(standardInfo.standard);
+			const standard = standardInfo.standard;
 			await fireDB.collection(standardInfo.type).doc(standardInfo.subject).set(standard);
 			return res.status(200).json({
 				message: "기준 생성에 성공했습니다.",
