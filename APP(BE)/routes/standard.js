@@ -58,7 +58,7 @@ router.post('/post',  verifyToken, supervisorAccess,async (req, res) => {
 	const standardRef = await fireDB.collection(standardInfo.type).doc(standardInfo.subject).get();
 	
 	if (!standardRef._fieldsProto) {
-			const standard = JSON.parse(standardInfo.standard);
+			const standard = standardInfo.standard;
 			await fireDB.collection(standardInfo.type).doc(standardInfo.subject).set(standard);
 			return res.status(200).json({
 				message: "기준 생성에 성공했습니다.",
@@ -98,7 +98,7 @@ router.post('/delete', verifyToken, supervisorAccess,async (req, res) => {
 		} else {
 			await fireDB.collection(standardInfo.collection).doc(standardInfo.doc).delete();
 			return res.status(200).json({
-				message : '성공적으로 기준을 삭제했습니다.'
+				message : ' 성공적으로 기준을 삭제했습니다. '
 			});
 		}
 	} catch (err) {

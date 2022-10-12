@@ -22,8 +22,105 @@ curl --location --request GET 'https://api-server.run.goorm.io/standard/'
 
 ```json
 {
-    "message": "standard 들을 모두 보냅니다",
-    standards
+
+	"message": "standard 들을 모두 보냅니다",
+
+	"standards": {
+
+	"측정시험": [
+
+		{
+
+			"윗몸일으키기": {
+
+				"fail_grade": "20",
+
+				"second_grade": "50",
+
+				"first_grade": "76",
+
+				"special_grade": "80",
+
+				"third_grade": "40"
+
+			}
+
+		},
+
+		{
+
+			"팔굽혀펴기": {
+
+				"special_grade": "80",
+
+				"third_grade": "40",
+
+				"first_grade": "60",
+
+				"fail_grade": "20",
+
+				"second_grade": "50"
+
+			}
+
+		}
+
+	],
+
+	"필기시험": [
+
+		{
+
+			"정신전력": {
+
+				"second_grade": "50",
+
+				"fail_grade": "20",
+
+				"third_grade": "40",
+
+				"first_grade": "75",
+
+				"special_grade": "80"
+
+			}
+
+		}
+
+	],
+
+	"수업": [
+
+		{
+
+			"북한과 나": {
+
+				"FAIL": "FAIL",
+
+				"PASS": "PASS"
+
+			}
+
+		},
+
+		{
+
+			"북한과 남한": {
+
+				"PASS": "PASS",
+
+				"FAIL": "FAIL"
+
+			}
+
+		}
+
+	],
+
+	"강연": []
+
+	}
+
 }
 ```
 
@@ -68,12 +165,16 @@ curl --location --request GET 'https://api-server.run.goorm.io/standard/'
 ```
 
 
-#### body에 넣어주세요 
+#### JSON 으로 요청 해주세요
 ```bash
 curl --location --request POST 'https://api-server.run.goorm.io/standard/post' \ 
---data-urlencode 'type=수업' \ 
---data-urlencode 'subject=북한과 남한' \ 
---data-urlencode 'standard={"PASS":"PASS","FAIL":"FAIL"}'
+
+{
+	"type" : "강연",
+	"subject" : "세바퀴",
+	"standard" : {"PASS":"PASS","FAIL":"FAIL"}
+}
+
 ```
 ---
 #### 응답 내용
@@ -81,8 +182,11 @@ curl --location --request POST 'https://api-server.run.goorm.io/standard/post' \
 ##### 성공시 status : 200
 ```json
 {
-    "message": "기준 생성에 성공했습니다.",
-    standard
+	"message": "기준 생성에 성공했습니다.",
+	"standard": {
+		"PASS": "PASS",
+		"FAIL": "FAIL"
+	}
 }
 ```
 ---
@@ -118,11 +222,15 @@ curl --location --request POST 'https://api-server.run.goorm.io/standard/post' \
 ## /standard/delete [POST] 개설자 가능
 ### 기준삭제 라우터입니다.
 / 에서 가져온 기준 정보로 기준을 삭제할 수 있습니다.
-#### body에 넣어주세요 
+#### JSON으로 요청 해주세요
 ```bash
 curl --location --request POST 'https://api-server.run.goorm.io/standard/delete' \
---data-urlencode 'collection=측정시험' \
---data-urlencode 'doc=팔굽혀펴기'
+
+{
+	"collection" : "강연",
+	"doc" : "세바퀴"
+}
+
 ```
 ---
 #### 응답 내용
