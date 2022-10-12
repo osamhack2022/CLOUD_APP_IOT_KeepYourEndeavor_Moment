@@ -24,7 +24,7 @@ router.post('/signup', async (req, res, next) => {
 		}
 		
 		// 테스트용 원래는 api.jerrykang.com
-		const peer_url = await axios.post("http://api.jerrykang.com/v1/peer",blockInfo);
+		const peer_url = await axios.post("http://api.jerrykang.com/v1/peer", blockInfo);
 		console.log(peer_url.data.url);
 		
 		
