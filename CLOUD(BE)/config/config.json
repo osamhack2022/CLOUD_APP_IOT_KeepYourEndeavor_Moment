@@ -4,5 +4,33 @@
       "pass": "routes"
     }
   },
-  "routes": []
+  "routes": [
+    {
+      "match": {
+        "host": "admin.jerrykang.com",
+        "uri": "/*"
+      },
+      "action": {
+        "proxy": "http://127.0.0.1:9000"
+      }
+    },
+    {
+      "match": {
+        "host": "supervisor.jerrykang.com",
+        "uri": "/*"
+      },
+      "action": {
+        "proxy": "http://172.24.255.3:5000"
+      }
+    },
+    {
+      "match": {
+        "host": "21-11112222.jerrykang.com",
+        "uri": "/*"
+      },
+      "action": {
+        "proxy": "http://172.24.255.5:5000"
+      }
+    }
+  ]
 }
