@@ -36,17 +36,17 @@ router.get('/:noticeId/',verifyToken,normalAccess, async (req, res, next) => {
 		const noticeId = req.params.noticeId;
 		let issueId = await conn.execute('SELECT issue_id FROM notice WHERE id = ?', [noticeId]);
 		issueId = issueId[0][0].issue_id;
-		const [members, fields] = await conn.execute('SELECT rep_id, members, message FROM application WHERE issue_id = ?', [issueId]);
+		const [members, fields] = await conn.execute('SELECT rep_id, members, message FROM application WHERE issue_id = ? and rep_id = ?', [issueId, req.decoded.id]);
 		res.status(200).json({
 			message: "해당 공지에 신청한 인원 현황입니다",
 			members
 		});
 	} catch (err) {
 		console.error(err);
-		return res.status(500).json({
-			error: "Interval server Error",
-			message : "예기치 못한 에러가 발생했습니다. "
-		});
+		return res.status(406).json({
+				error : "Not Acceptable", 
+				message: "잘못된 공지 정보입니다."
+			});
 	}
 });
 
@@ -55,19 +55,19 @@ router.post('/:noticeId/regist',verifyToken,normalAccess, async (req, res, next)
 		const token = req.decoded;
 		const noticeId = req.params.noticeId;
 		let issueId = await conn.execute('SELECT issue_id FROM notice WHERE id = ?', [noticeId]);
-		issueId = issueId[0][0].issue_id;
 		if (issueId[0].length === 0) {
 			return res.status(406).json({
 				error : "Not Acceptable", 
 				message: "잘못된 공지 정보입니다."
 			});
 		}
+
 		
 		const members = JSON.parse(req.body.members).members;
 		const message = req.body.message;
 		const createAt = moment().format("YYYY-M-D H:m:s");
-		
-		const bind = [null, issueId, token.id, members, message, createAt, null]
+		const updateAt = moment().format("YYYY-M-D H:m:s");
+		const bind = [null, issueId[0][0].issue_id, token.id, members, message, createAt, updateAt]
 		await conn.execute('INSERT INTO application VALUES (?,?,?,?,?,?,?)', bind);
 		
 		res.status(200).json({
@@ -75,10 +75,10 @@ router.post('/:noticeId/regist',verifyToken,normalAccess, async (req, res, next)
 		});
 	
 	} catch (err) {
-		
-		return res.status(500).json({
-			error: "Interval server Error",
-			message : "예기치 못한 에러가 발생했습니다. "
+		console.error(err);
+		return res.status(406).json({
+			error : "Not Acceptable", 
+			message: "요청 데이터의 형식이 잘못됐습니다. 요청 JSON을 확인해주세요."
 		});
 	}
 	
@@ -130,11 +130,9 @@ router.post('/:noticeId/edit',verifyToken,normalAccess, async (req, res, next) =
 			message: '보내주신 내용대로 업데이트에 성공했습니다!'
 		});
 	} catch (err) {
-		console.log(err);
-		res.status(500).json({
-			
-			error: "Internal Server Error",
-			message: "예기치 못한 에러가 발생했습니다. "
+		res.status(406).json({
+			error: "Not Acceptable",
+			message: "주어진 JSON 데이터의 형식이 올바르지 않습니다. JSON 데이터를 확인해주세요."
 		})
 	}
 });
@@ -144,7 +142,6 @@ router.post('/:noticeId/delete',verifyToken,normalAccess, async (req, res, next)
 		const rep_id = req.decoded.id
 		const noticeId = req.params.noticeId;
 		let issueId = await conn.execute('SELECT issue_id FROM notice WHERE id = ?', [noticeId]);
-		console.log(issueId);
 		issueId = issueId[0][0].issue_id;
 		const result = await conn.execute('DELETE FROM application WHERE rep_id = ? AND issue_id = ?', [rep_id, issueId]);
 		if (result[0].affectedRows === 0) {
@@ -158,9 +155,9 @@ router.post('/:noticeId/delete',verifyToken,normalAccess, async (req, res, next)
 		});
 	} catch (err) {
 		console.error(err);
-		return res.status(500).json({
-			error: "Interval server Error",
-			message : "예기치 못한 에러가 발생했습니다. "
+		return res.status(406).json({
+				error : "Not Acceptable", 
+				message: "잘못된 공지 정보입니다."
 		});
 	}
 });

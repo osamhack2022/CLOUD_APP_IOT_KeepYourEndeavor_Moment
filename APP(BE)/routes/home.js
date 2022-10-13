@@ -16,8 +16,8 @@ router.get('/', verifyToken ,normalAccess, async (req, res, next) => {
 	
 	const peer = req.decoded.peer;
   try {
-		//const response = await axios.get(`${peer}/v1/block?user=${req.decoded.id}`); 실제론 여기
-		const response = await axios.get(`http://api.jerrykang.com/v1/block?user=${req.decoded.id}`); // 테스트는 여기
+		const response = await axios.get(`${peer}/v1/block?user=${req.decoded.id}`); //실제론 여기
+		//const response = await axios.get(`http://api.jerrykang.com/v1/block?user=${req.decoded.id}`); // 테스트는 여기
 		console.log(response.data.blocks);
 		const usersData = []
 		response.data.blocks.forEach((data) =>{			
