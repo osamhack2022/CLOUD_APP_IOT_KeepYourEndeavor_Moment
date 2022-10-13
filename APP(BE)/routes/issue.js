@@ -72,7 +72,7 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 			flag = false;
 		}
 		if (flag) {
-			resultOfStandard = `collection = ${issueInfo.type}, subject = ${issueInfo.subject}(으)로 기준을 생성해야 합니다.`;
+			resultOfStandard = {collection : issueInfo.type, subject:issueInfo.subject};
 		} else {
 			resultOfStandard = `기준은 이미 생성돼 있습니다.`;
 			flag = true;
@@ -81,7 +81,7 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?)', bind);
 		res.status(200).json(
 			{
-				message : "issue 등록이 완료됐습니다.",
+				message : "issue 등록이 완료됐습니다. resultOfStandard의 내용대로 기준을 생성 해주세요",
 				issueId : id,
 				resultOfStandard
 			}
@@ -91,71 +91,12 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 		res.status(406).json(
 			{
 				error : "Not Acceptable", 
-				message: "잘못된 이슈 정보입니다."
+				message: "이미 등록된 이슈이거나 잘못된 이슈입니다. 이슈를 새로 등록을 원하실 경우 기존 이슈를 삭제해 주세요."
 			}
 		);
 	}
 });
 
-
-/* issue의 삭제는 의미가 없어보인다. 고로 과감히 삭제 
-router.post('/:issueId/edit', verifyToken, supervisorAccess, async (req, res) => {
-	try {
-		const issueId = req.params.issueId;
-		const issueAllowKeys = ['type','subject'];
-		let updateIssueTable = [];
-		
-		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM issue WHERE id = ?', [issueId]);
-		const issue = rowUser[0];
-		console.log(issue);
-		
-		
-		const clientRequestUpdateKey = Object.keys(req.body);
-		clientRequestUpdateKey.forEach((key) => {
-			if (key === "standard") {
-				console.log();
-			} else if (issueAllowKeys.includes(key)) {
-				updateIssueTable.push([key, req.body[key], issueId]);
-			} else {
-				throw new Error('Client request key is not matched to the db column name.');
-			}
-		});
-		
-		
-		for await (let inform of updateIssueTable) {
-			const updateAt = moment().format("YYYY-M-D H:m:s"); //format("YYYY-M-D H:m:s");
-			await conn.execute(`UPDATE issue SET ${inform[0]} = '${inform[1]}' WHERE id = '${inform[2]}'`);
-			await conn.execute(`UPDATE issue SET updated_at = '${updateAt}' WHERE id = '${inform[2]}'`);
-		}
-		
-		if (req.body.standard) {
-			const updateStandard = JSON.parse(req.body.standard);
-			console.log(updateStandard);
-			const userRef = await fireDB.collection(issue.type).doc(issue.subject).get();
-			console.log(userRef._fieldsProto);
-			if (userRef._fieldsProto) {
-				await fireDB.collection(issue.type).doc(issue.subject).update(updateStandard);
-			} else {
-				return res.status(406).json(
-								{
-									error : "Not Acceptable", 
-									message: "잘못된 기준 정보이거나 없는 기준입니다. issue 생성시 기준도 같이 생성해주세요"
-								}
-							);
-			}
-		}
-		
-		res.status(200).json({
-			message: '보내주신 내용대로 업데이트에 성공했습니다!'
-		});
-	} catch (err) {
-		res.status(500).json({
-			error: "Internal Server Error",
-			message: "예기치 못한 에러가 발생했습니다."
-		})
-	}
-});
-*/
 
 router.post('/:issueId/delete', verifyToken, supervisorAccess, async (req, res) => {
 	try {

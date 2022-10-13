@@ -7,23 +7,40 @@
 
 해당 subject에 대해 기준을 변경하고 싶으면 이슈 라우터에서 삭제 후 재생성 해야합니다.  
 
-#### body에 넣어주세요 
+#### JSON으로 요청 해주세요
 ```json
 curl --location --request POST 'https://api-server.run.goorm.io/issue/regist' \ 
---data-urlencode 'type=test' \ 
---data-urlencode 'subject=팔굽혀펴기' \ 
+
+{
+	"type" : "측정시험",
+	"subject" : "뜀걸음"
+}
 ```
 
 ---
 #### 응답 내용
 
-##### 성공시 status : 200
+##### 성공, 기준 생성이 필요할 때 status : 200
 
 ```json
 {
-    "message": "issue 등록이 완료됐습니다.",
-    "issueId": "Issue ID가 들어갑니다",
-    "resultOfStandard" : "기준이 있다면 있다고, 없다면 어떻게 만들어야 하는지에 대해서 알려줍니다." 
+	"message": "issue 등록이 완료됐습니다. resultOfStandard의 내용대로 기준을 생성 해주세요",
+	"issueId": "Kw9pJ1XTtP7N6a4",
+	"resultOfStandard": {
+		"collection": "측정시험",
+		"subject": "뜀걸음"
+	}
+}
+```
+---
+
+##### 성공, 기준 생성이 필요 없을 때 status : 200
+
+```json
+{
+	"message": "issue 등록이 완료됐습니다.",
+	"issueId": "ZdxQkIIPRADkRuk7",
+	"resultOfStandard": "기준은 이미 생성돼 있습니다."
 }
 ```
 ---
@@ -32,7 +49,7 @@ curl --location --request POST 'https://api-server.run.goorm.io/issue/regist' \
 ```json
 {
     "error": "Not Acceptable",
-    "message": "잘못된 이슈 정보입니다."
+    "message": "이미 등록된 이슈이거나 잘못된 이슈입니다. 이슈를 새로 등록을 원하실 경우 기존 이슈를 삭제해 주세요."
 }
 ```
 
@@ -47,23 +64,39 @@ curl --location --request GET 'https://api-server.run.goorm.io/issue/'
 ##### 성공시 status : 200
 ```json
 {
-    "message": "등록된 issue들을 성공적으로 전송했습니다.",
-    "issues": [
-        {
-            "id": "OvEuiS6MscL+J99q",
-            "type": "test",
-            "subject": "팔굽혀펴기",
-            "issuer_id": "supervisor",
-            "created_at": "2022-10-06T23:10:07.000Z",
-            "updated_at": null
-        }
-    ]
+	"message": "등록된 issue들을 성공적으로 전송했습니다.",
+	"issues": [
+		{
+			"id": "eHUl6qaWclHeij7G",
+			"type": "측정시험",
+			"subject": "윗몸일으키기",
+			"issuer_id": "supervisor",
+			"created_at": "2022-10-13T23:29:17.000Z",
+			"updated_at": "2022-10-13T23:29:17.000Z"
+		},
+		{
+			"id": "gbYONfg0KDDcXaFM",
+			"type": "측정시험",
+			"subject": "뜀걸음",
+			"issuer_id": "supervisor",
+			"created_at": "2022-10-13T23:27:01.000Z",
+			"updated_at": "2022-10-13T23:27:01.000Z"
+		},
+		{
+			"id": "KqiUkmHAJ0jiSXQ+",
+			"type": "측정시험",
+			"subject": "팔굽혀펴기",
+			"issuer_id": "supervisor",
+			"created_at": "2022-10-13T23:29:07.000Z",
+			"updated_at": "2022-10-13T23:29:07.000Z"
+		}
+	]
 }
 ```
 ---
 
 ##### 실패시 status : 500
-``` json
+```json
 {
     "error": "Interval server Error",
     "message" : "예기치 못한 에러가 발생했습니다."
@@ -84,41 +117,40 @@ curl --location --request GET 'https://api-server.run.goorm.io/issue/:issueId'
 ##### 성공시 status : 200
 ```json
 {
-    "message": "등록된 issue를 성공적으로 전송했습니다.",
-    "issue": [
-        {
-            "id": "OvEuiS6MscL+J99q",
-            "type": "test",
-            "subject": "팔굽혀펴기",
-            "issuer_id": "supervisor",
-            "created_at": "2022-10-06T23:10:07.000Z",
-            "updated_at": null
-        }
-    ],
-    "standard": {
-        "fail_grade": {
-            "stringValue": "20",
-            "valueType": "stringValue"
-        },
-        "special_grade": {
-            "stringValue": "80",
-            "valueType": "stringValue"
-        },
-        "first_grade": {
-            "stringValue": "75",
-            "valueType": "stringValue"
-        },
-        "third_grade": {
-            "stringValue": "40",
-            "valueType": "stringValue"
-        },
-        "second_grade": {
-            "stringValue": "50",
-            "valueType": "stringValue"
-        }
-    }
+	"message": "등록된 issue를 성공적으로 전송했습니다.",
+	"issue": [
+		{
+			"id": "eHUl6qaWclHeij7G",
+			"type": "측정시험",
+			"subject": "윗몸일으키기",
+			"issuer_id": "supervisor",
+			"created_at": "2022-10-13T23:29:17.000Z",
+			"updated_at": "2022-10-13T23:29:17.000Z"
+		}
+	],
+	"standard": {
+		"third_grade": {
+			"stringValue": "40",
+			"valueType": "stringValue"
+		},
+		"second_grade": {
+			"stringValue": "50",
+			"valueType": "stringValue"
+		},
+		"first_grade": {
+			"stringValue": "76",
+			"valueType": "stringValue"
+		},
+		"fail_grade": {
+			"stringValue": "20",
+			"valueType": "stringValue"
+		},
+		"special_grade": {
+			"stringValue": "80",
+			"valueType": "stringValue"
+		}
+	}
 }
-
 ```
 ---
 
