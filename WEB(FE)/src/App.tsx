@@ -4,8 +4,9 @@ import AuthPage from './pages/AuthPage';
 import IssueAddPage from './pages/IssueAddPage';
 import IssuePage from './pages/IssuePage';
 import MainPage from './pages/MainPage';
-import NoticeAddPage from './pages/NoticeAddPage';
+import NoticeDetailPage from './pages/NoticeDetailPage';
 import NoticePage from './pages/NoticePage';
+import RegisterPage from './pages/RegisterPage';
 import UserPage from './pages/UserPage';
 
 const App: React.FC = () => {
@@ -14,8 +15,9 @@ const App: React.FC = () => {
       <Switch>
         <Route exact component={MainPage} path='/'></Route>
         <Route exact component={AuthPage} path='/login'></Route>
+        <Route exact component={RegisterPage} path='/register'></Route>
         <Route exact component={NoticePage} path='/notice'></Route>
-        <Route exact component={NoticeAddPage} path='/notice/add'></Route>
+        <Route exact component={NoticeDetailPage} path='/notice/:id'></Route>
         <Route exact component={IssuePage} path='/issue'></Route>
         <Route exact component={IssueAddPage} path='/issue/add'></Route>
         <Route exact component={UserPage} path='/user'></Route>

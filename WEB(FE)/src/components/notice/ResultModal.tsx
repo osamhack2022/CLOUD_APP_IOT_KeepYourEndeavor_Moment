@@ -12,12 +12,12 @@ const options = [
     { key: 3, text: '정신전력 평가', value: 3 },
     { key: 3, text: '사격 평가', value: 3 },
   ]
-const ResultModal = ({open, onClickModal, onChangeInput, input}) => (
+const ResultModal = ({open, onClickModal, onChangeInput, input, name}) => (
     
     <ResultModalBlock>
         <Modal
-            onClose={() => onClickModal('resultNotice')}
-            onOpen={() => onClickModal('resultNotice')}
+            onClose={() => onClickModal(name)}
+            onOpen={() => onClickModal(name)}
             open={open}
         >
             <Modal.Header>시험결과 등록</Modal.Header>
@@ -45,7 +45,7 @@ const ResultModal = ({open, onClickModal, onChangeInput, input}) => (
                     content="등록하기"
                     labelPosition='right'
                     icon="lock"
-                    onClick={() => onClickModal('resultNotice')}
+                    onClick={() => onClickModal(name)}
                     positive />
             </Modal.Actions>
         </Modal>

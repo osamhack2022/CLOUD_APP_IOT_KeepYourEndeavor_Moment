@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Auth from '../components/main/Auth';
+import Auth from '../components/auth/Login';
 
 function AuthPage() {
     return (

@@ -19,7 +19,7 @@ const NoticeDetailBlock = styled.div`
 `;
 
 const NoticeDetail = () => {
-    const {open, onClickModal} = useModal();
+    const {open, onClickModal, modals} = useModal();
     const {onChangeInput, input} = useNoticeDetail();
     return (
         <NoticeDetailBlock>
@@ -49,7 +49,7 @@ const NoticeDetail = () => {
             <Table celled>
                 <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell>군번</Table.HeaderCell>
+                    <Table.HeaderCell textAlign='left'>군번</Table.HeaderCell>
                     <Table.HeaderCell>이름</Table.HeaderCell>
                     <Table.HeaderCell>점수</Table.HeaderCell>
                     <Table.HeaderCell width={2}>블록체인 인증</Table.HeaderCell>
@@ -74,7 +74,7 @@ const NoticeDetail = () => {
                     </Table.Cell>
                 </Table.Row>
                 <Table.Row href=''>
-                    <Table.Cell textAlign="left" selectable onClick={()=>onClickModal('resultNotice')}> 21-76045289</Table.Cell>
+                    <Table.Cell textAlign="left" selectable onClick={()=>onClickModal(modals.resultNotice)}> 21-76045289</Table.Cell>
                     <Table.Cell>성서윤</Table.Cell>
                     <Table.Cell>미등록</Table.Cell>
                     <Table.Cell textAlign='left' >
@@ -94,7 +94,7 @@ const NoticeDetail = () => {
                     totalPages={10}
                 />
             </footer>
-            <ResultModal onChangeInput={onChangeInput} open={open.resultNotice} onClickModal={onClickModal} input={input}/>
+            <ResultModal onChangeInput={onChangeInput} open={open.resultNotice} onClickModal={onClickModal} name={modals.resultNotice} input={input}/>
         </NoticeDetailBlock>
     )
 }

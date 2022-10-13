@@ -107,9 +107,6 @@ const Sidebar = ({children}) => {
                         <NavList to='/issue/'onClick={()=>{setSubSelect(1)}} subselect={subSelect === 1 ? 1 : undefined }>
                             - 시험 목록
                         </NavList>
-                        <NavList to='/issue/bundle' onClick={()=>{setSubSelect(2)}} subselect={subSelect === 2 ? 2 : undefined }>
-                            - 시험 일괄등록
-                        </NavList>
                     </div>
                 </Nav>
                 <Nav select={select === 3 ? true : false }>

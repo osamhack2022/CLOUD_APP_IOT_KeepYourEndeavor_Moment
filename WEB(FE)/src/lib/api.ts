@@ -4,8 +4,19 @@ import { noticeType } from '../hooks/notice/useNotice';
 axios.defaults.withCredentials = true;
 
 const api = axios.create({
-    baseURL: `/v1`,
+    baseURL: `https://api-server.run.goorm.io`,
+    headers: {'Authorization': `Bearer ${localStorage.token}`},
 });
+
+export const signin = async(user) => {
+    console.log(user);
+    return await api.post(`auth/signin`, user)
+}
+
+export const signup = async(user) => {
+    console.log(user);
+    return await api.post(`auth/signup`, user)
+}
 
 export const getNotices = () => {
     return {
@@ -15,7 +26,8 @@ export const getNotices = () => {
                 issue_id: "123123123",
                 test_date: "2022-10-17 17:30:00",
                 apply_date: "2022-10-12 15:30:00",
-                description: "화생방 시험 평가 준비물 방독면"
+                description: "화생방 시험 평가 준비물 방독면",
+                id: "123123"
             }
         ]
     }
@@ -28,6 +40,22 @@ export const getIssues = () => {
                 id: "OvEuiS6MscL+J99q",
                 type: "test",
                 subject: "팔굽혀펴기",
+                issuer_id: "supervisor",
+                created_at: "2022-10-06T23:10:07.000Z",
+                updated_at: "2022-10-06T23:10:07.000Z"
+            },
+            {
+                id: "OvEuiS6MscL+J99q",
+                type: "test",
+                subject: "화생방 평가",
+                issuer_id: "supervisor",
+                created_at: "2022-10-06T23:10:07.000Z",
+                updated_at: "2022-10-06T23:10:07.000Z"
+            },
+            {
+                id: "OvEuiS6MscL+J99q",
+                type: "test",
+                subject: "경계평가",
                 issuer_id: "supervisor",
                 created_at: "2022-10-06T23:10:07.000Z",
                 updated_at: "2022-10-06T23:10:07.000Z"
