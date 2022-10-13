@@ -72,7 +72,7 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 			flag = false;
 		}
 		if (flag) {
-			resultOfStandard = `collection = ${issueInfo.type}, subject = ${issueInfo.subject}(으)로 기준을 생성해야 합니다.`;
+			resultOfStandard = {collection : issueInfo.type, subject:issueInfo.subject};
 		} else {
 			resultOfStandard = `기준은 이미 생성돼 있습니다.`;
 			flag = true;
@@ -81,7 +81,7 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?)', bind);
 		res.status(200).json(
 			{
-				message : "issue 등록이 완료됐습니다.",
+				message : "issue 등록이 완료됐습니다. resultOfStandard의 내용대로 기준을 생성 해주세요",
 				issueId : id,
 				resultOfStandard
 			}
@@ -91,7 +91,7 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 		res.status(406).json(
 			{
 				error : "Not Acceptable", 
-				message: "잘못된 이슈 정보입니다."
+				message: "이미 등록된 이슈이거나 잘못된 이슈입니다. 이슈를 새로 등록을 원하실 경우 기존 이슈를 삭제해 주세요."
 			}
 		);
 	}
