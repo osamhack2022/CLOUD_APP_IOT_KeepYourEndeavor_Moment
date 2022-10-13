@@ -25,11 +25,29 @@
     },
     {
       "match": {
-        "host": "21-11112222.jerrykang.com",
+        "host": "21-76045920.jerrykang.com",
         "uri": "/*"
       },
       "action": {
         "proxy": "http://172.24.255.5:5000"
+      }
+    },
+    {
+      "match": {
+        "host": "21-76040179.jerrykang.com",
+        "uri": "/*"
+      },
+      "action": {
+        "proxy": "http://172.24.255.7:5000"
+      }
+    },
+    {
+      "match": {
+        "host": "21-11112222.jerrykang.com",
+        "uri": "/*"
+      },
+      "action": {
+        "proxy": "http://172.24.255.9:5000"
       }
     }
   ]
