@@ -32,13 +32,17 @@ router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
 		
 		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM issue WHERE id = ?', [issueId]);
 		const issue = rowUser[0];
-		const standard = await fireDB.collection(issue.type).doc(issue.subject).get();
 		
-		console.log();
+		const standard = await fireDB.collection(issue.type).doc(issue.subject).get();
+		const conversionStandard = {}
+		Object.keys(standard._fieldsProto).forEach((key) => {
+			conversionStandard[key] = standard._fieldsProto[key]["stringValue"]
+		});
+		
 		res.status(200).json({
 			message : "등록된 issue를 성공적으로 전송했습니다.",
 			issue : rowUser,
-			standard : standard._fieldsProto
+			standard : conversionStandard
 		});
 	} catch (err) {
 		console.error(err);

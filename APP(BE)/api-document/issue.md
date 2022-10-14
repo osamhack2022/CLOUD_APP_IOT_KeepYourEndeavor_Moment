@@ -135,26 +135,10 @@ curl --location --request GET 'https://api-server.run.goorm.io/issue/:issueId'
 		}
 	],
 	"standard": {
-		"third_grade": {
-			"stringValue": "40",
-			"valueType": "stringValue"
-		},
-		"second_grade": {
-			"stringValue": "50",
-			"valueType": "stringValue"
-		},
-		"first_grade": {
-			"stringValue": "76",
-			"valueType": "stringValue"
-		},
-		"fail_grade": {
-			"stringValue": "20",
-			"valueType": "stringValue"
-		},
-		"special_grade": {
-			"stringValue": "80",
-			"valueType": "stringValue"
-		}
+		"2급": "13:55",
+		"3급": "15:00",
+		"특": "13:10",
+		"1급": "13:30"
 	}
 }
 ```
