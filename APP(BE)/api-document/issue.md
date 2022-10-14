@@ -1,3 +1,4 @@
+
 # /issue
 ## /issue/regist [POST]
 ### 이슈 등록 라우터입니다.
@@ -7,15 +8,18 @@
 
 해당 subject에 대해 기준을 변경하고 싶으면 이슈 라우터에서 삭제 후 재생성 해야합니다.  
 
+
 #### JSON으로 요청 해주세요
 ```json
 curl --location --request POST 'https://api-server.run.goorm.io/issue/regist' \ 
 
 {
 	"type" : "측정시험",
-	"subject" : "뜀걸음"
+	"subject" : "테스트",
+	"mandatory" : "1"
 }
 ```
+##### 필수 응시과목일 경우 mandatory = "1" , 아닐경우 "0"
 
 ---
 #### 응답 내용
@@ -24,12 +28,13 @@ curl --location --request POST 'https://api-server.run.goorm.io/issue/regist' \
 
 ```json
 {
-	"message": "issue 등록이 완료됐습니다. resultOfStandard의 내용대로 기준을 생성 해주세요",
-	"issueId": "Kw9pJ1XTtP7N6a4",
-	"resultOfStandard": {
-		"collection": "측정시험",
-		"subject": "뜀걸음"
-	}
+    "message": "issue 등록이 완료됐습니다. resultOfStandard의 내용대로 기준을 생성 해주세요",
+    "issueId": "wA3JudX7xpBMAhI9",
+    "resultOfStandard": {
+        "collection": "측정시험",
+        "subject": "테스트"
+    },
+    "mandatory": "1"
 }
 ```
 ---
@@ -38,9 +43,10 @@ curl --location --request POST 'https://api-server.run.goorm.io/issue/regist' \
 
 ```json
 {
-	"message": "issue 등록이 완료됐습니다.",
-	"issueId": "ZdxQkIIPRADkRuk7",
-	"resultOfStandard": "기준은 이미 생성돼 있습니다."
+    "message": "issue 등록이 완료됐습니다. resultOfStandard의 내용대로 기준을 생성 해주세요",
+    "issueId": "HhIi2PA4MkBMIT8D",
+    "resultOfStandard": "기준은 이미 생성돼 있습니다.",
+    "mandatory": "1"
 }
 ```
 ---
@@ -129,26 +135,10 @@ curl --location --request GET 'https://api-server.run.goorm.io/issue/:issueId'
 		}
 	],
 	"standard": {
-		"third_grade": {
-			"stringValue": "40",
-			"valueType": "stringValue"
-		},
-		"second_grade": {
-			"stringValue": "50",
-			"valueType": "stringValue"
-		},
-		"first_grade": {
-			"stringValue": "76",
-			"valueType": "stringValue"
-		},
-		"fail_grade": {
-			"stringValue": "20",
-			"valueType": "stringValue"
-		},
-		"special_grade": {
-			"stringValue": "80",
-			"valueType": "stringValue"
-		}
+		"2급": "13:55",
+		"3급": "15:00",
+		"특": "13:10",
+		"1급": "13:30"
 	}
 }
 ```

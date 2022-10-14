@@ -32,13 +32,17 @@ router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
 		
 		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM issue WHERE id = ?', [issueId]);
 		const issue = rowUser[0];
-		const standard = await fireDB.collection(issue.type).doc(issue.subject).get();
 		
-		console.log();
+		const standard = await fireDB.collection(issue.type).doc(issue.subject).get();
+		const conversionStandard = {}
+		Object.keys(standard._fieldsProto).forEach((key) => {
+			conversionStandard[key] = standard._fieldsProto[key]["stringValue"]
+		});
+		
 		res.status(200).json({
 			message : "등록된 issue를 성공적으로 전송했습니다.",
 			issue : rowUser,
-			standard : standard._fieldsProto
+			standard : conversionStandard
 		});
 	} catch (err) {
 		console.error(err);
@@ -57,7 +61,7 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 		const id = await makeHashedValue(createAt);
 		console.log(id);
 		const issueInfo = req.body;
-		const bind = [id, issueInfo.type, issueInfo.subject, token.id, createAt, updateAt];
+		const bind = [id, issueInfo.type, issueInfo.subject, token.id, createAt, updateAt, issueInfo.mandatory];
 		if (issueInfo.type === undefined || issueInfo.subject === undefined) {
 			throw new Error();
 		}
@@ -78,12 +82,13 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 			flag = true;
 		}
 		
-		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?)', bind);
+		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?,?)', bind);
 		res.status(200).json(
 			{
 				message : "issue 등록이 완료됐습니다. resultOfStandard의 내용대로 기준을 생성 해주세요",
 				issueId : id,
-				resultOfStandard
+				resultOfStandard,
+				mandatory : issueInfo.mandatory
 			}
 		);
 	} catch (err) {

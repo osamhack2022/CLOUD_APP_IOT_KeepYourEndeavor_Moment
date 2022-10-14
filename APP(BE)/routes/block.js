@@ -32,17 +32,19 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 		
 		let type = ""
 		Object.keys(DBStandard._fieldsProto).forEach(function(v){
-			const data = DBStandard._fieldsProto[v].stringValue
-			if (moment(data, "m:s").isValid()) {
+			const data = DBStandard._fieldsProto[v].stringValue	
+			if (data.split(":").length === 2) {
 				type = "시간"
 				standard.push({'std' : v, 'data' : moment(data, "m:s").valueOf()});
-			} else if (!isNan(parseInt(data, 10))) {
+			} else if (data.split(":").length === 1) {
 				type = "숫자"
 				standard.push({'std' : v, 'data' : data});
 			} else {
 				type = "이수"
 			}
 		});
+	
+		
 		
 		let result = ""
 		if (type === "시간") {
@@ -57,20 +59,27 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 					return true;
 				}
 			});
-			console.log(result);
 		} else if ( type === "숫자" ) {
 			const check = parseInt(record,10);
 			standard.sort(function (a, b) { 
 				return a.data < b.data ? -1 : a.data > b.data ? 1 : 0;  
 			});
-			standard.some((std) => {
-				if (std.data <= check) {
-					result = std.std;
-					return true;
+			let stdFlag = true;
+			for(let i = 0; i < standard.length - 1 ; i++) {
+				if (parseInt(standard[i].data) <= check) {
+					if (check < parseInt(standard[i+1].data)){
+						stdFlag = false;
+						result = standard[i].std;
+						break;
+					}
 				}
-			});
+			}
+			if (stdFlag) {
+				result = "특"
+			}
+			
 		} else {
-			result = "Pass"
+			result = "PASS"
 		}
 		
 
@@ -83,7 +92,7 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 		}
 		
 		//const response = await axios.post(`${peer}/v1/block`, userRecord); 실제론 여기로
-		const response = await axios.post(`http://api.jerrykang.com/v1/block`, userRecord); // 테스트에만 일로
+		//const response = await axios.post(`http://api.jerrykang.com/v1/block`, userRecord); // 테스트에만 일로
 		res.status(200).json(
 			{
 				message : `${peer}에 해당 데이터를 온체인 시켰습니다.`,

@@ -1,14 +1,18 @@
 # /block
-## /block/push [POST] 매니저 이상
+## /block/push [POST]
 ### 사용자 점수 입력 라우터 입니다.
 점수 입력시 블록 체인에 해당 PEER에 자동으로 온체인 됩니다. <br>
-등급은 **`이수/미이수`** **`특/1급/2급/3급/FAIL`** 로 통일합니다.
-#### body에 넣어주세요
-```bash
+등급은 **`PASS/FAIL`** **`특/1급/2급/3급`** 로 통일합니다.
+#### JSON으로 요청 해주세요
+```json
 curl --location --request POST 'https://api-server.run.goorm.io/block/push' \ 
---data-urlencode 'user=user10' \ 
---data-urlencode 'record=10:01' \ 
---data-urlencode 'issue_id=issueId'
+
+{
+	"user" : "21-11112222",
+	"record" : "14:30",
+	"issue_id" : "vu3gr9LTB5SpERw5"
+}
+
 ```
 
 ---
@@ -17,8 +21,14 @@ curl --location --request POST 'https://api-server.run.goorm.io/block/push' \
 ##### 성공시 status : 200
 ```json
 {
-    "message" : "${peer}에 해당 데이터를 온체인 시켰습니다.",
-    userRecord
+    "message" : `${peer}에 해당 데이터를 온체인 시켰습니다.`,
+    "userRecord": {
+		"data": {
+			"user": "21-11112222",
+			"result": "3급",
+			"issue_id": "vu3gr9LTB5SpERw5"
+		}
+	}
 }
 ```
 ---
@@ -38,6 +48,6 @@ curl --location --request POST 'https://api-server.run.goorm.io/block/push' \
 ```json
 {
     "error" : "Not Acceptable", 
-    "message" : "${res.peerInfo} 가 존재하지 않거나 구동중이지 않습니다."
+    "message" : `${res.peerInfo} 가 존재하지 않거나 구동중이지 않습니다.`
 }
 ```
