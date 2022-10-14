@@ -57,7 +57,7 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 		const id = await makeHashedValue(createAt);
 		console.log(id);
 		const issueInfo = req.body;
-		const bind = [id, issueInfo.type, issueInfo.subject, token.id, createAt, updateAt];
+		const bind = [id, issueInfo.type, issueInfo.subject, token.id, createAt, updateAt, issueInfo.mandatory];
 		if (issueInfo.type === undefined || issueInfo.subject === undefined) {
 			throw new Error();
 		}
@@ -78,12 +78,13 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 			flag = true;
 		}
 		
-		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?)', bind);
+		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?,?)', bind);
 		res.status(200).json(
 			{
 				message : "issue 등록이 완료됐습니다. resultOfStandard의 내용대로 기준을 생성 해주세요",
 				issueId : id,
-				resultOfStandard
+				resultOfStandard,
+				mandatory : issueInfo.mandatory
 			}
 		);
 	} catch (err) {
