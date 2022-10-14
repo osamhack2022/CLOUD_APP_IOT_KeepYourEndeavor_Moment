@@ -15,7 +15,8 @@ require('../db/redisCon.js')().then((res) => redisCon = res);
 router.get('/', verifyToken, normalAccess, async(req, res) => {
 	try {
 //		const [rowNotice, fieldUser] = await conn.execute('SELECT * FROM issue');
-		const [rowNotice, fieldUser] = await conn.execute('SELECT notice.id, title, author_id, test_date, apply_date, notice.created_at, notice.updated_at, description, issue_id ,type, subject, issuer_id   FROM notice INNER JOIN issue ON notice.issue_id = issue.id');
+		const [rowNotice, fieldUser] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id  FROM notice INNER JOIN issue ON notice.issue_id = issue.id');
+		
 		res.status(200).json({
 			message : "등록된 notice들을 성공적으로 전송했습니다.",
 			notices : rowNotice
@@ -41,7 +42,7 @@ router.post('/regist', verifyToken ,managerAccess, async (req, res, next) => {
 		timeChecker(testDate, applyDate, res);
 		
 		const id = await makeHashedValue(title); 
-		const bind = [id, title, issue_id,manager_id ,token.id, test_date, apply_date, moment().format("YYYY-M-D H:m:s"), moment().format("YYYY-M-D H:m:s"), description];
+		const bind = [id, title, issue_id,manager_id ,token.id, test_date, apply_date, moment().format("YYYY-M-D H:m:s"),moment().format("YYYY-M-D H:m:s"),description];
 		await conn.execute('INSERT INTO notice VALUES (?,?,?,?,?,?,?,?,?,?)', bind);
 		return res.status(200).json({
 			message:"공지를 성공적으로 등록했습니다."
@@ -61,7 +62,7 @@ router.post('/regist', verifyToken ,managerAccess, async (req, res, next) => {
 router.get('/:noticeId', verifyToken ,managerAccess, async (req, res, next) => {
 	try {
 		const noticeId = req.params.noticeId;
-		const [rowNotice, fieldUser] = await conn.execute('SELECT notice.id, title, author_id, test_date, apply_date, notice.created_at, notice.updated_at, description, issue_id ,type, subject, issuer_id   FROM notice INNER JOIN issue ON notice.issue_id = issue.id WHERE notice.id = ?',[noticeId]);
+		const [rowNotice, fieldUser] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id  FROM notice INNER JOIN issue ON notice.issue_id = issue.id');
 		
 		if (rowNotice.length === 0) {
 			return res.status(406).json({
@@ -69,10 +70,9 @@ router.get('/:noticeId', verifyToken ,managerAccess, async (req, res, next) => {
 			message: "올바르지 않은 공지 넘버 입니다."
 		});
 		}
-		console.log(rowNotice);
 		res.status(200).json({
 			message : "notice를 성공적으로 전송했습니다.",
-			notice : rowNotice
+			notice : rowNotice[0]
 		});
 	} catch (err) {
 		res.status(500).json({
@@ -86,18 +86,38 @@ router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res, next
 	try {
 		const noticeId = req.params.noticeId;
 		const noticeAllowKeys = ['title','test_date','apply_date','description'];
-		let updateNoticeTable = [];
-
+		const updateNoticeTable = [];
+		const dateChangeFlag = []
+		
 		const clientRequestUpdateKey = Object.keys(req.body);
 		clientRequestUpdateKey.forEach((key) => {
-			if (noticeAllowKeys.includes(key)) {
-				updateNoticeTable.push([key, req.body[key], noticeId]);
-			} else {
-				throw new Error('수정 컬럼 이름이 잘못됐습니다. 수정 가능한 컬럼 이름만 넣어주세요');
+			if (req.body[key] !== "") {
+				if (noticeAllowKeys.includes(key)) {
+					if (key === 'test_date' || key === 'apply_date') {
+							dateChangeFlag.push(key);
+							updateNoticeTable.push([key, req.body[key], noticeId]);
+
+					} else {
+						updateNoticeTable.push([key, req.body[key], noticeId]);
+					}
 				
+				} else {
+					throw new Error('수정 컬럼 이름이 잘못됐습니다. 수정 가능한 컬럼 이름만 넣어주세요');
+				}
 			}
 		});
-		timeChecker(req.body.test_date, req.body.apply_date, res);
+		
+		if (dateChangeFlag.length === 2) {
+			timeChecker(req.body.test_date, req.body.apply_date, res);	
+		} else if (dateChangeFlag.length === 1) {
+			return res.status(406).json({
+				error : "Not Acceptable", 
+				message: "시험 실시 일자와 시험 신청 일자는 하나만 변경할 수 없습니다. 두 칸 모두 채워주세요."
+			});
+		} else {
+			console.log("No Change at Date");
+		}
+		
 		
 		for await (let inform of updateNoticeTable) {
 			const updateAt = moment().format("YYYY-M-D H:m:s"); //format("YYYY-M-D H:m:s");
@@ -114,7 +134,7 @@ router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res, next
 		console.error(err);
 		res.status(500).json({
 			error: "Internal Server Error",
-			message: err.message
+			message: "예기치 못한 에러가 발생했습니다."
 
 		})
 	}
