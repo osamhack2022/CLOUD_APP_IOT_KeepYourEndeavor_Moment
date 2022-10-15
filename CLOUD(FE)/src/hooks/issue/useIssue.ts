@@ -1,5 +1,6 @@
 import react, {useEffect, useState} from 'react';
 import { getIssues, getIssue } from '../../lib/api';
+import { SystemError } from '../../lib/error';
 
 export type issueType =  {
     id: string;
@@ -8,11 +9,13 @@ export type issueType =  {
     issuer_id: string;
     created_at: string;
     updated_at: string;
+    mandatory: number;
 };
 
 export default function useIssue(){
     const [issues, setIssues] = useState<issueType[]>([]);
     const [input, setInput] = useState({});
+    const [loading, setLoading] = useState(false);
 
     useEffect(()=>{
         getIssueList();
@@ -28,10 +31,18 @@ export default function useIssue(){
     }
 
     const getIssueList = async() => {
-        const {issues} = await getIssues();
-        setIssues(issues);
+        try{
+            setLoading(true);
+            const {data} = await getIssues();
+            console.log(data);
+            setIssues(data.issues);
+            setLoading(false);
+        }catch(e){
+            const error = e as SystemError;
+            console.log(error);
+        }
     }
     return {
-        issues, onChangeInput
+        issues, onChangeInput, loading
     }
 }
