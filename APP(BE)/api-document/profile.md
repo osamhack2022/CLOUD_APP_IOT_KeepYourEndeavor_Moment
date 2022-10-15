@@ -1,4 +1,92 @@
 # /profile
+## /profile/ [GET] 제한 없음 
+### 모든 사용자 정보 요청 라우터입니다.
+
+### 이곳에 요청 해주세요
+```bash
+curl --location --request GET 'https://api-server.run.goorm.io/profile/' \
+```
+#### 응답 내용
+
+##### 성공시 status : 200
+
+```json
+{
+	"message": "요청한 회원 정보들을 보내드립니다.",
+	"userInfo": [{
+		"user_id": "supervisor",
+		"class": "중사",
+		"user_name": "이상순",
+		"position": "소총수",
+		"cmd": "제2작전사령부",
+		"cps": "",
+		"division": "39사단",
+		"br": "117여단",
+		"bn": "12대대",
+		"co": "작전과",
+		"etc": ""
+	}]
+}
+```
+---
+##### 실패시 status : 500
+
+```json
+{
+	"error": "Internal Server Error",
+	"message": "예상치 못한 에러가 발생했습니다."
+}
+```
+## /profile/:userId [GET] 제한 없음
+### 사용자 정보 요청 라우터입니다.
+
+#### 이곳에 요청 해주세요
+```bash
+curl --location --request GET 'https://api-server.run.goorm.io/profile/:userId' \
+```
+#### 응답 내용
+
+##### 성공시 status : 200
+
+```json
+{
+	"message": "요청한 회원 정보를 보내드립니다.",
+	"userInfo": {
+		"user_id": "supervisor",
+		"class": "중사",
+		"user_name": "이상순",
+		"position": "소총수",
+		"cmd": "제2작전사령부",
+		"cps": "",
+		"division": "39사단",
+		"br": "117여단",
+		"bn": "12대대",
+		"co": "작전과",
+		"etc": ""
+	}
+}
+```
+
+---
+##### 회원 아이디가 없을 시 status : 406
+
+```json
+{
+	"error": "Not Acceptable",
+	"message": "회원이 존재하지 않습니다."
+}
+```
+
+---
+##### 실패시 status : 500
+
+```json
+{
+	"error": "Internal Server Error",
+	"message": "예상치 못한 에러가 발생했습니다."
+}
+```
+
 ## /profile/edit [POST] 제한 없음
 ### 사용자 정보 수정 라우터입니다.
 
