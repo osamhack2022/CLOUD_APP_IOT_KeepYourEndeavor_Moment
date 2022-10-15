@@ -152,7 +152,7 @@ curl --location --request GET 'https://api-server.run.goorm.io/issue/:issueId'
 }
 ```
 
-## /issue/:issueId/delete [POST]
+## /issue/:issueId/ [DELETE]
 ### 이슈 삭제 라우터입니다.
 #### 이 곳으로 요청을 보내주세요 
 ```json

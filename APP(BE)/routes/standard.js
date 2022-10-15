@@ -76,7 +76,7 @@ router.post('/post',  verifyToken, supervisorAccess,async (req, res) => {
 	
 });
 
-router.post('/delete', verifyToken, supervisorAccess,async (req, res) => {
+router.delete('/', verifyToken, supervisorAccess,async (req, res) => {
 	try {
 		const standardInfo = req.body;
 		const isInFireStore = await fireDB.collection(standardInfo.collection).doc(standardInfo.doc).get();

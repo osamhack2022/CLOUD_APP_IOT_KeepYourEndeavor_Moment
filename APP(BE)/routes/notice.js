@@ -140,7 +140,7 @@ router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res, next
 	}
 });
 
-router.post('/:noticeId/delete', verifyToken ,managerAccess, async (req, res, next) => {
+router.delete('/:noticeId/', verifyToken ,managerAccess, async (req, res, next) => {
 	try {
 		const noticeId = req.params.noticeId;
 		const deleteResult = await conn.execute(`DELETE FROM notice WHERE id = '${noticeId}'`);

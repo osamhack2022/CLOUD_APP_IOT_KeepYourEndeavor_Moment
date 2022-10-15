@@ -59,7 +59,7 @@ curl --location --request POST 'https://api-server.run.goorm.io/profile/edit' \
 }
 ```
 
-## /profile/delete [POST] 제한 없음
+## /profile/ [DELETE] 제한 없음
 ### 회원탈퇴 라우터입니다.
 token을 이용해 회원 탈퇴를 진행하기 때문에 사용자가 잘못 입력한 데이터에 의해 에러가 발생하지 않습니다.
 #### body에 넣어주세요 

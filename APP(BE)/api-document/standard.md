@@ -1,3 +1,4 @@
+
 # /standard
 ## /standard/ [GET] 개설자 가능
 ### 기준을 가져오는 라우터입니다.
@@ -219,7 +220,7 @@ curl --location --request POST 'https://api-server.run.goorm.io/standard/post' \
 }
 ```
 
-## /standard/delete [POST] 개설자 가능
+## /standard/ [DELETE] 개설자 가능
 ### 기준삭제 라우터입니다.
 / 에서 가져온 기준 정보로 기준을 삭제할 수 있습니다.
 #### JSON으로 요청 해주세요

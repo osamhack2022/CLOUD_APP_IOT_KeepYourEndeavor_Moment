@@ -103,7 +103,7 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 });
 
 
-router.post('/:issueId/delete', verifyToken, supervisorAccess, async (req, res) => {
+router.delete('/:issueId/', verifyToken, supervisorAccess, async (req, res) => {
 	try {
 		const issueId = req.params.issueId;
 		const deleteResult = await conn.execute(`DELETE FROM issue WHERE id = '${issueId}'`);

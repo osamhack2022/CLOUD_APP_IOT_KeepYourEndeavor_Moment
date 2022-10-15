@@ -189,7 +189,7 @@ router.post('/:noticeId/edit',verifyToken,normalAccess, async (req, res, next) =
 	}
 });
 
-router.post('/:noticeId/delete',verifyToken,normalAccess, async (req, res, next) => {
+router.delete('/:noticeId/',verifyToken,normalAccess, async (req, res, next) => {
 	try {
 		const rep_id = req.decoded.id
 		const noticeId = req.params.noticeId;
