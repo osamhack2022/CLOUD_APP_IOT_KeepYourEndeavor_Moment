@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Dimmer, Divider, Form, Loader } from 'semantic-ui-react';
+import { Button, Dimmer, Divider, Dropdown, Form, Loader } from 'semantic-ui-react';
 import styled from 'styled-components';
 import useSignup from '../../hooks/auth/useSignup';
 const RegisterBlock = styled.div`
@@ -43,6 +43,15 @@ const RegisterBlock = styled.div`
     }
 `;
 
+const options = [
+    { key: 1, text: '군무원', value: "군무원" },
+    { key: 2, text: '병사', value: "병사", disabled: true},
+    { key: 3, text: '간부', value: "간부"},
+    { key: 4, text: '등록자', value: "등록자" },
+    { key: 5, text: '개설자', value: "개설자"},
+  ]
+
+
 const Register = () => {
     const {onChange, handdleSignup, input, error, isLoading} = useSignup();
 
@@ -78,14 +87,19 @@ const Register = () => {
                     </Form.Field>
                     <Form.Field>
                         <label>권한</label>
-                        <input defaultValue='간부' disabled name='authority' onChange={onChange} />
+                        <Dropdown clearable defaultValue='개설자' onChange={onChange} options={options} name="authority" selection />
                     </Form.Field>
                     <h3>소속</h3>
                     <Form.Group widths='equal'>
-                        <Form.Input fluid label='군단/사령부' placeholder='00군단' name="cmd" />
-                        <Form.Input fluid label='사단' placeholder='00사단' name="division"/>
-                        <Form.Input fluid label='대대' placeholder='00여단' name="bn"/>
-                        <Form.Input fluid label='중대 / 과' placeholder='00여단' name="co"  />
+                        <Form.Input fluid label="사령부" placeholder='00사령부' name="cmd" />
+                        <Form.Input fluid label='군단' placeholder='00군단' name="cps"/>
+                        <Form.Input fluid label="사단" placeholder='00사단' name="division"/>
+                        <Form.Input fluid label='여단' placeholder='00여단' name="br"  />
+                    </Form.Group>
+                    <Form.Group widths='equal'>
+                        <Form.Input fluid label='대대' placeholder='00대대' name="bn" />
+                        <Form.Input fluid label='중대 / 부서' placeholder='00중대 / 00과' name="co"/>
+                        <Form.Input fluid label='담당직책' placeholder='00부사관' name="position"/>
                     </Form.Group>
                     <Form.Field>
                         <label>추가입력사항</label>

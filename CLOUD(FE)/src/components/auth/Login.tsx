@@ -1,5 +1,5 @@
 import React, { useState, } from 'react';
-import { Button, Input } from 'semantic-ui-react';
+import { Button, Dimmer, Input, Loader } from 'semantic-ui-react';
 import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import useSignin from '../../hooks/auth/useSignin';
@@ -61,9 +61,14 @@ const LoginBlock = styled.div`
 `;
 
 const Login = () => {
-    const {onChange, handdleSignin, input, error} = useSignin();
+    const {onChange, handdleSignin, input, error, loading} = useSignin();
     return (
         <LoginBlock>
+            { loading && 
+                (<Dimmer active inverted>
+                    <Loader size='large'>블록체인 서버 시작중...</Loader>
+                </Dimmer>)
+            }
             <img src='undraw_logic_re_nyb4.svg'></img>
             <div className='container'>
                 <h1>Keep Your <span>Endeavor</span></h1>
