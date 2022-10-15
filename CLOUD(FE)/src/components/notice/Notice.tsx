@@ -8,6 +8,7 @@ import NoticeModal from './NoticeModal';
 import {Link} from 'react-router-dom';
 import NoticeDeleteModal from './NoticeDeleteModal';
 import moment from 'moment';
+import { ToastContainer } from 'react-toastify';
 const NoticeBlock = styled.div`
     padding: 2rem;
     .sub-header{
@@ -18,7 +19,7 @@ const NoticeBlock = styled.div`
 `;
 
 const Notice = () => {
-    const {notices, onChangeInput, input, handleCreateNotice, loading, onChangeSearch, search, issues, open, onClickModal, modals} = useNotice();
+    const {notices, onChangeInput, input, handleCreateNotice, loading, onChangeSearch, search, issues, open, onClickModal, modals, handleDeleteNotice, id} = useNotice();
 
     const noticeList = notices.filter((notice) => notice.title.indexOf(search) !== -1).map((notice: noticeType) => {
         const {subject, apply_date, test_date, description, notice_id, notice_created_at, title} = notice;
@@ -29,7 +30,7 @@ const Notice = () => {
                     <Table.Cell>{moment(apply_date).format('YYYY-MM-DD hh:mm')}</Table.Cell>
                     <Table.Cell>{moment(test_date).format('YYYY-MM-DD hh:mm')}</Table.Cell>
                     <Table.Cell>{description}</Table.Cell>
-                    <Table.Cell textAlign='center'><Button basic color='red' icon="delete" onClick={()=>onClickModal(modals.deleteNotice)}></Button></Table.Cell>
+                    <Table.Cell textAlign='center'><Button basic color='red' icon="delete" onClick={()=>onClickModal(modals.deleteNotice, notice_id)}></Button></Table.Cell>
             </Table.Row>
         )
     })
@@ -62,8 +63,9 @@ const Notice = () => {
                     {noticeList}
                 </Table.Body>
             </Table>
-            <NoticeDeleteModal onChangeInput={onChangeInput} open={open.deleteNotice} onClickModal={onClickModal} name={modals.deleteNotice} ></NoticeDeleteModal>
+            <NoticeDeleteModal id={id} handleDeleteNotice={handleDeleteNotice} open={open.deleteNotice} onClickModal={onClickModal} name={modals.deleteNotice} ></NoticeDeleteModal>
             <NoticeModal issues={issues} input={input} handleCreateNotice={handleCreateNotice} onChangeInput={onChangeInput} open={open.addNotice} onClickModal={onClickModal} name={modals.addNotice} ></NoticeModal>
+ 
         </NoticeBlock>
     )
 }

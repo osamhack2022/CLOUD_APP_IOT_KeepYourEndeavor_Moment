@@ -5,7 +5,7 @@ const NoticeDeleteModalBlock = styled.div`
     
 `;
 
-const NoticeDeleteModal = ({open, onClickModal, onChangeInput, name}) => (
+const NoticeDeleteModal = ({open, onClickModal, handleDeleteNotice, name, id}) => (
     <NoticeDeleteModalBlock>
         <Modal
             onClose={() => onClickModal(name)}
@@ -26,7 +26,7 @@ const NoticeDeleteModal = ({open, onClickModal, onChangeInput, name}) => (
                     content="삭제하기"
                     labelPosition='right'
                     icon='trash alternate'
-                    onClick={() => onClickModal(name)}
+                    onClick={() => handleDeleteNotice(id)}
                     negative 
                 />
             </Modal.Actions>

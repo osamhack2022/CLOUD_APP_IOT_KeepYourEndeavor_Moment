@@ -18,7 +18,12 @@ export default function useModal(){
         [modals.deleteNotice]: false,
     });
 
-    const onClickModal = (name) => {
+    const [id, setId] = useState();
+
+    const onClickModal = (name, id?) => {
+        if(id){
+            setId(id)
+        }
         setOpen({
             ...open,
             [name] : !open[name]
@@ -26,6 +31,6 @@ export default function useModal(){
     }
 
     return {
-        open, setOpen, onClickModal, modals
+        open, setOpen, onClickModal, modals, id
     }
 }

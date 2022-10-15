@@ -5,7 +5,7 @@ const IssueDeleteModalBlock = styled.div`
     
 `;
 
-const IssueDeleteModal = ({open, onClickModal, onChangeInput, name}) => (
+const IssueDeleteModal = ({open, onClickModal, handleDeleteIssue , name, id}) => (
     <IssueDeleteModalBlock>
         <Modal
             onClose={() => onClickModal(name)}
@@ -26,7 +26,7 @@ const IssueDeleteModal = ({open, onClickModal, onChangeInput, name}) => (
                     content="삭제하기"
                     labelPosition='right'
                     icon='trash alternate'
-                    onClick={() => onClickModal(name)}
+                    onClick={() => handleDeleteIssue(id)}
                     negative 
                 />
             </Modal.Actions>

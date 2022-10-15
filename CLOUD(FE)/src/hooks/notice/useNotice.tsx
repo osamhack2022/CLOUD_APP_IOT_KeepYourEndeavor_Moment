@@ -1,8 +1,10 @@
 import react, {useCallback, useEffect, useState} from 'react';
-import { createNotice, getNotices } from '../../lib/api';
+import { toast } from 'react-toastify';
+import { createNotice, deleteNotice, getNotices } from '../../lib/api';
 import { SystemError } from '../../lib/error';
 import useModal from '../common/useModal';
 import useIssue from '../issue/useIssue';
+
 
 export type noticeType =  {
     title: string;
@@ -21,7 +23,7 @@ export default function useNotice(){
     const [input, setInput] = useState({});
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState('');
-    const {open, onClickModal, modals} = useModal();
+    const {open, onClickModal, modals, id} = useModal();
 
     useEffect(()=>{
         getNoticeList();
@@ -43,11 +45,16 @@ export default function useNotice(){
     const handleCreateNotice = async(notice) => {
         console.log(notice);
         try{
-            await createNotice(input);
+            await createNotice({
+                manager_id: 'supervisor',
+                ...input,
+            });
             onClickModal(modals.addNotice);
         }catch(e){
             const error = e as SystemError;
-            console.log(error.response);
+            toast.error('오류가 발생했습니다', {
+                position: toast.POSITION.TOP_RIGHT
+            });
         }
     }
 
@@ -60,12 +67,24 @@ export default function useNotice(){
             setLoading(false);
         }catch(e){
             const error = e as SystemError;
-            console.log(error);
-        }
-
-        
+            toast.error('오류가 발생했습니다', {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        }        
     }
+
+    const handleDeleteNotice = async(id: string) => {
+        try{
+            await deleteNotice(id);
+        }catch(e){
+            const error = e as SystemError;
+            toast.error('오류가 발생했습니다', {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        }       
+    }
+
     return {
-        notices, onChangeInput, handleCreateNotice, input, loading, search, onChangeSearch, issues, open, onClickModal, modals
+        notices, onChangeInput, handleCreateNotice, input, loading, search, onChangeSearch, issues, open, onClickModal, modals, handleDeleteNotice, id
     }
 }

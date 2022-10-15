@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import AuthPage from './pages/AuthPage';
 import IssueAddPage from './pages/IssueAddPage';
 import IssuePage from './pages/IssuePage';
@@ -22,6 +23,7 @@ const App: React.FC = () => {
         <Route exact component={IssueAddPage} path='/issue/add'></Route>
         <Route exact component={UserPage} path='/user'></Route>
       </Switch>
+      <ToastContainer/>
     </div>
   );
 }

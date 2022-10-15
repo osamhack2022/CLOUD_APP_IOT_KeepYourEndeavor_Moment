@@ -118,6 +118,7 @@ const Sidebar = ({children}) => {
             <div className="main">
                 {children}
             </div>
+            
         </SidebarBlock>
     )
 }
