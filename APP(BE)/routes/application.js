@@ -178,7 +178,7 @@ router.post('/:noticeId/edit',verifyToken,normalAccess, async (req, res, next) =
 			
 
 		res.status(200).json({
-			message: '보내주신 내용대로 업데이트에 성공했습니다!'
+			message: '보내주신 내용대로 업데이트에 성공했습니다.'
 		});
 	} catch (err) {
 		console.log(1);

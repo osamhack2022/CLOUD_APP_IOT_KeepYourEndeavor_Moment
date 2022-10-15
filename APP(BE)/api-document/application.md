@@ -276,7 +276,7 @@ throw new Error('Client request key is not matched to the db column name.');
 ## /application/:noticeId/delete [POST] 제한 없음
 ### 특정 공지에 대한 신청을 삭제하는
 
-대표 아이디로 신청한 모든 신청을 해당 공지에서 삭제합니다
+대표 아이디로 신청한 모든 신청을 해당 공지에서 삭제합니다.
 
 #### 여기에 요청해 주세요
 ```bash
