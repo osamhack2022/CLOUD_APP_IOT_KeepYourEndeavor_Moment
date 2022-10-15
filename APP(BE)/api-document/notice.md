@@ -155,7 +155,7 @@ curl --location --request GET 'https://api-server.run.goorm.io/notice/:noticeId'
 }
 ```
 
-## /notice/:noticeId/delete [POST] 매니저 이상
+## /notice/:noticeId/ [DELETE] 매니저 이상
 ### 공지 삭제 라우터입니다.
 #### 여기로 요청을 보내주세요
 ```json

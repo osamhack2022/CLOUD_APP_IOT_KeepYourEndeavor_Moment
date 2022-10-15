@@ -17,18 +17,42 @@ const { createHashedPassword, makePasswordHashed } = require('../lib/security.js
 router.post('/signup', async (req, res, next) => {
 	const user = req.body;
   try {
+		const authenticatedInfo = ['id','pwd','class','name','authority','position']
+		const orgCandidates = Object.keys(user).filter(key => !authenticatedInfo.includes(key));
+		
+		let authenticatedBlanckFlag = false
+		authenticatedInfo.forEach((key)=>{
+			if (user[key] === "") {
+				authenticatedBlanckFlag = true
+			}
+		});
+		
+
+		const organization = [];
+		orgCandidates.forEach((key)=>{
+			if (user[key] !== "") {
+				organization.push(user[key]);
+			}
+		});
+
+		if (organization.length === 0 || authenticatedBlanckFlag) {
+			return res.status(406).json({
+				error : "Not Acceptable", 
+				message: "회원 정보 중 누락된 부분이 있습니다."
+			});
+		}
+
 		const blockInfo = {
 			"id" : user.id,
-			"organization" : user.co,
+			"organization" : organization.pop(),
 			"password" : user.pwd
 		}
 		
+		
 		// 테스트용 원래는 api.jerrykang.com
 
+		const peer_url = await axios.post("http://api.jerrykang.com/v1/peer", blockInfo);
 
-		const peer_url = await axios.post("http://api.jerrykang.com/v1/peer",blockInfo);
-
-		console.log(peer_url.data.url);
 		
 		
 		const createAt = moment().format("YYYY-M-D H:m:s");
@@ -51,7 +75,7 @@ router.post('/signup', async (req, res, next) => {
 		res.status(406).json(
 			{
 				error : "Not Acceptable", 
-				message: "잘못된 회원 정보입니다."
+				message: "올바르지 않은 회원 정보입니다."
 			}
 		);
 	}

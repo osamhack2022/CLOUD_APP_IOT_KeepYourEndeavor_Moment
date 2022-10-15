@@ -14,7 +14,6 @@ require('../db/redisCon.js')().then((res) => redisCon = res);
 
 router.get('/', verifyToken, normalAccess, async(req, res) => {
 	try {
-//		const [rowNotice, fieldUser] = await conn.execute('SELECT * FROM issue');
 		const [rowNotice, fieldUser] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id  FROM notice INNER JOIN issue ON notice.issue_id = issue.id');
 		
 		res.status(200).json({
@@ -140,7 +139,7 @@ router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res, next
 	}
 });
 
-router.post('/:noticeId/delete', verifyToken ,managerAccess, async (req, res, next) => {
+router.delete('/:noticeId/', verifyToken ,managerAccess, async (req, res, next) => {
 	try {
 		const noticeId = req.params.noticeId;
 		const deleteResult = await conn.execute(`DELETE FROM notice WHERE id = '${noticeId}'`);

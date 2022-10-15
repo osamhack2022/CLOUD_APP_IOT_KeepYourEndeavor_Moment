@@ -10,7 +10,44 @@ require('../db/sqlCon.js')().then((res) => conn = res);
 let redisCon = "";
 require('../db/redisCon.js')().then((res) => redisCon = res);
 
+router.get('/', verifyToken, async(req, res) => {
+	try {
+		const selectResult = await conn.execute('SELECT user.id as user_id, user.class as class, user.name as user_name, user.position as position, affiliation.cmd as cmd, affiliation.cps as cps, affiliation.division as division, affiliation.br as br, affiliation.bn as bn, affiliation.co as co, affiliation.etc as etc FROM user INNER JOIN affiliation ON user.id=affiliation.user_id')
+		return res.status(200).json({
+			message: '요청한 회원 정보들을 보내드립니다.',
+			userInfo : selectResult[0]
+		});
+	} catch (err) {
+		res.status(500).json({
+			error: "Internal Server Error",
+			message: "예상치 못한 에러가 발생했습니다."
+		})
+	}
+});
 
+router.get('/:userId', verifyToken, async (req, res) => {
+	try {
+		const findedUserId = req.params.userId;
+		const selectResult = await conn.execute('SELECT user.id as user_id, user.class as class, user.name as user_name, user.position as position, affiliation.cmd as cmd, affiliation.cps as cps, affiliation.division as division, affiliation.br as br, affiliation.bn as bn, affiliation.co as co, affiliation.etc as etc FROM user INNER JOIN affiliation ON user.id=affiliation.user_id WHERE affiliation.user_id = ?'
+																					 ,[findedUserId])
+		if (selectResult[0].length === 0) {
+			return res.status(406).json({
+				error : "Not Acceptable", 
+				message: "회원이 존재하지 않습니다."
+			});
+		}
+		return res.status(200).json({
+			message: '요청한 회원 정보를 보내드립니다.',
+			userInfo : selectResult[0][0]
+		});
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({
+			error: "Internal Server Error",
+			message: "예상치 못한 에러가 발생했습니다."
+		})
+	}
+});
 
 router.post('/edit', verifyToken, async (req, res) => {
 	try {
@@ -74,7 +111,7 @@ router.post('/edit', verifyToken, async (req, res) => {
 	}
 });
 
-router.post('/delete', async (req, res) => {
+router.delete('/', async (req, res) => {
 	try {
 		const token = req.decoded;
 		await axios.delete(`${token.peer}/v1/peer/${token.id}`);

@@ -77,7 +77,6 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 			if (stdFlag) {
 				result = "특"
 			}
-			
 		} else {
 			result = "PASS"
 		}
@@ -91,7 +90,7 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 			}
 		}
 		
-		//const response = await axios.post(`${peer}/v1/block`, userRecord); 실제론 여기로
+		await axios.post(`${peer}/v1/block`, userRecord); 
 		//const response = await axios.post(`http://api.jerrykang.com/v1/block`, userRecord); // 테스트에만 일로
 		res.status(200).json(
 			{

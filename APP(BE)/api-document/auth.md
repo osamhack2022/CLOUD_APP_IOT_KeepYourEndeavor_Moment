@@ -4,6 +4,9 @@
 ### 회원가입 라우터입니다.
 회원 가입의 기능과 더불어 해당 USER의 PEER에 해당하는 컨테이너를 생성 및 실행하는 기능도 담당합니다.
 
+id와 pwd는 필수입니다. 프론트 단에서 하이라이트해주세요.
+소속명을 하나도 기입하지 않을 경우에 에러가 발생합니다.
+
 #### JSON으로 요청해주세요
 ```bash
 curl --location --request POST 'https://api-server.run.goorm.io/auth/signup/' \ 
@@ -41,12 +44,22 @@ curl --location --request POST 'https://api-server.run.goorm.io/auth/signup/' \
 ```
 
 ---
+##### 누락한 회원정보가 있을 때 status : 406
+
+```json
+{
+    "error": "Not Acceptable",
+    "message": "회원 정보 중 누락된 부분이 있습니다."
+}
+```
+---
+
 ##### 실패시 status : 406
 
 ```json
 {
     "error": "Not Acceptable",
-    "message": "잘못된 회원 정보입니다."
+    "message": "올바르지 않은 회원 정보입니다."
 }
 ```
 
