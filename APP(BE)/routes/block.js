@@ -77,7 +77,6 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 			if (stdFlag) {
 				result = "특"
 			}
-			
 		} else {
 			result = "PASS"
 		}

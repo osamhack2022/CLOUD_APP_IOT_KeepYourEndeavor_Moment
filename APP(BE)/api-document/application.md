@@ -85,7 +85,7 @@ curl --location --request GET 'https://api-server.run.goorm.io/application/:noti
 ```json
 {
 	"message": "해당 공지에 신청한 인원 현황입니다",
-	"info": [
+	"applicants": [
 		{
 			"rep_id": "supervisor",
 			"members": [

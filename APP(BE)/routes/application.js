@@ -41,7 +41,7 @@ router.get('/:noticeId/',verifyToken,normalAccess, async (req, res, next) => {
 		
 		res.status(200).json({
 			message: "해당 공지에 신청한 인원 현황입니다",
-			info : members
+			applicants : members
 		});
 		
 	} catch (err) {
@@ -88,7 +88,6 @@ router.post('/:noticeId/regist',verifyToken,normalAccess, async (req, res, next)
 		const message = req.body.message;
 		const createAt = moment().format("YYYY-M-D H:m:s");
 		const updateAt = moment().format("YYYY-M-D H:m:s");
-		console.log(members);
 		const bind = [null, issueId[0][0].issue_id, token.id, JSON.stringify(members), message, createAt, updateAt]
 		
 		await conn.execute('INSERT INTO application VALUES (?,?,?,?,?,?,?)', bind);

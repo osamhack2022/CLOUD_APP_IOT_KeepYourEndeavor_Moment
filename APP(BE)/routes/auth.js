@@ -17,7 +17,6 @@ const { createHashedPassword, makePasswordHashed } = require('../lib/security.js
 router.post('/signup', async (req, res, next) => {
 	const user = req.body;
   try {
-		//organization에 최상위 소속을 넣도록 하자.
 		const authenticatedInfo = ['id','pwd','class','name','authority','position']
 		const orgCandidates = Object.keys(user).filter(key => !authenticatedInfo.includes(key));
 		
