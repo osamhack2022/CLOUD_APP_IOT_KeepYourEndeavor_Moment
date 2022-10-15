@@ -7,7 +7,7 @@ import {
     Pagination,
     Table,
   } from 'semantic-ui-react'
-import moment  from 'moment';
+import {Redirect} from 'react-router-dom';
 import useAuth from '../../hooks/auth/useSignin';
 
 const MainBlock = styled.div`
@@ -59,61 +59,14 @@ const MainBlock = styled.div`
 const Main = () => {
     const {handleLogout} = useAuth();
 
+    if(!localStorage.getItem('token')){
+        return (<Redirect to='/login'></Redirect>)
+    }
 
     return (
         <MainBlock>
             <div>
-                <header>
-                    <div>
-
-                    </div>
-                    <img src='/logo.png'/>
-                    <Button secondary onClick={()=>handleLogout()}>
-                        로그아웃
-                    </Button>
-                </header>
-                <div className='card-group'>
-                    <div className='card'>
-                        5 <span>Node</span>
-                    </div>
-                    <div className='card'>
-                        2 <span>Blocks</span>
-                    </div>
-                    <div className='card'>
-                        1 <span>Orgs</span>
-                    </div>
-                    <div className='card'>
-                        3 <span>Cluster</span>
-                    </div>
-                </div>
-                <div className='list'>
-                    <Input fluid size="big" icon='search' placeholder='Search...' />
-                    <Table celled  selectable>
-                        <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell>id</Table.HeaderCell>
-                            <Table.HeaderCell>generated_time</Table.HeaderCell>
-                            <Table.HeaderCell>event_id</Table.HeaderCell>
-                            <Table.HeaderCell>data</Table.HeaderCell>
-                        </Table.Row>
-                        </Table.Header>
-
-                        <Table.Body>
- 
-                        </Table.Body>
-                    </Table>
-                </div>
-                <footer>
-                    <Pagination
-                        boundaryRange={0}
-                        defaultActivePage={1}
-                        ellipsisItem={null}
-                        firstItem={null}
-                        lastItem={null}
-                        siblingRange={1}
-                        totalPages={10}
-                    />
-                </footer>
+                
             </div>      
         </MainBlock>
     )

@@ -1,5 +1,7 @@
-import react, {useCallback, useEffect, useState} from 'react';
-import { signin } from '../../lib/api';
+import {useState} from 'react';
+import { System } from 'typescript';
+import { logout, signin } from '../../lib/api';
+import { SystemError } from '../../lib/error';
 
 import { useRouter } from '../common/useRouter';
 
@@ -10,6 +12,7 @@ export default function useSignin(){
         pwd: ''
     });
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const onChange = (e) => {
         const {name, value} = e.target;
@@ -21,22 +24,34 @@ export default function useSignin(){
     }
 
     const handdleSignin = async(input) => {
-        const response = await signin(input);
-        console.log(response);
+        try{
+            setLoading(true);
+            const {data} = await signin(input);
+            localStorage.setItem('token', data.token);
+            router.history.push('/');
+            setLoading(false);
+        }catch(e){
+            const err = e as SystemError;
+            setError(err.response.data.message);
+            setLoading(false);
+        }
     }
 
-    const handdleSignup = async(input) => {
-        const response = await signin(input);
-        console.log(response);
-    }
+    const handleLogout = async() => {
+        try{
+            const token: string = localStorage.getItem('token') ?? '';
+            await logout(token);
+            localStorage.removeItem('token');
+            router.history.push('/login');
+        }catch(e){
+            const err = e as SystemError;
+            
+        }
 
-    const handleLogout = () => {
-        localStorage.removeItem('login');
-        router.history.push('/login');
     }
 
 
     return {
-        handdleSignin, handdleSignup, onChange, input, error, handleLogout
+        handdleSignin, onChange, input, error, handleLogout, loading
     }
 }

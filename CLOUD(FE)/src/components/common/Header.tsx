@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import Responsive from './Responsive';
 import {Link} from 'react-router-dom';
+import { Button } from 'semantic-ui-react';
+import useSignin from '../../hooks/auth/useSignin';
 
 const HeaderBlock = styled.div`
     padding-left : 2rem;
@@ -32,6 +33,7 @@ const Wrapper = styled.div`
     display : flex;
     flex-direction: row;
     align-items: center;
+    margin-right: 1rem;
     justify-content : space-between;
     .logo{
         font-size : 1.125rem;
@@ -47,7 +49,7 @@ const Spacer = styled.div`
     height : 4rem;
 `
 function Header() {
-
+    const {handleLogout} = useSignin();
     return (
         <>
         <HeaderBlock>
@@ -56,6 +58,9 @@ function Header() {
                     <Link className="logo" to="/">Keep Your Endeavor</Link>
                     <div className="title" >관리자페이지</div>
                 </div>
+                <Button secondary onClick={()=>handleLogout()}>
+                        로그아웃
+                </Button>
             </Wrapper>
         </HeaderBlock>
         <Spacer/>
