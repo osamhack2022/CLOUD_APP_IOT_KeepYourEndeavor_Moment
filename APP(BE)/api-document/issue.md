@@ -24,29 +24,26 @@ curl --location --request POST 'https://api-server.run.goorm.io/issue/regist' \
 ---
 #### 응답 내용
 
-##### 성공, 기준 생성이 필요할 때 status : 200
+##### 성공, 기준 생성이 불필요할 때 status : 200
 
 ```json
 {
-    "message": "issue 등록이 완료됐습니다. resultOfStandard의 내용대로 기준을 생성 해주세요",
-    "issueId": "wA3JudX7xpBMAhI9",
-    "resultOfStandard": {
-        "collection": "측정시험",
-        "subject": "테스트"
-    },
-    "mandatory": "1"
+	"message": "issue 등록이 완료됐습니다.",
+	"issueId": "x0APItSlm9LBoGKN",
+	"resultOfStandard": "기준은 이미 생성돼 있습니다. 수정을 원할 시 standard route에서 삭제 후 생성해주세요",
+	"mandatory": "1"
 }
 ```
 ---
 
-##### 성공, 기준 생성이 필요 없을 때 status : 200
+##### 성공, 기준을 생성했을 때 status : 200
 
 ```json
 {
-    "message": "issue 등록이 완료됐습니다. resultOfStandard의 내용대로 기준을 생성 해주세요",
-    "issueId": "HhIi2PA4MkBMIT8D",
-    "resultOfStandard": "기준은 이미 생성돼 있습니다.",
-    "mandatory": "1"
+	"message": "issue 등록이 완료됐습니다.",
+	"issueId": "pC3zF3oyqpV5x3T7",
+	"resultOfStandard": "요청하신 내용대로 기준을 생성했습니다.",
+	"mandatory": "1"
 }
 ```
 ---
@@ -54,8 +51,8 @@ curl --location --request POST 'https://api-server.run.goorm.io/issue/regist' \
 ##### 이슈 정보가 잘못됐을 때 stauts : 406
 ```json
 {
-    "error": "Not Acceptable",
-    "message": "이미 등록된 이슈이거나 잘못된 이슈입니다. 이슈를 새로 등록을 원하실 경우 기존 이슈를 삭제해 주세요."
+	"error": "Not Acceptable",
+	"message": "이미 등록된 이슈이거나 잘못된 이슈입니다. 1. 이슈를 새로 등록을 원하실 경우 기존 이슈를 삭제해 주세요. 2. 기준을 새로 생성하시려면 기준을 삭제 후 standard route에서 생성해주세요"
 }
 ```
 
@@ -73,30 +70,34 @@ curl --location --request GET 'https://api-server.run.goorm.io/issue/'
 	"message": "등록된 issue들을 성공적으로 전송했습니다.",
 	"issues": [
 		{
-			"id": "eHUl6qaWclHeij7G",
+			"id": "BSUds+6TLZ8Jqwa",
 			"type": "측정시험",
-			"subject": "윗몸일으키기",
+			"subject": "멀리뛰기",
 			"issuer_id": "supervisor",
-			"created_at": "2022-10-13T23:29:17.000Z",
-			"updated_at": "2022-10-13T23:29:17.000Z"
+			"mandatory": 1,
+			"created_at": "2022-10-19T11:14:00.000Z",
+			"updated_at": "2022-10-19T11:14:00.000Z"
 		},
 		{
-			"id": "gbYONfg0KDDcXaFM",
-			"type": "측정시험",
-			"subject": "뜀걸음",
-			"issuer_id": "supervisor",
-			"created_at": "2022-10-13T23:27:01.000Z",
-			"updated_at": "2022-10-13T23:27:01.000Z"
-		},
-		{
-			"id": "KqiUkmHAJ0jiSXQ+",
+			"id": "pC3zF3oyqpV5x3T7",
 			"type": "측정시험",
 			"subject": "팔굽혀펴기",
 			"issuer_id": "supervisor",
-			"created_at": "2022-10-13T23:29:07.000Z",
-			"updated_at": "2022-10-13T23:29:07.000Z"
+			"mandatory": 1,
+			"created_at": "2022-10-19T11:37:07.000Z",
+			"updated_at": "2022-10-19T11:37:07.000Z"
+		},
+		{
+			"id": "x0APItSlm9LBoGKN",
+			"type": "강연",
+			"subject": "테스트 강연",
+			"issuer_id": "supervisor",
+			"mandatory": 1,
+			"created_at": "2022-10-19T11:40:12.000Z",
+			"updated_at": "2022-10-19T11:40:12.000Z"
 		}
 	]
+
 }
 ```
 ---
@@ -143,6 +144,14 @@ curl --location --request GET 'https://api-server.run.goorm.io/issue/:issueId'
 }
 ```
 ---
+
+##### 이슈는 살아있으나 기준이 삭제됐을 경우 status : 406
+```json
+{
+	"error": "Not Acceptable",
+	"message": "이슈는 살아있으나 기준이 삭제된 이슈입니다. 1. 해당 이슈를 삭제 후 재생성 해주세요 2. 기준을 재생성 해주세요"
+}
+```
 
 ##### 실패시 stauts : 406
 ```json

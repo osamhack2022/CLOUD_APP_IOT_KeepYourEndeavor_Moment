@@ -67,8 +67,8 @@ router.post('/:noticeId/regist',verifyToken,normalAccess, async (req, res, next)
 
 		
 		const members = [];
-		
-		for await (let member of req.body.members) {
+		for await (let member of JSON.parse(req.body.members)) {
+			console.log(member);
 			const memberList = await conn.execute('SELECT * FROM user WHERE id = ?',[member]);
 			
 			if (memberList[0].length === 0) {
@@ -86,8 +86,8 @@ router.post('/:noticeId/regist',verifyToken,normalAccess, async (req, res, next)
 		}
 
 		const message = req.body.message;
-		const createAt = moment().format("YYYY-M-D H:m:s");
-		const updateAt = moment().format("YYYY-M-D H:m:s");
+		const createAt = moment().add(9,'h').format("YYYY-M-D H:m:s");
+		const updateAt = moment().add(9,'h').format("YYYY-M-D H:m:s");
 		const bind = [null, issueId[0][0].issue_id, token.id, JSON.stringify(members), message, createAt, updateAt]
 		
 		await conn.execute('INSERT INTO application VALUES (?,?,?,?,?,?,?)', bind);
@@ -169,7 +169,7 @@ router.post('/:noticeId/edit',verifyToken,normalAccess, async (req, res, next) =
 		}
 		console.log(updateApplicationTable);
 		for await (let inform of updateApplicationTable) {
-			const updateAt = moment().format("YYYY-M-D H:m:s"); //format("YYYY-M-D H:m:s");
+			const updateAt = moment().add(9,'h').format("YYYY-M-D H:m:s"); //format("YYYY-M-D H:m:s");
 			await conn.execute(`UPDATE application SET ${inform[0]} = '${inform[1]}' WHERE issue_id = '${inform[2]}' AND rep_id = '${inform[3]}'`);
 			await conn.execute(`UPDATE application SET updated_at = '${updateAt}' WHERE issue_id = '${inform[2]}' AND rep_id = '${inform[3]}'`);
 		}

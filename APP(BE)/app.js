@@ -14,7 +14,6 @@ app.set('port', process.env.PORT || 3000);
 
 const cors = require('cors');
 
-
 let corsOptions = {
 		origin: ['http://game.jerrykang.com', 'http://admin.jerrykang.com'],
 		credentials: true
@@ -56,8 +55,6 @@ fs.readdirSync(path.join(__dirname, '/routes'))
     .forEach(routeFile => {
 			app.use(`/${routeFile.split('.')[0]}`, require(`./routes/${routeFile}`));
 		});
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

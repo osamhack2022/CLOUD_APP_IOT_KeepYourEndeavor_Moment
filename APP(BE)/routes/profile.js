@@ -12,7 +12,8 @@ require('../db/redisCon.js')().then((res) => redisCon = res);
 
 router.get('/', verifyToken, async(req, res) => {
 	try {
-		const selectResult = await conn.execute('SELECT user.id as user_id, user.class as class, user.name as user_name, user.position as position, affiliation.cmd as cmd, affiliation.cps as cps, affiliation.division as division, affiliation.br as br, affiliation.bn as bn, affiliation.co as co, affiliation.etc as etc FROM user INNER JOIN affiliation ON user.id=affiliation.user_id')
+		const selectResult = await conn.execute('SELECT user.id as user_id, user.class as class, user.name as user_name, user.position as position, affiliation.cmd as cmd, affiliation.cps as cps, affiliation.division as division, affiliation.br as br, affiliation.bn as bn, affiliation.co as co, affiliation.etc as etc FROM user INNER JOIN affiliation ON user.id=affiliation.user_id');
+
 		return res.status(200).json({
 			message: '요청한 회원 정보들을 보내드립니다.',
 			userInfo : selectResult[0]
@@ -84,21 +85,18 @@ router.post('/edit', verifyToken, async (req, res) => {
 			});
 		}
 		
-		console.log(updateUserTable,updateAffTable)
-		
 		for await (let inform of updateUserTable) {
-			const updateAt = moment().format("YYYY-M-D H:m:s"); //format("YYYY-M-D H:m:s");
+			const updateAt = moment().add(9,'h').format("YYYY-M-D H:m:s"); //format("YYYY-M-D H:m:s");
 			await conn.execute(`UPDATE user SET ${inform[0]} = '${inform[1]}' WHERE id = '${inform[2]}'`);
 			await conn.execute(`UPDATE user SET updated_at = '${updateAt}' WHERE id = '${inform[2]}'`);
 		}
 		for await (let inform of updateAffTable) {
-			const updateAt =moment().format("YYYY-M-D H:m:s");
+			const updateAt =moment().add(9,'h').format("YYYY-M-D H:m:s");
 			await conn.execute(`UPDATE affiliation SET ${inform[0]} = '${inform[1]}' WHERE user_id = '${inform[2]}'`);
 			await conn.execute(`UPDATE affiliation SET updated_at = '${updateAt}' WHERE id = '${inform[2]}'`);
 		}
 		
-		
-		
+
 		return res.status(200).json({
 			message: '보내주신 내용대로 업데이트에 성공했습니다!'
 		});
