@@ -84,8 +84,6 @@ router.post('/edit', verifyToken, async (req, res) => {
 			});
 		}
 		
-		console.log(updateUserTable,updateAffTable)
-		
 		for await (let inform of updateUserTable) {
 			const updateAt = moment().format("YYYY-M-D H:m:s"); //format("YYYY-M-D H:m:s");
 			await conn.execute(`UPDATE user SET ${inform[0]} = '${inform[1]}' WHERE id = '${inform[2]}'`);
@@ -97,8 +95,7 @@ router.post('/edit', verifyToken, async (req, res) => {
 			await conn.execute(`UPDATE affiliation SET updated_at = '${updateAt}' WHERE id = '${inform[2]}'`);
 		}
 		
-		
-		
+
 		return res.status(200).json({
 			message: '보내주신 내용대로 업데이트에 성공했습니다!'
 		});

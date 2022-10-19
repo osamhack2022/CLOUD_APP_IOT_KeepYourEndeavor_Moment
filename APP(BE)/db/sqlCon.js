@@ -1,6 +1,6 @@
 module.exports = async () => {
 	// get the client
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 const mysql = require('mysql2/promise');
 // get the promise implementation, we will use bluebird
 const bluebird = require('bluebird');
@@ -13,5 +13,6 @@ const connection = await mysql.createConnection(
 		database: process.env.DATABASE, 
 		Promise: bluebird
 	});
+
 return connection
 }

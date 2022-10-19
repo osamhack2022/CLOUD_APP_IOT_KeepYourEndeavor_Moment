@@ -32,8 +32,14 @@ router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
 		
 		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM issue WHERE id = ?', [issueId]);
 		const issue = rowUser[0];
-		
 		const standard = await fireDB.collection(issue.type).doc(issue.subject).get();
+		if (standard._fieldsProto === undefined) {
+			return res.status(406).json({
+				error : "Not Acceptable", 
+				message: "이슈는 살아있으나 기준이 삭제된 이슈입니다. 1. 해당 이슈를 삭제 후 재생성 해주세요 2. 기준을 재생성 해주세요"
+			});
+		}
+
 		const conversionStandard = {}
 		Object.keys(standard._fieldsProto).forEach((key) => {
 			conversionStandard[key] = standard._fieldsProto[key]["stringValue"]
@@ -61,7 +67,7 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 		const id = await makeHashedValue(createAt);
 		console.log(id);
 		const issueInfo = req.body;
-		const bind = [id, issueInfo.type, issueInfo.subject, token.id, createAt, updateAt, issueInfo.mandatory];
+		const bind = [id, issueInfo.type, issueInfo.subject, token.id, issueInfo.mandatory,createAt, updateAt];
 		if (issueInfo.type === undefined || issueInfo.subject === undefined) {
 			throw new Error();
 		}
@@ -70,22 +76,27 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 		let flag = true
 		let resultOfStandard = ""
 		const userRef = await fireDB.collection(issueInfo.type).doc(issueInfo.subject).get();
+		
 		if (!userRef._fieldsProto) {
 			await conn.execute('INSERT INTO type VALUES (?,?,?)', [issueInfo.type, createAt, updateAt]);
 		} else {
 			flag = false;
 		}
+
+
 		if (flag) {
-			resultOfStandard = {collection : issueInfo.type, subject:issueInfo.subject};
+			// 스탠다드 생성하기
+			await fireDB.collection(issueInfo.type).doc(issueInfo.subject).set(issueInfo.standard);
+			resultOfStandard = `요청하신 내용대로 기준을 생성했습니다.`
 		} else {
-			resultOfStandard = `기준은 이미 생성돼 있습니다.`;
+			resultOfStandard = `기준은 이미 생성돼 있습니다. 수정을 원할 시 standard route에서 삭제 후 생성해주세요`;
 			flag = true;
 		}
 		
 		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?,?)', bind);
 		res.status(200).json(
 			{
-				message : "issue 등록이 완료됐습니다. resultOfStandard의 내용대로 기준을 생성 해주세요",
+				message : "issue 등록이 완료됐습니다.",
 				issueId : id,
 				resultOfStandard,
 				mandatory : issueInfo.mandatory
@@ -96,7 +107,7 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 		res.status(406).json(
 			{
 				error : "Not Acceptable", 
-				message: "이미 등록된 이슈이거나 잘못된 이슈입니다. 이슈를 새로 등록을 원하실 경우 기존 이슈를 삭제해 주세요."
+				message: "이미 등록된 이슈이거나 잘못된 이슈입니다. 1. 이슈를 새로 등록을 원하실 경우 기존 이슈를 삭제해 주세요. 2. 기준을 새로 생성하시려면 기준을 삭제 후 standard route에서 생성해주세요"
 			}
 		);
 	}

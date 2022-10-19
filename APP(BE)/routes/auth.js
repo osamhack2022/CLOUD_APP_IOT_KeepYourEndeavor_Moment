@@ -13,7 +13,6 @@ require('../db/redisCon.js')().then((res) => redisCon = res);
 
 const { createHashedPassword, makePasswordHashed } = require('../lib/security.js');
 
-/* GET home page. */
 router.post('/signup', async (req, res, next) => {
 	const user = req.body;
   try {
@@ -27,7 +26,6 @@ router.post('/signup', async (req, res, next) => {
 			}
 		});
 		
-
 		const organization = [];
 		orgCandidates.forEach((key)=>{
 			if (user[key] !== "") {
@@ -50,14 +48,15 @@ router.post('/signup', async (req, res, next) => {
 		
 		
 		// 테스트용 원래는 api.jerrykang.com
-		const peer_url = await axios.post("http://api.jerrykang.com/v1/peer", blockInfo);
+		// const peer_url = await axios.post("http://api.jerrykang.com/v1/peer", blockInfo);
 		
 		
 		const createAt = moment().format("YYYY-M-D H:m:s");
 		const updateAt = moment().format("YYYY-M-D H:m:s");
 		const { pwd, salt } = await createHashedPassword(user.pwd);
-		const userInfo = [user.id, pwd, user.class, user.name, user.authority, user.position, createAt, updateAt, salt, peer_url.data.url];
+		const userInfo = [user.id, pwd, user.class, user.name, user.authority, user.position, salt,  "peer_url.data.url", createAt, updateAt];
 		const affInfo = [null, user.id,user.cmd, user.cps ,user.division, user.br, user.bn, user.co, user.etc, createAt, updateAt];
+		
 		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?,?,?)', userInfo);
 		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?,?,?)', affInfo);
 		
@@ -65,7 +64,7 @@ router.post('/signup', async (req, res, next) => {
 			{
 				message : "회원가입에 성공했습니다. 회원의 비밀번호는 암호화 처리됩니다.",
 				issue : "암호화 시간이 조금 소요될 수 있으니 기다려주세요.",
-				peer_url : `${peer_url.data.url}가 생성됐습니다.`,
+				peer_url : `${"peer_url.data.url"}가 생성됐습니다.`,
 			}
 		);
 	} catch (err) {
@@ -82,12 +81,11 @@ router.post('/signup', async (req, res, next) => {
 
 router.post('/signin', async (req, res, next) => {
 	const userInfo = req.body;
-
 	try {
-		
 		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM user WHERE id = ?', [userInfo.id]);
 		const recordedUserInfo = rowUser[0];
 		const password = await makePasswordHashed(userInfo.id, userInfo.pwd);
+		
 		if (recordedUserInfo.pwd === password) {
 			const token = jwt.sign({
 				id: recordedUserInfo.id,
