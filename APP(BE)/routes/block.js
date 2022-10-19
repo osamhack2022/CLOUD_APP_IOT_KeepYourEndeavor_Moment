@@ -10,7 +10,6 @@ let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
 const fireDB = require('../db/firestoreCon.js');
 
-
 router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
   try {
 		const {user, record, issue_id} = req.body;

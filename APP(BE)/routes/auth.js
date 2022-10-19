@@ -51,8 +51,8 @@ router.post('/signup', async (req, res, next) => {
 		// const peer_url = await axios.post("http://api.jerrykang.com/v1/peer", blockInfo);
 		
 		
-		const createAt = moment().format("YYYY-M-D H:m:s");
-		const updateAt = moment().format("YYYY-M-D H:m:s");
+		const createAt = moment().add(9,'h').format("YYYY-M-D H:m:s");
+		const updateAt = moment().add(9,'h').format("YYYY-M-D H:m:s");
 		const { pwd, salt } = await createHashedPassword(user.pwd);
 		const userInfo = [user.id, pwd, user.class, user.name, user.authority, user.position, salt,  "peer_url.data.url", createAt, updateAt];
 		const affInfo = [null, user.id,user.cmd, user.cps ,user.division, user.br, user.bn, user.co, user.etc, createAt, updateAt];

@@ -14,8 +14,7 @@ require('../db/redisCon.js')().then((res) => redisCon = res);
 
 router.get('/', verifyToken, normalAccess, async(req, res) => {
 	try {
-		const [rowNotice, fieldUser] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id  FROM notice INNER JOIN issue ON notice.issue_id = issue.id');
-		
+		const [rowNotice, fieldUser] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id FROM notice INNER JOIN issue ON notice.issue_id = issue.id');
 		res.status(200).json({
 			message : "등록된 notice들을 성공적으로 전송했습니다.",
 			notices : rowNotice
@@ -33,15 +32,13 @@ router.post('/regist', verifyToken ,managerAccess, async (req, res, next) => {
 	try {
 		const token = req.decoded;
 		let {title, issue_id, manager_id ,test_date, apply_date, description} = req.body;
-		const testDate = moment(test_date).valueOf();
-		const applyDate = moment(apply_date).valueOf();
-		test_date = moment(test_date).format("YYYY-M-D H:m:s");
-		apply_date = moment(apply_date).format("YYYY-M-D H:m:s");
-		console.log(test_date, apply_date);
-		timeChecker(testDate, applyDate, res);
-		
+		timeChecker(test_date, apply_date, res);
 		const id = await makeHashedValue(title); 
-		const bind = [id, title, issue_id,manager_id ,token.id, test_date, apply_date, moment().format("YYYY-M-D H:m:s"),moment().format("YYYY-M-D H:m:s"),description];
+		const createAt = moment().add(9,'h').format("YYYY-M-D H:m:s");
+		const updateAt = moment().add(9,'h').format("YYYY-M-D H:m:s");
+		const testTime = moment(test_date).add(9,'h').format("YYYY-M-D H:m:s");
+		const applyTime = moment(apply_date).add(9,'h').format("YYYY-M-D H:m:s");
+		const bind = [id, title, issue_id,manager_id ,token.id, testTime, applyTime, description,createAt,updateAt];
 		await conn.execute('INSERT INTO notice VALUES (?,?,?,?,?,?,?,?,?,?)', bind);
 		return res.status(200).json({
 			message:"공지를 성공적으로 등록했습니다."
@@ -61,8 +58,7 @@ router.post('/regist', verifyToken ,managerAccess, async (req, res, next) => {
 router.get('/:noticeId', verifyToken ,managerAccess, async (req, res, next) => {
 	try {
 		const noticeId = req.params.noticeId;
-		const [rowNotice, fieldUser] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id  FROM notice INNER JOIN issue ON notice.issue_id = issue.id');
-		
+		const [rowNotice, fieldUser] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id  FROM notice INNER JOIN issue ON notice.issue_id = issue.id WHERE notice.id = ?', [noticeId]);
 		if (rowNotice.length === 0) {
 			return res.status(406).json({
 			error : "Not Acceptable", 
@@ -119,9 +115,15 @@ router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res, next
 		
 		
 		for await (let inform of updateNoticeTable) {
-			const updateAt = moment().format("YYYY-M-D H:m:s"); //format("YYYY-M-D H:m:s");
-			await conn.execute(`UPDATE notice SET ${inform[0]} = '${inform[1]}' WHERE id = '${inform[2]}'`);
-			await conn.execute(`UPDATE notice SET updated_at = '${updateAt}' WHERE id = '${inform[2]}'`);
+			const updateAt = moment().add(9,'h').format("YYYY-M-D H:m:s"); //format("YYYY-M-D H:m:s");
+			if (inform[0] === 'test_date' || inform[0] === 'apply_date') {
+				console.log("hello",inform[0], moment(inform[1]).add(9,'h').format("YYYY-M-D H:m:s"))
+				await conn.execute(`UPDATE notice SET ${inform[0]} = '${moment(inform[1]).add(9,'h').format("YYYY-M-D H:m:s")}' WHERE id = '${inform[2]}'`);
+				await conn.execute(`UPDATE notice SET updated_at = '${updateAt}' WHERE id = '${inform[2]}'`);
+			} else {
+				await conn.execute(`UPDATE notice SET ${inform[0]} = '${inform[1]}' WHERE id = '${inform[2]}'`);
+				await conn.execute(`UPDATE notice SET updated_at = '${updateAt}' WHERE id = '${inform[2]}'`);
+			}
 		}
 		
 		

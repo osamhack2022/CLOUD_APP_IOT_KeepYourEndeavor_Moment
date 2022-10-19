@@ -14,6 +14,7 @@ const fireDB = require('../db/firestoreCon.js');
 router.get('/', verifyToken, managerAccess, async (req, res) => {
 	try {
 		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM issue');
+		console.log(moment(rowUser[0].created_at).format("YYYY-M-D H:m:s"));
 		res.status(200).json({
 			message : "등록된 issue들을 성공적으로 전송했습니다.",
 			issues : rowUser
@@ -62,12 +63,12 @@ router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
 router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 	try {
 		const token = req.decoded;
-		const createAt = moment().format("YYYY-M-D H:m:s");
-		const updateAt = moment().format("YYYY-M-D H:m:s");
+		const createAt = moment().add(9,'h').format("YYYY-M-D H:m:s");
+		const updateAt = moment().add(9,'h').format("YYYY-M-D H:m:s");
 		const id = await makeHashedValue(createAt);
 		console.log(id);
 		const issueInfo = req.body;
-		const bind = [id, issueInfo.type, issueInfo.subject, token.id, issueInfo.mandatory,createAt, updateAt];
+		const bind = [id, issueInfo.type, issueInfo.subject, token.id, issueInfo.mandatory, createAt, updateAt];
 		if (issueInfo.type === undefined || issueInfo.subject === undefined) {
 			throw new Error();
 		}
