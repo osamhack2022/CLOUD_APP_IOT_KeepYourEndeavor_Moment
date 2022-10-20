@@ -6,6 +6,7 @@ const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
 const axios = require('axios');
 
+
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
 let redisCon = "";
@@ -13,23 +14,24 @@ require('../db/redisCon.js')().then((res) => redisCon = res);
 
 const { createHashedPassword, makePasswordHashed } = require('../lib/security.js');
 
-router.post('/signup', async (req, res, next) => {
-	const user = req.body;
-  try {
+router.post('/signup', async (req, res) => {
+	const body = req.body;
+  	try {
+		const nowTime = moment().add(9,'h').format("YYYY-M-D H:m:s");
 		const authenticatedInfo = ['id','pwd','class','name','authority','position']
-		const orgCandidates = Object.keys(user).filter(key => !authenticatedInfo.includes(key));
+		const orgCandidates = Object.keys(body).filter(key => !authenticatedInfo.includes(key));
 		
 		let authenticatedBlanckFlag = false
 		authenticatedInfo.forEach((key)=>{
-			if (user[key] === "") {
+			if (body[key] === "") {
 				authenticatedBlanckFlag = true
 			}
 		});
 		
 		const organization = [];
 		orgCandidates.forEach((key)=>{
-			if (user[key] !== "") {
-				organization.push(user[key]);
+			if (body[key] !== "") {
+				organization.push(body[key]);
 			}
 		});
 
@@ -41,27 +43,23 @@ router.post('/signup', async (req, res, next) => {
 		}
 
 		const blockInfo = {
-			"id" : user.id,
+			"id" : body.id,
 			"organization" : organization.pop(),
-			"password" : user.pwd
+			"password" : body.pwd
 		}
-		
 		
 		// 테스트용 원래는 api.jerrykang.com
 
 		// const peer_url = await axios.post("http://api.jerrykang.com/v1/peer", blockInfo);
 
-		
-		const createAt = moment().add(9,'h').format("YYYY-M-D H:m:s");
-		const updateAt = moment().add(9,'h').format("YYYY-M-D H:m:s");
-		const { pwd, salt } = await createHashedPassword(user.pwd);
-		const userInfo = [user.id, pwd, user.class, user.name, user.authority, user.position, salt,  "peer_url.data.url", createAt, updateAt];
-		const affInfo = [null, user.id,user.cmd, user.cps ,user.division, user.br, user.bn, user.co, user.etc, createAt, updateAt];
+		const { pwd, salt } = await createHashedPassword(body.pwd);
+		const userInfo = [body.id, pwd, body.class, body.name, body.authority, body.position, salt,  "peer_url.data.url", nowTime, nowTime];
+		const affInfo = [null, body.id,body.cmd, body.cps ,body.division, body.br, body.bn, body.co, body.etc, nowTime, nowTime];
 		
 		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?,?,?)', userInfo);
 		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?,?,?)', affInfo);
 		
-		res.status(200).json(
+		return res.status(200).json(
 			{
 				message : "회원가입에 성공했습니다. 회원의 비밀번호는 암호화 처리됩니다.",
 				issue : "암호화 시간이 조금 소요될 수 있으니 기다려주세요.",
@@ -70,7 +68,7 @@ router.post('/signup', async (req, res, next) => {
 		);
 	} catch (err) {
 		console.log(err);
-		res.status(406).json(
+		return res.status(406).json(
 			{
 				error : "Not Acceptable", 
 				message: "올바르지 않은 회원 정보입니다."
@@ -80,22 +78,23 @@ router.post('/signup', async (req, res, next) => {
   
 });
 
-router.post('/signin', async (req, res, next) => {
-	const userInfo = req.body;
+router.post('/signin', async (req, res) => {
+	const body = req.body;
 	try {
-		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM user WHERE id = ?', [userInfo.id]);
-		const recordedUserInfo = rowUser[0];
-		const password = await makePasswordHashed(userInfo.id, userInfo.pwd);
-		
+		const [userSelectResult, fieldUser] = await conn.execute('SELECT * FROM user WHERE id = ?', [body.id]);
+		const recordedUserInfo = userSelectResult[0];
+		const password = await makePasswordHashed(body.id, body.pwd);
 		if (recordedUserInfo.pwd === password) {
 			const token = jwt.sign({
 				id: recordedUserInfo.id,
-				auth: rowUser[0].authority,
-				peer: rowUser[0].peer
+				auth: userSelectResult[0].authority,
+				peer: userSelectResult[0].peer
 			}, process.env.JWT_SECRET, {
 				issuer: 'api-server'
 			});
-			const start_peer = await axios.post("http://api.jerrykang.com/v1/peer/start",{"id" : userInfo.id});
+
+			const start_peer = await axios.post("http://api.jerrykang.com/v1/peer/start",{"id" : body.id});
+
 			await redisCon.set(recordedUserInfo.id, token);
 			await redisCon.expire(recordedUserInfo.id, 259200) // 로그인 유호 시간 6시간
 			

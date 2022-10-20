@@ -1,23 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
-const {verifyToken, normalAccess,managerAccess, supervisorAccess} = require('../middleware/accessController.js');
+const {verifyToken, supervisorAccess} = require('../middleware/accessController.js');
 const fireDB = require('../db/firestoreCon.js');
 
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
-let redisCon = "";
-require('../db/redisCon.js')().then((res) => redisCon = res);
-
-
 
 router.get('/', verifyToken, supervisorAccess, async (req, res) => {
 	try {
 		const [types, fields] = await conn.execute('SELECT id FROM type');
-		console.log(types);
-		const standards = {}
+		const standards = {};
 		for await (let type of types) {
 				const snapshot = await fireDB.collection(type.id).get();
 				standards[type.id] = []
@@ -45,9 +39,9 @@ router.get('/', verifyToken, supervisorAccess, async (req, res) => {
 });
 
 router.post('/post',  verifyToken, supervisorAccess,async (req, res) => {
-	const standardInfo = req.body;
-	const [rowType, fieldType] = await conn.execute('SELECT * FROM type WHERE id = ?', [standardInfo.type]);
-	if (rowType.length === 0) {
+	const body = req.body;
+	const [typeSelectResult, field] = await conn.execute('SELECT * FROM type WHERE id = ?', [body.type]);
+	if (typeSelectResult.length === 0) {
 		return res.status(406).json(
 				{
 					error:'Not Acceptable', 
@@ -55,11 +49,11 @@ router.post('/post',  verifyToken, supervisorAccess,async (req, res) => {
 				}
 			);
 	}
-	const standardRef = await fireDB.collection(standardInfo.type).doc(standardInfo.subject).get();
+	const standardRef = await fireDB.collection(body.type).doc(body.subject).get();
 	
 	if (!standardRef._fieldsProto) {
-			const standard = standardInfo.standard;
-			await fireDB.collection(standardInfo.type).doc(standardInfo.subject).set(standard);
+			const standard = body.standard;
+			await fireDB.collection(body.type).doc(body.subject).set(standard);
 			return res.status(200).json({
 				message: "기준 생성에 성공했습니다.",
 				standard
@@ -78,10 +72,10 @@ router.post('/post',  verifyToken, supervisorAccess,async (req, res) => {
 
 router.delete('/', verifyToken, supervisorAccess,async (req, res) => {
 	try {
-		const standardInfo = req.body;
-		const isInFireStore = await fireDB.collection(standardInfo.collection).doc(standardInfo.doc).get();
+		const body = req.body;
+		const isInFireStore = await fireDB.collection(body.collection).doc(body.doc).get();
 		
-		if (!standardInfo.doc ||!standardInfo.collection ) {
+		if (!body.doc ||!body.collection ) {
 			return res.status(406).json(
 				{
 					error:'Not Acceptable', 
@@ -96,7 +90,7 @@ router.delete('/', verifyToken, supervisorAccess,async (req, res) => {
 				}
 			);
 		} else {
-			await fireDB.collection(standardInfo.collection).doc(standardInfo.doc).delete();
+			await fireDB.collection(body.collection).doc(body.doc).delete();
 			return res.status(200).json({
 				message : ' 성공적으로 기준을 삭제했습니다. '
 			});

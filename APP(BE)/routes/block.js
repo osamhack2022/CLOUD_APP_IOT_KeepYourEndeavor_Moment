@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const {verifyToken,managerAccess } = require('../middleware/accessController.js');
-const jwt = require('jsonwebtoken');
 const axios = require('axios');
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
@@ -10,14 +9,31 @@ let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
 const fireDB = require('../db/firestoreCon.js');
 
+const typeFilter = async (dbStandard, standard, flags) => {
+	Object.keys(dbStandard).forEach((v) => {
+		const data = dbStandard[v].stringValue	
+		if (data.split(":").length === 2) {
+			flags.type = "시간"
+			standard.push({'std' : v, 'data' : moment(data, "m:s").valueOf()});
+		} else if (data.split(":").length === 1) {
+			flags.type = "숫자"
+			standard.push({'std' : v, 'data' : data});
+		} else {
+			flags.type = "이수"
+		}
+	});
+}
+
 router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
   try {
 		const {user, record, issue_id} = req.body;
-		const [userInfo, fieldsUser] = await conn.execute('SELECT peer FROM user WHERE id = ?', [user]);
-		const peer = userInfo[0].peer;
+
+		const [userSelectResult, fieldsUser] = await conn.execute('SELECT peer FROM user WHERE id = ?', [user]);
+		const peer = userSelectResult[0].peer;
 		res.peerInfo = peer;
-		const [issue, fieldsIssue] = await conn.execute('SELECT * FROM issue WHERE id = ?', [issue_id]);
-		if (issue.length === 0) {
+
+		const [issueSelectResult, fieldsIssue] = await conn.execute('SELECT * FROM issue WHERE id = ?', [issue_id]);
+		if (issueSelectResult.length === 0) {
 			return res.status(406).json(
 				{
 					error:'Not Acceptable', 
@@ -26,49 +42,60 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 			);
 		}
 		
-		const DBStandard = await fireDB.collection(issue[0].type).doc(issue[0].subject).get();
+		const DBStandard = await fireDB.collection(issueSelectResult[0].type).doc(issueSelectResult[0].subject).get();
 		const standard = []
+		const flags = {
+			type : "",
+			result : ""
+		}
+		typeFilter(DBStandard._fieldsProto, standard, flags);
 		
-		let type = ""
-		Object.keys(DBStandard._fieldsProto).forEach(function(v){
+		standard.sort(function (a, b) { 
+			return a.data < b.data ? -1 : a.data > b.data ? 1 : 0;  
+		});
+
+		/*
+		Object.keys(DBStandard._fieldsProto).forEach((v) => {
 			const data = DBStandard._fieldsProto[v].stringValue	
 			if (data.split(":").length === 2) {
-				type = "시간"
+				flags.type = "시간"
 				standard.push({'std' : v, 'data' : moment(data, "m:s").valueOf()});
 			} else if (data.split(":").length === 1) {
-				type = "숫자"
+				flags.type = "숫자"
 				standard.push({'std' : v, 'data' : data});
 			} else {
-				type = "이수"
+				flags.type = "이수"
 			}
 		});
+		*/
+		
 	
-		
-		
-		let result = ""
-		if (type === "시간") {
+		if (flags.type === "시간") {
 			const checkTime = moment(record,"m:s").valueOf();
+			/*
 			standard.sort(function (a, b) { 
 				return a.data < b.data ? -1 : a.data > b.data ? 1 : 0;  
 			});
-			console.log(checkTime);
+			*/
 			standard.some((std) => {
 				if (std.data >= checkTime) {
-					result = std.std;
+					flags.result = std.std;
 					return true;
 				}
 			});
-		} else if ( type === "숫자" ) {
+		} else if ( flags.type === "숫자" ) {
 			const check = parseInt(record,10);
+			/*
 			standard.sort(function (a, b) { 
 				return a.data < b.data ? -1 : a.data > b.data ? 1 : 0;  
 			});
+			*/
 			let stdFlag = true;
 			for(let i = 0; i < standard.length - 1 ; i++) {
 				if (parseInt(standard[i].data) <= check) {
 					if (check < parseInt(standard[i+1].data)){
 						stdFlag = false;
-						result = standard[i].std;
+						flags.result = standard[i].std;
 						break;
 					}
 				}
@@ -80,7 +107,6 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 			result = "PASS"
 		}
 		
-
 		const userRecord = {
 			data : {
 				user,
@@ -91,7 +117,7 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 		
 		await axios.post(`${peer}/v1/block`, userRecord); 
 		//const response = await axios.post(`http://api.jerrykang.com/v1/block`, userRecord); // 테스트에만 일로
-		res.status(200).json(
+		return res.status(200).json(
 			{
 				message : `${peer}에 해당 데이터를 온체인 시켰습니다.`,
 				userRecord
