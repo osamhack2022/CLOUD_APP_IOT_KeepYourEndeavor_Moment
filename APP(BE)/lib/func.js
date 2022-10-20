@@ -29,3 +29,11 @@ exports.timeChecker = (test_date, apply_date, res) => {
 		});
 	}
 }
+
+exports.convertStandard = (standard) => {
+	const conversionStandard = {}
+	Object.keys(standard).forEach((key) => {
+		conversionStandard[key] = standard[key]["stringValue"]
+	});
+	return conversionStandard
+}

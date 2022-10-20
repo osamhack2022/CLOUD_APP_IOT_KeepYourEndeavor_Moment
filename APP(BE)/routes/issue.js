@@ -4,23 +4,16 @@ const {verifyToken, managerAccess, supervisorAccess} = require('../middleware/ac
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
 const { makeHashedValue } = require('../lib/security.js');
+const { convertStandard } = require('../lib/func.js');
 
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
 const fireDB = require('../db/firestoreCon.js');
 
-const convertStandard = async (standard) => {
-	const conversionStandard = {}
-	Object.keys(standard).forEach((key) => {
-		conversionStandard[key] = standard[key]["stringValue"]
-	});
-	return conversionStandard
-};
-
 
 router.get('/', verifyToken, managerAccess, async (req, res) => {
 	try {
-		const [issueSelectResult, fieldUser] = await conn.execute('SELECT * FROM issue');
+		const [issueSelectResult, field] = await conn.execute('SELECT * FROM issue');
 		res.status(200).json({
 			message : "등록된 issue들을 성공적으로 전송했습니다.",
 			issues : issueSelectResult
@@ -37,7 +30,7 @@ router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
 	try {
 		const params = req.params;
 		
-		const [issueSelectResult, fieldUser] = await conn.execute('SELECT * FROM issue WHERE id = ?', [params.issueId]);
+		const [issueSelectResult, field] = await conn.execute('SELECT * FROM issue WHERE id = ?', [params.issueId]);
 		const standard = await fireDB.collection(issueSelectResult[0].type).doc(issueSelectResult[0].subject).get();
 		if (standard._fieldsProto === undefined) {
 			return res.status(406).json({
@@ -45,11 +38,6 @@ router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
 				message: "이슈는 살아있으나 기준이 삭제된 이슈입니다. 1. 해당 이슈를 삭제 후 재생성 해주세요 2. 기준을 재생성 해주세요"
 			});
 		}
-
-		/* const conversionStandard = {}
-		Object.keys(standard._fieldsProto).forEach((key) => {
-			conversionStandard[key] = standard._fieldsProto[key]["stringValue"]
-		});*/
 		
 		return res.status(200).json({
 			message : "등록된 issue를 성공적으로 전송했습니다.",

@@ -4,15 +4,17 @@ const {verifyToken, normalAccess,managerAccess} = require('../middleware/accessC
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
 const { makeHashedValue } = require('../lib/security.js');
-const { timeChecker } = require('../lib/func.js');
-
+const { timeChecker, convertStandard } = require('../lib/func.js');
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
+const fireDB = require('../db/firestoreCon.js');
+
+
 
 
 router.get('/', verifyToken, normalAccess, async(req, res) => {
 	try {
-		const [noticeSelectResult, fieldUser] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id FROM notice INNER JOIN issue ON notice.issue_id = issue.id');
+		const [noticeSelectResult, field] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id FROM notice INNER JOIN issue ON notice.issue_id = issue.id');
 		res.status(200).json({
 			message : "등록된 notice들을 성공적으로 전송했습니다.",
 			notices : noticeSelectResult
@@ -30,7 +32,7 @@ router.post('/regist', verifyToken ,managerAccess, async (req, res) => {
 	try {
 		const nowTime = moment().add(9,'h').format("YYYY-M-D H:m:s");
 		const token = req.decoded;
-		let {title, issue_id, manager_id ,test_date, apply_date, description} = req.body;
+		const {title, issue_id, manager_id ,test_date, apply_date, description} = req.body;
 		timeChecker(test_date, apply_date, res);
 		const id = await makeHashedValue(title); 
 
@@ -56,19 +58,32 @@ router.post('/regist', verifyToken ,managerAccess, async (req, res) => {
 router.get('/:noticeId', verifyToken ,managerAccess, async (req, res) => {
 	try {
 		const params = req.params;
-		const [noticeSelectResult, field] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id  FROM notice INNER JOIN issue ON notice.issue_id = issue.id WHERE notice.id = ?', [params.noticeId]);
+		const [noticeSelectResult, field] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description,type, subject, issuer_id  FROM notice INNER JOIN issue ON notice.issue_id = issue.id WHERE notice.id = ?', [params.noticeId]);
+		const [issueSelectResult, Issuefield] = await conn.execute('SELECT * FROM issue WHERE id = ?', [noticeSelectResult[0].issue_id]);
+		const {type, subject} = issueSelectResult[0]
+		const standard = await fireDB.collection(type).doc(subject).get();
+		if (standard._fieldsProto === undefined) {
+			return res.status(406).json({
+				error : "Not Acceptable", 
+				message: "공지에 대응되는 이슈에 기준이 없습니다. 1. 이슈에 해당하는 기준을 생성해주세요. 2. 이슈를 삭제하고 재생성해주세요"
+			});
+		}
+
 		if (noticeSelectResult.length === 0) {
 			return res.status(406).json({
-			error : "Not Acceptable", 
-			message: "올바르지 않은 공지 넘버 입니다."
-		});
+				error : "Not Acceptable", 
+				message: "올바르지 않은 공지 넘버 입니다."
+			});
 		}
-		res.status(200).json({
+		return res.status(200).json({
 			message : "notice를 성공적으로 전송했습니다.",
-			notice : noticeSelectResult[0]
+			notice : noticeSelectResult[0],
+			issue : issueSelectResult[0],
+			standard : convertStandard(standard._fieldsProto)
 		});
 	} catch (err) {
-		res.status(500).json({
+		console.error(err);
+		return res.status(500).json({
 			error: "Interval server Error",
 			message : "예기치 못한 에러가 발생했습니다."
 		});
