@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {verifyToken, normalAccess,managerAccess, supervisorAccess} = require('../middleware/accessController.js');
-const jwt = require('jsonwebtoken');
+const {verifyToken, normalAccess,managerAccess} = require('../middleware/accessController.js');
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
 const { makeHashedValue } = require('../lib/security.js');
@@ -9,15 +8,14 @@ const { timeChecker } = require('../lib/func.js');
 
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
-let redisCon = "";
-require('../db/redisCon.js')().then((res) => redisCon = res);
+
 
 router.get('/', verifyToken, normalAccess, async(req, res) => {
 	try {
-		const [rowNotice, fieldUser] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id FROM notice INNER JOIN issue ON notice.issue_id = issue.id');
+		const [noticeSelectResult, fieldUser] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id FROM notice INNER JOIN issue ON notice.issue_id = issue.id');
 		res.status(200).json({
 			message : "등록된 notice들을 성공적으로 전송했습니다.",
-			notices : rowNotice
+			notices : noticeSelectResult
 		});
 	} catch (err) {
 		console.error(err);
@@ -28,23 +26,23 @@ router.get('/', verifyToken, normalAccess, async(req, res) => {
 	}
 });
 
-router.post('/regist', verifyToken ,managerAccess, async (req, res, next) => {
+router.post('/regist', verifyToken ,managerAccess, async (req, res) => {
 	try {
+		const nowTime = moment().add(9,'h').format("YYYY-M-D H:m:s");
 		const token = req.decoded;
 		let {title, issue_id, manager_id ,test_date, apply_date, description} = req.body;
 		timeChecker(test_date, apply_date, res);
 		const id = await makeHashedValue(title); 
-		const createAt = moment().add(9,'h').format("YYYY-M-D H:m:s");
-		const updateAt = moment().add(9,'h').format("YYYY-M-D H:m:s");
+
 		const testTime = moment(test_date).add(9,'h').format("YYYY-M-D H:m:s");
 		const applyTime = moment(apply_date).add(9,'h').format("YYYY-M-D H:m:s");
-		const bind = [id, title, issue_id,manager_id ,token.id, testTime, applyTime, description,createAt,updateAt];
+		const bind = [id, title, issue_id,manager_id ,token.id, testTime, applyTime, description,nowTime,nowTime];
+
 		await conn.execute('INSERT INTO notice VALUES (?,?,?,?,?,?,?,?,?,?)', bind);
+
 		return res.status(200).json({
 			message:"공지를 성공적으로 등록했습니다."
 		});
-
-
 	} catch (err) {
 		console.error(err);
 		return res.status(406).json({
@@ -55,11 +53,11 @@ router.post('/regist', verifyToken ,managerAccess, async (req, res, next) => {
 
 });
 
-router.get('/:noticeId', verifyToken ,managerAccess, async (req, res, next) => {
+router.get('/:noticeId', verifyToken ,managerAccess, async (req, res) => {
 	try {
-		const noticeId = req.params.noticeId;
-		const [rowNotice, fieldUser] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id  FROM notice INNER JOIN issue ON notice.issue_id = issue.id WHERE notice.id = ?', [noticeId]);
-		if (rowNotice.length === 0) {
+		const params = req.params;
+		const [noticeSelectResult, field] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id  FROM notice INNER JOIN issue ON notice.issue_id = issue.id WHERE notice.id = ?', [params.noticeId]);
+		if (noticeSelectResult.length === 0) {
 			return res.status(406).json({
 			error : "Not Acceptable", 
 			message: "올바르지 않은 공지 넘버 입니다."
@@ -67,7 +65,7 @@ router.get('/:noticeId', verifyToken ,managerAccess, async (req, res, next) => {
 		}
 		res.status(200).json({
 			message : "notice를 성공적으로 전송했습니다.",
-			notice : rowNotice[0]
+			notice : noticeSelectResult[0]
 		});
 	} catch (err) {
 		res.status(500).json({
@@ -77,25 +75,26 @@ router.get('/:noticeId', verifyToken ,managerAccess, async (req, res, next) => {
 	}
 });
 
-router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res, next) => {
+router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res) => {
 	try {
-		const noticeId = req.params.noticeId;
+		const params = req.params;
+		const body = req.body;
+		const nowTime = moment().add(9,'h').format("YYYY-M-D H:m:s");
+
 		const noticeAllowKeys = ['title','test_date','apply_date','description'];
 		const updateNoticeTable = [];
-		const dateChangeFlag = []
+		const dateChangeFlag = [];
 		
-		const clientRequestUpdateKey = Object.keys(req.body);
+		const clientRequestUpdateKey = Object.keys(body);
 		clientRequestUpdateKey.forEach((key) => {
-			if (req.body[key] !== "") {
+			if (body[key] !== "") {
 				if (noticeAllowKeys.includes(key)) {
 					if (key === 'test_date' || key === 'apply_date') {
 							dateChangeFlag.push(key);
-							updateNoticeTable.push([key, req.body[key], noticeId]);
-
+							updateNoticeTable.push([key, body[key], params.noticeId]);
 					} else {
-						updateNoticeTable.push([key, req.body[key], noticeId]);
+						updateNoticeTable.push([key, body[key], params.noticeId]);
 					}
-				
 				} else {
 					throw new Error('수정 컬럼 이름이 잘못됐습니다. 수정 가능한 컬럼 이름만 넣어주세요');
 				}
@@ -103,7 +102,7 @@ router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res, next
 		});
 		
 		if (dateChangeFlag.length === 2) {
-			timeChecker(req.body.test_date, req.body.apply_date, res);	
+			timeChecker(body.test_date, body.apply_date, res);	
 		} else if (dateChangeFlag.length === 1) {
 			return res.status(406).json({
 				error : "Not Acceptable", 
@@ -115,48 +114,42 @@ router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res, next
 		
 		
 		for await (let inform of updateNoticeTable) {
-			const updateAt = moment().add(9,'h').format("YYYY-M-D H:m:s"); //format("YYYY-M-D H:m:s");
 			if (inform[0] === 'test_date' || inform[0] === 'apply_date') {
-				console.log("hello",inform[0], moment(inform[1]).add(9,'h').format("YYYY-M-D H:m:s"))
 				await conn.execute(`UPDATE notice SET ${inform[0]} = '${moment(inform[1]).add(9,'h').format("YYYY-M-D H:m:s")}' WHERE id = '${inform[2]}'`);
-				await conn.execute(`UPDATE notice SET updated_at = '${updateAt}' WHERE id = '${inform[2]}'`);
+				await conn.execute(`UPDATE notice SET updated_at = '${nowTime}' WHERE id = '${inform[2]}'`);
 			} else {
 				await conn.execute(`UPDATE notice SET ${inform[0]} = '${inform[1]}' WHERE id = '${inform[2]}'`);
-				await conn.execute(`UPDATE notice SET updated_at = '${updateAt}' WHERE id = '${inform[2]}'`);
+				await conn.execute(`UPDATE notice SET updated_at = '${nowTime}' WHERE id = '${inform[2]}'`);
 			}
 		}
-		
-		
-		
-		res.status(200).json({
+		return res.status(200).json({
 			message: '보내주신 내용대로 업데이트에 성공했습니다!'
 		});
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({
+		return res.status(500).json({
 			error: "Internal Server Error",
 			message: "예기치 못한 에러가 발생했습니다."
-
 		})
 	}
 });
 
-router.delete('/:noticeId/', verifyToken ,managerAccess, async (req, res, next) => {
+router.delete('/:noticeId/', verifyToken ,managerAccess, async (req, res) => {
 	try {
-		const noticeId = req.params.noticeId;
-		const deleteResult = await conn.execute(`DELETE FROM notice WHERE id = '${noticeId}'`);
+		const params = req.params;
+		const deleteResult = await conn.execute(`DELETE FROM notice WHERE id = '${params.noticeId}'`);
 		if (deleteResult[0].affectedRows === 0) {
-				res.status(406).json({
+				return res.status(406).json({
 				error: "Not Acceptable",
 				message: "존재하지 않는 공지 넘버입니다."
 			});
 		} else {
-			res.status(200).json({
+			return res.status(200).json({
 				message: '공지 삭제가 완료됐습니다.'
 			});	
 		}
 	} catch (err) {
-		res.status(500).json({
+		return res.status(500).json({
 			error: "Internal Server Error",
 			message: "예기치 못한 에러가 발생했습니다."
 		})

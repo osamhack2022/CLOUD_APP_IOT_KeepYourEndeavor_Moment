@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const {verifyToken, normalAccess} = require('../middleware/accessController.js');
-const jwt = require('jsonwebtoken');
 const axios = require('axios');
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');

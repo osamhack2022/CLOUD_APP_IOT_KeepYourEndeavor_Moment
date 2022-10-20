@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 const {verifyToken} = require('../middleware/accessController.js');
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
@@ -13,7 +12,6 @@ require('../db/redisCon.js')().then((res) => redisCon = res);
 router.get('/', verifyToken, async(req, res) => {
 	try {
 		const selectResult = await conn.execute('SELECT user.id as user_id, user.class as class, user.name as user_name, user.position as position, affiliation.cmd as cmd, affiliation.cps as cps, affiliation.division as division, affiliation.br as br, affiliation.bn as bn, affiliation.co as co, affiliation.etc as etc FROM user INNER JOIN affiliation ON user.id=affiliation.user_id');
-
 		return res.status(200).json({
 			message: '요청한 회원 정보들을 보내드립니다.',
 			userInfo : selectResult[0]
@@ -53,26 +51,29 @@ router.get('/:userId', verifyToken, async (req, res) => {
 router.post('/edit', verifyToken, async (req, res) => {
 	try {
 		const token = req.decoded;
+		const body = req.body;
+		const nowTime = moment().add(9,'h').format("YYYY-M-D H:m:s");
+
 		const userAllowKeys = ['pwd','class','name','authority','position', 'grade_target_id'];
 		const affAllowKeys = ['cmd','cps','division','br','bn','co','etc'];
-		let updateUserTable = [];
-		let updateAffTable = [];
-		let auth_flag = false
-		const clientRequestUpdateKey = Object.keys(req.body);
+		const updateUserTable = [];
+		const updateAffTable = [];
+		let auth_flag = false;
+
+		const clientRequestUpdateKey = Object.keys(body);
 		clientRequestUpdateKey.forEach((key) => {
-			if (req.body[key] === "") {
+			if (body[key] === "") {
 				console.log();
-			} else if (key === "authority" && req.body[key] !== "") {
+			} else if (key === "authority" && body[key] !== "") {
 				if (token.auth !== "개설자") {
 					auth_flag = true;
 				} else {
-					updateUserTable.push([key, req.body[key], req.body["grade_target_id"]]);
+					updateUserTable.push([key, body[key], body["grade_target_id"]]);
 				}
-				
 			} else if (userAllowKeys.includes(key)) {
-				updateUserTable.push([key, req.body[key], token.id]);
+				updateUserTable.push([key, body[key], token.id]);
 			} else if (affAllowKeys.includes(key)) {
-				updateAffTable.push([key, req.body[key], token.id]);
+				updateAffTable.push([key, body[key], token.id]);
 			} else {
 				throw new Error("요청 데이터의 형식이 잘못됐습니다. 요청 JSON을 확인해주세요.");
 			}
@@ -86,17 +87,14 @@ router.post('/edit', verifyToken, async (req, res) => {
 		}
 		
 		for await (let inform of updateUserTable) {
-			const updateAt = moment().add(9,'h').format("YYYY-M-D H:m:s"); //format("YYYY-M-D H:m:s");
 			await conn.execute(`UPDATE user SET ${inform[0]} = '${inform[1]}' WHERE id = '${inform[2]}'`);
-			await conn.execute(`UPDATE user SET updated_at = '${updateAt}' WHERE id = '${inform[2]}'`);
+			await conn.execute(`UPDATE user SET updated_at = '${nowTime}' WHERE id = '${inform[2]}'`);
 		}
 		for await (let inform of updateAffTable) {
-			const updateAt =moment().add(9,'h').format("YYYY-M-D H:m:s");
 			await conn.execute(`UPDATE affiliation SET ${inform[0]} = '${inform[1]}' WHERE user_id = '${inform[2]}'`);
-			await conn.execute(`UPDATE affiliation SET updated_at = '${updateAt}' WHERE id = '${inform[2]}'`);
+			await conn.execute(`UPDATE affiliation SET updated_at = '${nowTime}' WHERE id = '${inform[2]}'`);
 		}
-		
-
+	
 		return res.status(200).json({
 			message: '보내주신 내용대로 업데이트에 성공했습니다!'
 		});
@@ -125,7 +123,7 @@ router.delete('/', async (req, res) => {
 		console.error(err);
 		res.status(500).json({
 			error: "Internal Server Error",
-			message: err.message
+			message: "예상하지 못한 에러가 발생했습니다."
 		})
 	}
 });

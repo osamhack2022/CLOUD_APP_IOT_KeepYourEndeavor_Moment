@@ -1,23 +1,29 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
-const {verifyToken, normalAccess,managerAccess, supervisorAccess} = require('../middleware/accessController.js');
+const {verifyToken, managerAccess, supervisorAccess} = require('../middleware/accessController.js');
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
 const { makeHashedValue } = require('../lib/security.js');
-
 
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
 const fireDB = require('../db/firestoreCon.js');
 
+const convertStandard = async (standard) => {
+	const conversionStandard = {}
+	Object.keys(standard).forEach((key) => {
+		conversionStandard[key] = standard[key]["stringValue"]
+	});
+	return conversionStandard
+};
+
+
 router.get('/', verifyToken, managerAccess, async (req, res) => {
 	try {
-		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM issue');
-		console.log(moment(rowUser[0].created_at).format("YYYY-M-D H:m:s"));
+		const [issueSelectResult, fieldUser] = await conn.execute('SELECT * FROM issue');
 		res.status(200).json({
 			message : "등록된 issue들을 성공적으로 전송했습니다.",
-			issues : rowUser
+			issues : issueSelectResult
 		});
 	} catch (err) {
 		res.status(500).json({
@@ -29,11 +35,10 @@ router.get('/', verifyToken, managerAccess, async (req, res) => {
 
 router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
 	try {
-		const issueId = req.params.issueId;
+		const params = req.params;
 		
-		const [rowUser, fieldUser] = await conn.execute('SELECT * FROM issue WHERE id = ?', [issueId]);
-		const issue = rowUser[0];
-		const standard = await fireDB.collection(issue.type).doc(issue.subject).get();
+		const [issueSelectResult, fieldUser] = await conn.execute('SELECT * FROM issue WHERE id = ?', [params.issueId]);
+		const standard = await fireDB.collection(issueSelectResult[0].type).doc(issueSelectResult[0].subject).get();
 		if (standard._fieldsProto === undefined) {
 			return res.status(406).json({
 				error : "Not Acceptable", 
@@ -41,15 +46,15 @@ router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
 			});
 		}
 
-		const conversionStandard = {}
+		/* const conversionStandard = {}
 		Object.keys(standard._fieldsProto).forEach((key) => {
 			conversionStandard[key] = standard._fieldsProto[key]["stringValue"]
-		});
+		});*/
 		
-		res.status(200).json({
+		return res.status(200).json({
 			message : "등록된 issue를 성공적으로 전송했습니다.",
-			issue : rowUser,
-			standard : conversionStandard
+			issue : issueSelectResult,
+			standard : convertStandard(standard._fieldsProto)
 		});
 	} catch (err) {
 		console.error(err);
@@ -62,32 +67,31 @@ router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
 
 router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 	try {
+		const nowTime = moment().add(9,'h').format("YYYY-M-D H:m:s");
 		const token = req.decoded;
-		const createAt = moment().add(9,'h').format("YYYY-M-D H:m:s");
-		const updateAt = moment().add(9,'h').format("YYYY-M-D H:m:s");
-		const id = await makeHashedValue(createAt);
-		console.log(id);
-		const issueInfo = req.body;
-		const bind = [id, issueInfo.type, issueInfo.subject, token.id, issueInfo.mandatory, createAt, updateAt];
-		if (issueInfo.type === undefined || issueInfo.subject === undefined) {
+		const id = await makeHashedValue(nowTime);
+		const body = req.body;
+
+		if (body.type === undefined || body.subject === undefined) {
 			throw new Error();
 		}
-		
+
+		const bind = [id, body.type, body.subject, token.id, body.mandatory, nowTime, nowTime];
 		
 		let flag = true
 		let resultOfStandard = ""
-		const userRef = await fireDB.collection(issueInfo.type).doc(issueInfo.subject).get();
 		
-		if (!userRef._fieldsProto) {
-			await conn.execute('INSERT INTO type VALUES (?,?,?)', [issueInfo.type, createAt, updateAt]);
+		const DBstandard = await fireDB.collection(body.type).doc(body.subject).get();
+		
+		if (!DBstandard._fieldsProto) {
+			await conn.execute('INSERT INTO type VALUES (?,?,?)', [body.type, nowTime, nowTime]);
 		} else {
 			flag = false;
 		}
 
 
 		if (flag) {
-			// 스탠다드 생성하기
-			await fireDB.collection(issueInfo.type).doc(issueInfo.subject).set(issueInfo.standard);
+			await fireDB.collection(body.type).doc(body.subject).set(body.standard);
 			resultOfStandard = `요청하신 내용대로 기준을 생성했습니다.`
 		} else {
 			resultOfStandard = `기준은 이미 생성돼 있습니다. 수정을 원할 시 standard route에서 삭제 후 생성해주세요`;
@@ -100,7 +104,7 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 				message : "issue 등록이 완료됐습니다.",
 				issueId : id,
 				resultOfStandard,
-				mandatory : issueInfo.mandatory
+				mandatory : body.mandatory
 			}
 		);
 	} catch (err) {
