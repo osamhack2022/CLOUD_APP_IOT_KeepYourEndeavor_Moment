@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as Material;
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ky2/utils/ky2_color.dart';
 
 class AppBar extends StatelessWidget implements PreferredSizeWidget {
   AppBar({
@@ -68,7 +69,7 @@ class AppBar extends StatelessWidget implements PreferredSizeWidget {
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
-                    color: GatewayColor.black,
+                    color: ky2Color.black,
                   ),
                 )
               : SizedBox(),
@@ -96,7 +97,7 @@ class AppBar extends StatelessWidget implements PreferredSizeWidget {
               ? this.backgroundColor.withOpacity(this.opacity)
               : this.backgroundColor,
           elevation: 0.0,
-          brightness: this.brightness,
+          brightness: brightness,
         ),
       ),
     );
