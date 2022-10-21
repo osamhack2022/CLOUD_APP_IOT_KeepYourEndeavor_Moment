@@ -1,19 +1,19 @@
 <template>
   <v-row>
     <v-col>
-      <v-card>
-        <v-card-title>{{ testinfo.title }}</v-card-title>
+      <v-card flat rounded="lg">
+        <v-card-title>{{ info.title }}</v-card-title>
         <v-list>
-          <template v-for="(v, k, i) in testinfo">
+          <template v-for="(v, k, i) in info">
             <v-list-item :key="k">
               <v-list-item-icon>
-                <v-icon>{{ testsicons[i] }}</v-icon>
+                <v-icon>{{ icons[i] }}</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content>
                 <v-list-item-title>{{ k }}</v-list-item-title>
                 <v-list-item-subtitle>
-                  {{ testinfo[k] }}
+                  {{ info[k] }}
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
@@ -22,7 +22,7 @@
       </v-card>
     </v-col>
     <v-col>
-      <v-card>
+      <v-card flat rounded="lg">
         <v-card-title>participations</v-card-title>
       </v-card>
     </v-col>
@@ -32,11 +32,11 @@
 <script>
 export default {
   props: {
-    testinfo: {
+    info: {
       type: Object,
       required: true,
     },
-    testsicons: {
+    icons: {
       type: Array,
       required: true,
     },
