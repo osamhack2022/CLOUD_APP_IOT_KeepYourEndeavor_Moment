@@ -8,6 +8,10 @@
               <v-row justify="center">
                 <v-card style="width: 600px">
                   <v-form class="ma-2" style="background-color: #e8eaf6">
+                    <v-progress-linear
+                      :indeterminate="server_await"
+                      color="indigo"
+                    ></v-progress-linear>
                     <v-col class="ma-0 pa-5" md="15">
                       <h1 style="color: rgba(0, 0, 0, 0.8)">SignUp</h1>
                     </v-col>
@@ -17,46 +21,84 @@
                         label="ID"
                         prepend-inner-icon="mdi-account"
                         @input="IDformatting($event)"
-                        :value="id"
+                        :value="regdata.id"
                         required
+                        :rules="rule"
                       ></v-text-field>
-                    </v-col>
-                    <v-col class="ma-0 pa-5" md="15">
                       <v-text-field
                         :type="visibility ? 'text' : 'password'"
                         label="Password"
                         color="#3F51B5"
                         prepend-inner-icon="mdi-lock"
+                        v-model="regdata.pwd"
                         @click:append="visibility = !visibility"
-                        @keyup.enter="loginclicked"
                         :append-icon="visibility ? 'mdi-eye' : 'mdi-eye-off'"
                         required
+                        :rules="rule"
                       ></v-text-field>
                     </v-col>
                     <v-col class="ma-0 pa-5" md="15">
                       <v-text-field
                         color="#3F51B5"
                         label="Name"
-                        v-model="name"
+                        v-model="regdata.name"
                         required
                       ></v-text-field>
-                    </v-col>
-                    <v-col class="ma-0 pa-5" md="15">
-                      <v-select
-                        :items="items"
-                        color="#3F51B5"
-                        label="Rank"
-                      ></v-select>
+                      <v-row>
+                        <v-col md="15">
+                          <v-select
+                            :items="rank_items"
+                            color="#3F51B5"
+                            label="Rank"
+                            v-model="regdata.class"
+                            required
+                          ></v-select>
+                        </v-col>
+                        <v-col md="15">
+                          <v-select
+                            :items="authority_items"
+                            color="#3F51B5"
+                            label="Authority"
+                            v-model="regdata.authority"
+                            required
+                          ></v-select>
+                        </v-col>
+                      </v-row>
                     </v-col>
                     <v-divider></v-divider>
                     <v-col class="ma-0 pa-5" md="15">
+                      <span style="font-size: 13px"
+                        >1개 이상의 소속명을 기입하여야 합니다.</span
+                      >
+                    </v-col>
+                    <v-col class="ma-0 px-5" md="15">
+                      <v-layout>
+                        <v-row class="ma-0 pr-2">
+                          <v-text-field
+                            outlined
+                            color="#3F51B5"
+                            label="Cmd"
+                            v-model="regdata.cmd"
+                            required
+                          ></v-text-field>
+                        </v-row>
+                        <v-row class="ma-0 pl-2">
+                          <v-text-field
+                            outlined
+                            color="#3F51B5"
+                            label="Cps"
+                            v-model="regdata.cps"
+                            required
+                          ></v-text-field>
+                        </v-row>
+                      </v-layout>
                       <v-layout>
                         <v-row class="ma-0 pa-0">
                           <v-text-field
                             outlined
                             color="#3F51B5"
                             label="Div"
-                            v-model="div"
+                            v-model="regdata.division"
                             required
                           ></v-text-field>
                         </v-row>
@@ -65,7 +107,7 @@
                             outlined
                             color="#3F51B5"
                             label="Br"
-                            v-model="br"
+                            v-model="regdata.br"
                             required
                           ></v-text-field>
                         </v-row>
@@ -74,7 +116,7 @@
                             outlined
                             color="#3F51B5"
                             label="Bn"
-                            v-model="bn"
+                            v-model="regdata.bn"
                             required
                           ></v-text-field>
                         </v-row>
@@ -83,28 +125,34 @@
                             outlined
                             color="#3F51B5"
                             label="Co"
-                            v-model="co"
+                            v-model="regdata.co"
+                            required
+                          ></v-text-field>
+                        </v-row>
+                      </v-layout>
+                      <v-layout>
+                        <v-row class="ma-0 pr-2">
+                          <v-text-field
+                            outlined
+                            color="#3F51B5"
+                            label="Etc"
+                            v-model="regdata.etc"
+                            required
+                          ></v-text-field>
+                        </v-row>
+                        <v-row class="ma-0 pl-2">
+                          <v-text-field
+                            outlined
+                            color="#3F51B5"
+                            label="Position"
+                            v-model="regdata.position"
                             required
                           ></v-text-field>
                         </v-row>
                       </v-layout>
                     </v-col>
                     <v-col class="ma-0 pl-5 pr-5" md="15">
-                      <v-text-field
-                        outlined
-                        color="#3F51B5"
-                        label="Position"
-                        v-model="position"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col class="ma-0 pl-5 pr-5" md="15">
-                      <v-btn
-                        block
-                        outlined
-                        color="indigo"
-                        @click.stop="loginclicked"
-                      >
+                      <v-btn block outlined color="indigo" @click.stop="submit">
                         submit
                       </v-btn>
                     </v-col>
@@ -123,21 +171,20 @@
 export default {
   name: "LoginView",
   data: () => ({
+    server_await: false,
     visibility: false,
-    id: "",
-    pwd: "",
-    name: null,
-    items: ["이병", "일병", "상병", "병장"],
-    div: null,
-    br: null,
-    bn: null,
-    co: null,
-    position: null,
+    rank_items: ["이병", "일병", "상병", "병장"],
+    authority_items: ["군무원", "병사", "간부", "등록자", "개설자"],
+    peer_url: null,
+    regdata: {
+      id: "",
+    },
+    rule: [(v) => !!v || "required"],
   }),
   methods: {
     IDformatting(event) {
-      this.id = "";
-      console.log(this.id);
+      this.regdata.id = "";
+      console.log(this.regdata.id);
       event = event.replace(/[^0-9]/g, "");
       if (event.length >= 3) {
         event = event.substr(0, 2) + "-" + event.substr(2);
@@ -146,11 +193,34 @@ export default {
         event = event.substr(0, 11);
       }
       console.log(event);
-      this.id = event;
+      this.regdata.id = event;
+    },
+    submit: function () {
+      if (this.regdata.id == "" || this.regdata.pwd === undefined) {
+        alert("ID와 비밀번호는 필수사항입니다.");
+        return;
+      }
+      this.server_await = true;
+      console.log({ ...this.regdata });
+      this.$axios
+        .post("/auth/signup/", { ...this.regdata })
+        .then((response) => {
+          alert(response.data.message);
+          this.peer_url = response.data.peer_url;
+          this.$router.replace("/");
+          this.server_await = false;
+        })
+        .catch((error) => {
+          alert(error.response.data.message);
+          this.server_await = false;
+        });
     },
   },
 };
 </script>
 
-<style lang="sass" scoped></style>
->
+<style lang="scss" scoped>
+v-flex {
+  overflow-y: scroll;
+}
+</style>

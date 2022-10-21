@@ -1,7 +1,7 @@
 <template>
   <div class="indigo lighten-5">
     <v-app-bar color="indigo" dark outlined flat>
-      <v-toolbars>Tests</v-toolbars>
+      <v-toolbar-title>Moment</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -17,9 +17,20 @@
       <v-btn icon width="40" height="40">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
-      <v-btn icon width="40" height="40">
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
+
+      <popup-view
+        @submit="create_issue"
+        :user="userdata.username"
+        v-if="detail == false"
+      />
+      <div v-else>
+        <v-btn icon width="40" height="40" @click="modify_issue">
+          <v-icon>mdi-file-edit</v-icon>
+        </v-btn>
+        <v-btn icon width="40" height="40" @click="delete_issue">
+          <v-icon>mdi-trash-can</v-icon>
+        </v-btn>
+      </div>
 
       <v-divider class="mx-4" vertical></v-divider>
 
@@ -33,58 +44,49 @@
             </template>
 
             <v-list>
-              <v-list-item @click="() => {}">
+              <v-list-item @click="logout">
                 <v-list-item-title>LogOut</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
         </v-app-bar-nav-icon>
         <span style="text-justify: center; font-size: 16px; float: right">
-          {{ username }}
+          {{ userdata.username }}
         </span>
       </div>
     </v-app-bar>
+
     <v-main>
-      <v-container class="py-8 px-6" fluid>
-        <v-row>
-          <v-col v-for="test in tests" :key="test.id" cols="12">
-            <v-card>
-              <v-subheader>{{ test.title }}</v-subheader>
-
-              <v-list two-line>
-                <template v-for="(v, k, i) in test">
-                  <v-list-item :key="k">
-                    <v-list-item-icon>
-                      <v-icon>{{ testsicons[i] }}</v-icon>
-                    </v-list-item-icon>
-
-                    <v-list-item-content>
-                      <v-list-item-title>{{ k }}</v-list-item-title>
-
-                      <v-list-item-subtitle>
-                        {{ test[k] }}
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-divider
-                    v-if="i !== 6"
-                    :key="`divider-${i}`"
-                    inset
-                  ></v-divider>
-                </template>
-              </v-list>
-            </v-card>
+      <v-container class="py-8 px-6" fluid fill-height>
+        <v-row v-if="detail == false">
+          <v-col v-for="issue in issues" :key="issue.id" cols="12">
+            <dashboardCardView
+              :testinfo="issue"
+              :testsicons="testsicons"
+              @cardclicked="get_detail_issue(issue)"
+            />
           </v-col>
         </v-row>
+        <DetailsView v-else :testinfo="curr_issue" :testsicons="testsicons" />
       </v-container>
     </v-main>
   </div>
 </template>
 <script>
+import dashboardCardView from "../components/dashboardCardView.vue";
+import popupView from "../components/popupView.vue";
+import DetailsView from "./DetailsView.vue";
 export default {
+  components: {
+    dashboardCardView,
+    popupView,
+    DetailsView,
+  },
   data() {
     return {
+      userdata: { ...this.$route.params },
+      detail: false,
+      curr_issue: null,
       testsicons: [
         "mdi-music-accidental-sharp",
         "mdi-format-title",
@@ -94,28 +96,119 @@ export default {
         "mdi-calendar",
         "mdi-calendar",
       ],
-      tests: [
+      issues: [
         {
-          id: 21,
-          title: "test notificaton1",
-          author: 10234,
-          subject: "subject7",
-          deadline: "2022.10.06",
-          created: "2022.10.03",
-          changed: "2022.10.05",
-        },
-        {
-          id: 22,
-          title: "test notificaton2",
-          author: 10235,
-          subject: "subject6",
-          deadline: "2022.10.02",
-          created: "2022.10.01",
-          changed: "2022.10.01",
+          id: "BSUds+6TLZ8Jqwa",
+          type: "측정시험",
+          subject: "멀리뛰기",
+          issuer_id: "supervisor",
+          mandatory: 1,
+          created_at: "2022-10-19T11:14:00.000Z",
+          updated_at: "2022-10-19T11:14:00.000Z",
         },
       ],
-      username: "username",
     };
+  },
+  methods: {
+    get_detail_issue(issue) {
+      this.$axios
+        .get("/issue/", {
+          headers: {
+            Authorization: this.userdata.token,
+          },
+          params: {
+            issueId: issue.id,
+          },
+        })
+        .then((response) => {
+          this.curr_issue = response.data.issues;
+          this.curr_issue["standard"] = response.data.standard;
+          this.detail = true;
+        })
+        .catch((error) => {
+          alert(error.response.message);
+        });
+      this.detail = true;
+      this.curr_issue = issue;
+      this.curr_issue["standard"] = {
+        "2급": "13:55",
+        "3급": "15:00",
+        특: "13:10",
+        "1급": "13:30",
+      };
+    },
+    create_issue(newissue) {
+      this.$axios
+        .post(
+          "/issue/regist",
+          {},
+          {
+            headers: {
+              Authorization: this.userdata.token,
+            },
+            data: { ...newissue },
+          }
+        )
+        .catch((error) => {
+          alert(error.response.message + error.response.resultOfStandard);
+        });
+      this.get_issue();
+    },
+    delete_issue() {
+      this.$axios
+        .delete("/issue/", {
+          headers: {
+            Authorization: this.userdata.token,
+          },
+          data: {
+            issueId: this.curr_issue.id,
+          },
+        })
+        .catch((error) => {
+          alert(error.response.message);
+        });
+      this.get_issue();
+      this.detail = false;
+      this.curr_issue = null;
+    },
+    modify_issue() {},
+    logout() {
+      this.$axios
+        .post(
+          "/auth/logout",
+          {},
+          {
+            headers: {
+              Authorization: this.userdata.token,
+            },
+          }
+        )
+        .then(() => {
+          this.$router.replace("/");
+        })
+        .catch((error) => {
+          alert(error.response.data.message);
+        });
+    },
+    get_issue() {
+      this.$axios
+        .get("/issue/", {
+          headers: {
+            Authorization: this.userdata.token,
+          },
+        })
+        .then((response) => {
+          this.issue = { ...response.data.issues };
+        })
+        .catch((error) => {
+          alert(error.response.data.message);
+        });
+    },
+  },
+  created() {
+    console.log(this.userdata.token);
+    console.log("created");
+    this.get_issue();
   },
 };
 </script>
