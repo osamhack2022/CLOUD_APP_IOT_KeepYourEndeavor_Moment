@@ -31,9 +31,9 @@ router.get('/', verifyToken, supervisorAccess, async (req, res) => {
 			standards
 		});
 	} catch (err) {
-		res.status(500).json({
-			error: "Interval server Error",
-			message : "예기치 못한 에러가 발생했습니다."
+		return res.status(409).json({
+			error: "Conflict",
+			message : "요청 처리 도중 충돌이 발생했습니다."
 		});
 	}
 });
@@ -54,7 +54,7 @@ router.post('/post',  verifyToken, supervisorAccess,async (req, res) => {
 	if (!standardRef._fieldsProto) {
 			const standard = body.standard;
 			await fireDB.collection(body.type).doc(body.subject).set(standard);
-			return res.status(200).json({
+			return res.status(201).json({
 				message: "기준 생성에 성공했습니다.",
 				standard
 			});
@@ -97,9 +97,9 @@ router.delete('/', verifyToken, supervisorAccess,async (req, res) => {
 		}
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({
-			error: "Interval server Error",
-			message : "예기치 못한 에러가 발생했습니다."
+		return res.status(409).json({
+			error: "Conflict",
+			message : "요청 처리 도중 충돌이 발생했습니다."
 		});
 	}
 });

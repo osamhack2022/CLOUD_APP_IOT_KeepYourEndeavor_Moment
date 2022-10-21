@@ -21,9 +21,9 @@ router.get('/', verifyToken, normalAccess, async(req, res) => {
 		});
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({
-			error: "Interval server Error",
-			message : "예기치 못한 에러가 발생했습니다."
+		return res.status(506).json({
+			error: "DATABASE ERROR / Variant Also Negotiates",
+			message : "DB query 도중 문제가 발생했습니다."
 		});
 	}
 });
@@ -42,7 +42,7 @@ router.post('/regist', verifyToken ,managerAccess, async (req, res) => {
 
 		await conn.execute('INSERT INTO notice VALUES (?,?,?,?,?,?,?,?,?,?)', bind);
 
-		return res.status(200).json({
+		return res.status(201).json({
 			message:"공지를 성공적으로 등록했습니다."
 		});
 	} catch (err) {
@@ -83,9 +83,9 @@ router.get('/:noticeId', verifyToken ,managerAccess, async (req, res) => {
 		});
 	} catch (err) {
 		console.error(err);
-		return res.status(500).json({
-			error: "Interval server Error",
-			message : "예기치 못한 에러가 발생했습니다."
+		return res.status(409).json({
+			error: "Conflict",
+			message : "요청 처리 도중 충돌이 발생했습니다."
 		});
 	}
 });
@@ -142,10 +142,10 @@ router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res) => {
 		});
 	} catch (err) {
 		console.error(err);
-		return res.status(500).json({
-			error: "Internal Server Error",
-			message: "예기치 못한 에러가 발생했습니다."
-		})
+		return res.status(409).json({
+			error: "Conflict",
+			message : "요청 처리 도중 충돌이 발생했습니다."
+		});
 	}
 });
 
@@ -164,10 +164,10 @@ router.delete('/:noticeId/', verifyToken ,managerAccess, async (req, res) => {
 			});	
 		}
 	} catch (err) {
-		return res.status(500).json({
-			error: "Internal Server Error",
-			message: "예기치 못한 에러가 발생했습니다."
-		})
+		return res.status(409).json({
+			error: "Conflict",
+			message : "요청 처리 도중 충돌이 발생했습니다."
+		});
 	}
 });
 

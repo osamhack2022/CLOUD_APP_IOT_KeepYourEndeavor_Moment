@@ -58,7 +58,7 @@ router.post('/signup', async (req, res) => {
 		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?,?,?)', userInfo);
 		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?,?,?)', affInfo);
 		
-		return res.status(200).json(
+		return res.status(201).json(
 			{
 				message : "회원가입에 성공했습니다. 회원의 비밀번호는 암호화 처리됩니다.",
 				issue : "암호화 시간이 조금 소요될 수 있으니 기다려주세요.",
@@ -137,14 +137,14 @@ router.post('/logout',verifyToken, async (req, res) => {
 	const token = req.decoded;
 	try {
 		await redisCon.del(token.id);
-		res.status(200).json({
+		return res.status(200).json({
 			message : "로그아웃 되었습니다."
 		});
 	} catch (err) {
 		console.log(err);
-		res.status(500).json({
-			error: "Interval server Error",
-			message : "예기치 못한 에러가 발생했습니다. "
+		return res.status(409).json({
+			error: "Conflict",
+			message : "요청 처리 도중 충돌이 발생했습니다."
 
 		});
 	}

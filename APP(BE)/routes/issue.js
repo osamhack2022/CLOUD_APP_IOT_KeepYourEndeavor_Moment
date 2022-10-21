@@ -19,9 +19,9 @@ router.get('/', verifyToken, managerAccess, async (req, res) => {
 			issues : issueSelectResult
 		});
 	} catch (err) {
-		res.status(500).json({
-			error: "Interval server Error",
-			message : "예기치 못한 에러가 발생했습니다."
+		return res.status(506).json({
+			error: "DATABASE ERROR / Variant Also Negotiates",
+			message : "DB query 도중 문제가 발생했습니다."
 		});
 	}
 });
@@ -87,7 +87,7 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 		}
 		
 		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?,?)', bind);
-		res.status(200).json(
+		res.status(201).json(
 			{
 				message : "issue 등록이 완료됐습니다.",
 				issueId : id,
@@ -122,10 +122,10 @@ router.delete('/:issueId/', verifyToken, supervisorAccess, async (req, res) => {
 			});	
 		}
 	} catch (err) {
-		res.status(500).json({
-			error: "Internal Server Error",
-			message: "예기치 못한 에러가 발생했습니다."
-		})
+		return res.status(409).json({
+			error: "Conflict",
+			message : "요청 처리 도중 충돌이 발생했습니다."
+		});
 	}
 });
 

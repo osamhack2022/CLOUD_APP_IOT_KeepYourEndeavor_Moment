@@ -117,7 +117,7 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 		
 		await axios.post(`${peer}/v1/block`, userRecord); 
 		//const response = await axios.post(`http://api.jerrykang.com/v1/block`, userRecord); // 테스트에만 일로
-		return res.status(200).json(
+		return res.status(201).json(
 			{
 				message : `${peer}에 해당 데이터를 온체인 시켰습니다.`,
 				userRecord

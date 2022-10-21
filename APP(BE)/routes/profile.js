@@ -17,10 +17,10 @@ router.get('/', verifyToken, async(req, res) => {
 			userInfo : selectResult[0]
 		});
 	} catch (err) {
-		res.status(500).json({
-			error: "Internal Server Error",
-			message: "예상치 못한 에러가 발생했습니다."
-		})
+		return res.status(506).json({
+			error: "DATABASE ERROR / Variant Also Negotiates",
+			message : "DB query 도중 문제가 발생했습니다."
+		});
 	}
 });
 
@@ -41,10 +41,10 @@ router.get('/:userId', verifyToken, async (req, res) => {
 		});
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({
-			error: "Internal Server Error",
-			message: "예상치 못한 에러가 발생했습니다."
-		})
+		return res.status(409).json({
+			error: "Conflict",
+			message : "요청 처리 도중 충돌이 발생했습니다."
+		});
 	}
 });
 
@@ -80,7 +80,7 @@ router.post('/edit', verifyToken, async (req, res) => {
 		});
 		
 		if (auth_flag) {
-			return res.status(406).json({
+			return res.status(403).json({
 				error : "Not Acceptable", 
 				message: "개설자만이 권한을 부여할 수 있습니다."
 			});
@@ -95,7 +95,7 @@ router.post('/edit', verifyToken, async (req, res) => {
 			await conn.execute(`UPDATE affiliation SET updated_at = '${nowTime}' WHERE id = '${inform[2]}'`);
 		}
 	
-		return res.status(200).json({
+		return res.status(201).json({
 			message: '보내주신 내용대로 업데이트에 성공했습니다!'
 		});
 	} catch (err) {
@@ -121,10 +121,10 @@ router.delete('/', async (req, res) => {
 		});
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({
-			error: "Internal Server Error",
-			message: "예상하지 못한 에러가 발생했습니다."
-		})
+		return res.status(409).json({
+			error: "Conflict",
+			message : "요청 처리 도중 충돌이 발생했습니다."
+		});
 	}
 });
 module.exports = router;
