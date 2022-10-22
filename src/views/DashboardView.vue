@@ -78,6 +78,9 @@
                   @cardclicked="get_detail(info)"
                 />
               </v-col>
+              <v-col v-if="section == 'profile'">
+                <SignUpView />
+              </v-col>
             </v-row>
             <DetailsView v-else :info="curr_issue" :icons="icons" />
           </v-col>
@@ -91,11 +94,13 @@
 import dashboardCardView from "../components/dashboardCardView.vue";
 import popupView from "../components/popupView.vue";
 import DetailsView from "../components/DetailsView.vue";
+import SignUpView from "./SignUpView.vue";
 export default {
   components: {
     dashboardCardView,
     popupView,
     DetailsView,
+    SignUpView,
   },
   data() {
     return {

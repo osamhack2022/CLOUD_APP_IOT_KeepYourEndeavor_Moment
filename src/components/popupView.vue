@@ -8,7 +8,7 @@
       </template>
       <v-card>
         <v-card-title>
-          <span class="text-h5">Add test</span>
+          <span class="text-h5">Add {{ section }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
