@@ -1,5 +1,6 @@
 import react, {useCallback, useEffect, useState} from 'react';
-import { getApplication, getNotice } from '../../lib/api';
+import { toast } from 'react-toastify';
+import api from '../../lib/api';
 import { SystemError } from '../../lib/error';
 import { useRouter } from '../common/useRouter';
 
@@ -35,7 +36,7 @@ export default function useNoticeDetail(){
         subject: "",
         issuer_id: ""
     });
-    const [members, setMemebers] = useState([]);
+    const [applicants, setApplicants] = useState([]);
     const router = useRouter();
     const [loading, setLoading] = useState(false);
 
@@ -48,24 +49,31 @@ export default function useNoticeDetail(){
         try{
             setLoading(true);
             const id = router.match.params.id;
-            const {data} = await getNotice(id);
+            const {data} = await api.getNotice(id);
+            console.log(data);
             setNotice(data.notice);
             setLoading(false)
         }catch(e){
             const error = e as SystemError;
-            console.log(error);
+            const message = error.response?.data?.message ?? "예기치 못 한 오류가 발생했습니다."
+            toast.error(message, {
+                position: toast.POSITION.TOP_CENTER
+            });
         }
     }
 
     const handleApplication = async() => {
         try{
             const id = router.match.params.id;
-            const {data} = await getApplication(id);   
+            const {data} = await api.getApplications(id); 
             console.log(data);
-            setMemebers(data.members ?? []);
+            setApplicants(data.applicants[0].members ?? []);
         }catch(e){
             const error = e as SystemError;
-            console.log(error.response);
+            const message = error.response?.data?.message ?? "예기치 못 한 오류가 발생했습니다."
+            toast.error(message, {
+                position: toast.POSITION.TOP_CENTER
+            });
         }
     }
     
@@ -78,6 +86,6 @@ export default function useNoticeDetail(){
         })
     }
     return {
-        onChangeInput, input, notice, loading, members
+        onChangeInput, input, notice, loading, applicants
     }
 }

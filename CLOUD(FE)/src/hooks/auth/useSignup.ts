@@ -1,5 +1,6 @@
 import react, {useCallback, useEffect, useState} from 'react';
-import { signin, signup } from '../../lib/api';
+import { toast } from 'react-toastify';
+import api from '../../lib/api';
 import { SystemError } from '../../lib/error';
 
 import { useRouter } from '../common/useRouter';
@@ -47,18 +48,41 @@ export default function useSignup(){
             ...input,
             [name]: value
         });
+        console.log(input)
     }
 
     const handdleSignup = async(input: SignupInputType) => {
-        if(!input.name){
-            alert('이름을 입력해주세요!')
+        if(!input.id){
+            toast.error('군번은 필수 입력사항입니다.', {
+                position: toast.POSITION.TOP_CENTER
+            });
+            return;
+        }
+        else if(!input.name){
+            toast.error('이름은 필수 입력사항입니다.', {
+                position: toast.POSITION.TOP_CENTER
+            });
+            return;
+        }
+        
+        else if(!input.pwd){
+            toast.error('비밀번호는 필수 입력사항입니다.', {
+                position: toast.POSITION.TOP_CENTER
+            });
+            return;
         }
         try{
-            await signup(input);
-            router.history.pushState('/login');
+            await api.signup(input);
+            toast.success('회원가입이 완료되었습니다.', {
+                position: toast.POSITION.TOP_CENTER
+            });
+            router.history.push('/login');
         }catch(e){
             const error = e as SystemError;
-            
+            const message = error.response?.data?.message ?? "예기치 못 한 오류가 발생했습니다."
+            toast.error(message, {
+                position: toast.POSITION.TOP_CENTER
+            });
         }
     }
 

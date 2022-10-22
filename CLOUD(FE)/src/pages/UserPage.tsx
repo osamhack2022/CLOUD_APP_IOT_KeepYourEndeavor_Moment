@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import Header from '../components/common/Header';
 import Sidebar from '../components/common/Sidebar';
-
-import Main from '../components/main/Main';
-import User from '../components/main/User';
+import User from '../components/user/User';
 
 function MainPage() {
     return (

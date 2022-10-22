@@ -1,5 +1,4 @@
 import react, {useEffect, useState} from 'react';
-import { getIssues, getIssue } from '../../lib/api';
 
 export default function useModal(){
     const modals = {

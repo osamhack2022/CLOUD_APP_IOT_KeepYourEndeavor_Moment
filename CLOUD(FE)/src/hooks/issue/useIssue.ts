@@ -1,6 +1,6 @@
 import react, {useEffect, useState} from 'react';
 import { toast } from 'react-toastify';
-import { getIssues, getIssue, deleteIssue } from '../../lib/api';
+import api from '../../lib/api';
 import { SystemError } from '../../lib/error';
 import useModal from '../common/useModal';
 
@@ -21,7 +21,6 @@ export default function useIssue(){
     const {open, onClickModal, modals, id} = useModal();
 
     useEffect(()=>{
-        
         getIssueList();
     }, []);
 
@@ -37,7 +36,7 @@ export default function useIssue(){
     const getIssueList = async() => {
         try{
             setLoading(true);
-            const {data} = await getIssues();
+            const {data} = await api.getIssues();
             console.log(data);
             setIssues(data.issues);
             setLoading(false);
@@ -49,19 +48,21 @@ export default function useIssue(){
 
     const handleDeleteIssue = async(id: string) => {
         try{
-            await deleteIssue(id);
+            await api.deleteIssue(id);
+            onClickModal(modals.deleteIssue);
+            getIssueList();
         }catch(e){
             const error = e as SystemError;
-            toast.error('오류가 발생했습니다', {
-                position: toast.POSITION.TOP_RIGHT
+            const message = error.response?.data?.message ?? "예기치 못 한 오류가 발생했습니다."
+            toast.error(message, {
+                position: toast.POSITION.TOP_CENTER
             });
-            console.log(error.response);
         }       
     }
 
     
 
     return {
-        issues, onChangeInput, loading, handleDeleteIssue, open, onClickModal, modals, id
+        issues, onChangeInput, loading, handleDeleteIssue, open, onClickModal, modals, id, getIssueList
     }
 }

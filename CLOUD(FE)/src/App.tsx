@@ -9,6 +9,7 @@ import NoticeDetailPage from './pages/NoticeDetailPage';
 import NoticePage from './pages/NoticePage';
 import RegisterPage from './pages/RegisterPage';
 import UserPage from './pages/UserPage';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App: React.FC = () => {
   return (

@@ -1,6 +1,6 @@
 import react, {useCallback, useEffect, useState} from 'react';
 import { toast } from 'react-toastify';
-import { createNotice, deleteNotice, getNotices } from '../../lib/api';
+import api from '../../lib/api';
 import { SystemError } from '../../lib/error';
 import useModal from '../common/useModal';
 import useIssue from '../issue/useIssue';
@@ -45,15 +45,17 @@ export default function useNotice(){
     const handleCreateNotice = async(notice) => {
         console.log(notice);
         try{
-            await createNotice({
+            await api.createNotice({
                 manager_id: 'supervisor',
                 ...input,
             });
             onClickModal(modals.addNotice);
+            getNoticeList();
         }catch(e){
             const error = e as SystemError;
-            toast.error('오류가 발생했습니다', {
-                position: toast.POSITION.TOP_RIGHT
+            const message = error.response?.data?.message ?? "예기치 못 한 오류가 발생했습니다."
+            toast.error(message, {
+                position: toast.POSITION.TOP_CENTER
             });
         }
     }
@@ -61,25 +63,28 @@ export default function useNotice(){
     const getNoticeList = async() => {
         try{
             setLoading(true);
-            const {data} = await getNotices();
-            console.log(data);
+            const {data} = await api.getNotices();
             setNotices(data.notices);
             setLoading(false);
         }catch(e){
             const error = e as SystemError;
-            toast.error('오류가 발생했습니다', {
-                position: toast.POSITION.TOP_RIGHT
+            const message = error.response?.data?.message ?? "예기치 못 한 오류가 발생했습니다."
+            toast.error(message, {
+                position: toast.POSITION.TOP_CENTER
             });
         }        
     }
 
     const handleDeleteNotice = async(id: string) => {
         try{
-            await deleteNotice(id);
+            await api.deleteNotice(id);
+            onClickModal(modals.deleteNotice);
+            getNoticeList();
         }catch(e){
             const error = e as SystemError;
-            toast.error('오류가 발생했습니다', {
-                position: toast.POSITION.TOP_RIGHT
+            const message = error.response?.data?.message ?? "예기치 못 한 오류가 발생했습니다."
+            toast.error(message, {
+                position: toast.POSITION.TOP_CENTER
             });
         }       
     }
