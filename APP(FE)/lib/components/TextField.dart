@@ -82,7 +82,9 @@ class _TextFieldState extends State<TextField> {
         Container(
           height: widget.height,
           width: widget.width,
+          padding: EdgeInsets.only(left: 10),
           decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
             color: ky2Color.inputBackground,
           ),
           child: Material.TextField(
@@ -103,7 +105,7 @@ class _TextFieldState extends State<TextField> {
               ),
               hintStyle: TextStyle(
                 color: ky2Color.hintText,
-                fontSize: 14,
+                fontSize: 16,
                 fontWeight: FontWeight.w300,
               ),
               contentPadding: const EdgeInsets.only(),
