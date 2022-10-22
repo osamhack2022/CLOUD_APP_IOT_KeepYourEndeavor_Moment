@@ -1,82 +1,101 @@
 import React from 'react';
 import { Button, Checkbox, Form, Input, Modal } from 'semantic-ui-react';
 import styled from 'styled-components';
+import useAddIssue from '../../hooks/issue/useAddIssue';
 const IssueModalBlock = styled.div`
     
 `;
 
-const IssueModal = ({open, onClickModal, onChangeInput, name}) => (
-    
-    <IssueModalBlock>
-        <Modal
-            onClose={() => onClickModal(name)}
-            onOpen={() => onClickModal(name)}
-            open={open}
-        >
-            <Modal.Header>시험추가</Modal.Header>
-            <Modal.Content>
-                <Form>
-                <h3>과목정보</h3>
-                    <Form.Field>
-                        <label>과목 이름</label>
-                        <input placeholder='과목이름' onChange={onChangeInput} />
-                    </Form.Field>
-                    <Form.Field>
-                    <Form.Group inline>
-                        <label>과목 형식</label>
-                        <Form.Radio
-                            label='강연'
-                            value='sm'
-                            //checked={value === 'sm'}
-                            //onChange={this.handleChange}
-                        />
-                        <Form.Radio
-                            label='평가'
-                            value='md'
-                            //checked={value === 'md'}
-                            //onChange={this.handleChange}
-                        />
-                        <Form.Radio
-                            label='활동'
-                            value='lg'
-                            //checked={value === 'lg'}
-                            //onChange={this.handleChange}
-                        />
-                        </Form.Group>
-                    </Form.Field>
-                    <Form.Field>
-                        <Checkbox label='필수응시 과목' />
-                    </Form.Field>
+const IssueModal = ({open, onClickModal, name, getIssueList}) => {
+    const {input, onChangeInput, handleCreateIssue} = useAddIssue();
 
-                    <h3>평가기준</h3>
-                    <Form.Field>
-                        <label>특급</label>
-                        <input placeholder='85' type='number' />
-                    </Form.Field>
-                    <Form.Field>
-                        <label>1급</label>
-                        <input placeholder='70' type='number' />
-                    </Form.Field>
-                    <Form.Field>
-                        <label>2급</label>
-                        <input placeholder='60' type='number' />
-                    </Form.Field>
-                    <Form.Field>
-                        <label>3급</label>
-                        <input placeholder='50'type='number' />
-                    </Form.Field>
-                </Form>
-            </Modal.Content>
-            <Modal.Actions>
-                <Button
-                    content="추가하기"
-                    labelPosition='right'
-                    icon='checkmark'
-                    onClick={() => onClickModal(name)}
-                    positive />
-            </Modal.Actions>
-        </Modal>
-    </IssueModalBlock>
-)
+    const grandeType = (
+        <>
+            <p>4단계로 등급을 나눠서 측정하게됩니다. 3급 이하의 점수를 받으면 불합격 처리됩니다.</p>
+            <Form.Field>
+                <label>특급</label>
+                <input placeholder='85' onChange={onChangeInput} type='number' name='s'/>
+            </Form.Field>
+            <Form.Field>
+                <label>1급</label>
+                <input placeholder='70' onChange={onChangeInput} type='number' name='a'/>
+            </Form.Field>
+            <Form.Field>
+                <label>2급</label>
+                <input placeholder='60' onChange={onChangeInput} type='number' name='b'/>
+            </Form.Field>
+            <Form.Field>
+                <label>3급</label>
+                <input placeholder='50'onChange={onChangeInput} type='number' name='c'/>
+            </Form.Field>
+        </>
+    )
+
+    const pnpType = (
+        <>
+            <p>PASS or No PASS 로 나눠서 측정합니다.</p>
+        </>
+    )
+
+    return (
+        <IssueModalBlock>
+            <Modal
+                onClose={() => onClickModal(name)}
+                onOpen={() => onClickModal(name)}
+                open={open}
+            >
+                <Modal.Header>시험추가</Modal.Header>
+                <Modal.Content>
+                    <Form>
+                    <h3>과목정보</h3>
+                        <Form.Field>
+                            <label>과목 이름</label>
+                            <input placeholder='과목이름' name='subject' onChange={onChangeInput} />
+                        </Form.Field>
+                        <Form.Field>
+                        <Form.Group inline>
+                            <label>과목 형식</label>
+                            <Form.Radio
+                                label='강연'
+                                value='강연'
+                                name='type'
+                                checked={input.type === '강연'}
+                                onChange={onChangeInput}
+                            />
+                            <Form.Radio
+                                label='측정시험'
+                                value='측정시험'
+                                name='type'
+                                checked={input.type === '측정시험'}
+                                onChange={onChangeInput}
+                            />
+                            </Form.Group>
+                        </Form.Field>
+                        <Form.Field>
+                            <Checkbox label='필수응시 과목' name="mandatory" onChange={onChangeInput} />
+                        </Form.Field>
+
+                        <h3>평가기준</h3>
+                        {
+                            input.type === '측정시험' ? grandeType : input.type === '강연' ? pnpType : <p>아직 기준을 선택하지 않았습니다.</p>
+                        }
+                    </Form>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button
+                        content="추가하기"
+                        labelPosition='right'
+                        icon='checkmark'
+                        onClick={async() => {
+                            await handleCreateIssue(input);
+                            onClickModal(name);
+                            await getIssueList();
+                        }}
+                        positive />
+                </Modal.Actions>
+            </Modal>
+        </IssueModalBlock>
+    )
+}
 
 export default IssueModal;

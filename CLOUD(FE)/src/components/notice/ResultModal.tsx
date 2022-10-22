@@ -25,11 +25,7 @@ const ResultModal = ({open, onClickModal, onChangeInput, input, name}) => (
                 <Form>
                      <Form.Field>
                         <label>응시자 이름</label>
-                        <input placeholder='일정 이름' value='성서윤' disabled />
-                    </Form.Field>
-                    <Form.Field>
-                        <label>응시 과목</label>
-                        <Dropdown options={options} value="화생방 평가" disabled selection />
+                        <input placeholder='일정 이름' value='강은솔' disabled />
                     </Form.Field>
                     <Form.Field>
                         <label>점수</label>

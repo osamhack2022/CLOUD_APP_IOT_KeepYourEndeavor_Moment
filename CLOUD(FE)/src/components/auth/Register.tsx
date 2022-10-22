@@ -75,11 +75,11 @@ const Register = () => {
                     </Form.Field>
                     <Form.Field>
                         <label>이름</label>
-                        <input placeholder='군번을 입력해주세요' name='name' onChange={onChange} />
+                        <input placeholder='이름을 입력해주세요' name='name' onChange={onChange} />
                     </Form.Field>
                     <Form.Field>
                         <label>계급</label>
-                        <input placeholder='군번을 입력해주세요' name='class' onChange={onChange} />
+                        <input placeholder='계급을 입력해주세요' name='class' onChange={onChange} />
                     </Form.Field>
                     <Form.Field>
                         <label>비밀번호</label>
@@ -91,15 +91,15 @@ const Register = () => {
                     </Form.Field>
                     <h3>소속</h3>
                     <Form.Group widths='equal'>
-                        <Form.Input fluid label="사령부" placeholder='00사령부' name="cmd" />
-                        <Form.Input fluid label='군단' placeholder='00군단' name="cps"/>
-                        <Form.Input fluid label="사단" placeholder='00사단' name="division"/>
-                        <Form.Input fluid label='여단' placeholder='00여단' name="br"  />
+                        <Form.Input fluid label="사령부" placeholder='00사령부' name="cmd" onChange={onChange} />
+                        <Form.Input fluid label='군단' placeholder='00군단' name="cps" onChange={onChange}/>
+                        <Form.Input fluid label="사단" placeholder='00사단' name="division" onChange={onChange}/>
+                        <Form.Input fluid label='여단' placeholder='00여단' name="br" onChange={onChange} />
                     </Form.Group>
                     <Form.Group widths='equal'>
-                        <Form.Input fluid label='대대' placeholder='00대대' name="bn" />
-                        <Form.Input fluid label='중대 / 부서' placeholder='00중대 / 00과' name="co"/>
-                        <Form.Input fluid label='담당직책' placeholder='00부사관' name="position"/>
+                        <Form.Input fluid label='대대' placeholder='00대대' name="bn" onChange={onChange} />
+                        <Form.Input fluid label='중대 / 부서' placeholder='00중대 / 00과' name="co" onChange={onChange}/>
+                        <Form.Input fluid label='담당직책' placeholder='00부사관' name="position"onChange={onChange}/>
                     </Form.Group>
                     <Form.Field>
                         <label>추가입력사항</label>

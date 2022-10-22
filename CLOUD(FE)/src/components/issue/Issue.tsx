@@ -2,11 +2,9 @@ import React from 'react';
 import { Button, Dimmer, Loader, Table } from 'semantic-ui-react';
 import styled from 'styled-components';
 import useIssue, { issueType } from '../../hooks/issue/useIssue';
-import useModal from '../../hooks/common/useModal';
 import IssueModal from './issueModal';
 import IssueDeleteModal from './IssueDeleteModal';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import moment from 'moment';
 
 const IssueBlock = styled.div`
     padding: 2rem;
@@ -19,14 +17,14 @@ const IssueBlock = styled.div`
 
 const Issue = () => {
     
-    const {issues, onChangeInput, loading, open, onClickModal, modals, id , handleDeleteIssue} = useIssue();
+    const {issues, loading, open, onClickModal, modals, id , handleDeleteIssue, getIssueList} = useIssue();
     const issueList = issues.map((issue: issueType) => {
         const {type, subject, created_at, mandatory, id} = issue;
         return (
             <Table.Row key={id}>
                 <Table.Cell>{subject}</Table.Cell>
                 <Table.Cell>{type}</Table.Cell>
-                <Table.Cell>{created_at}</Table.Cell>
+                <Table.Cell>{moment(created_at).format('YYYY-MM-DD hh:mm')}</Table.Cell>
                 <Table.Cell>{mandatory === 1 ? '필수' : '선택'}</Table.Cell>
                 <Table.Cell textAlign='center' width={2}>
                     <Button.Group >
@@ -53,8 +51,8 @@ const Issue = () => {
                 <Table.Row>
                     <Table.HeaderCell>이름</Table.HeaderCell>
                     <Table.HeaderCell>유형</Table.HeaderCell>
-                    <Table.HeaderCell>필수여부</Table.HeaderCell>
                     <Table.HeaderCell>생성일</Table.HeaderCell>
+                    <Table.HeaderCell>필수여부</Table.HeaderCell>
                     <Table.HeaderCell textAlign="center">설정</Table.HeaderCell>
                 </Table.Row>
                 </Table.Header>
@@ -63,8 +61,8 @@ const Issue = () => {
                     {issueList}
                 </Table.Body>
             </Table>
-            <IssueModal open={open.addIssue}  onClickModal={onClickModal} onChangeInput={onChangeInput} name={modals.addIssue}></IssueModal>
-            <IssueDeleteModal id={id} open={open.deleteIssue} onClickModal={onClickModal} handleDeleteIssue={handleDeleteIssue} name={modals.deleteIssue}></IssueDeleteModal>
+            <IssueModal open={open.addIssue}  getIssueList={getIssueList}  onClickModal={onClickModal} name={modals.addIssue}></IssueModal>
+            <IssueDeleteModal id={id} open={open.deleteIssue}onClickModal={onClickModal} handleDeleteIssue={handleDeleteIssue} name={modals.deleteIssue}></IssueDeleteModal>
         </IssueBlock>
     )
 }

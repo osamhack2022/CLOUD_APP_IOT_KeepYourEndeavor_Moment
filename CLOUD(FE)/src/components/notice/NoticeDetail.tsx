@@ -31,12 +31,12 @@ const NoticeDetailBlock = styled.div`
 
 const NoticeDetail = () => {
     const {open, onClickModal, modals} = useModal();
-    const {onChangeInput, input, notice, loading, members} = useNoticeDetail();
+    const {onChangeInput, input, notice, loading, applicants} = useNoticeDetail();
 
-    const memberList = members.map(member => {
+    const memberList = applicants.map(member => {
         const {user_id, user_name} = member;
         return (
-            <Table.Row>
+            <Table.Row key={user_id} onClick={() => onClickModal(modals.resultNotice)}>
                     <Table.Cell>{user_id}</Table.Cell>
                     <Table.Cell>{user_name}</Table.Cell>
                     <Table.Cell><Label size="medium" color="violet">1급</Label></Table.Cell>
