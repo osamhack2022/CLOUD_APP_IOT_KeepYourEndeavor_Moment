@@ -38,7 +38,7 @@ extension on SplashPage {
         children: [
           Column(
             children: [
-              SvgPicture.asset('assets/splash_logo.svg'),
+              Image.asset('assets/splash_logo.png', width: 238,),
               Text(
                 '블록체인 기반 병자격 인증앱',
                 style: TextStyle(
