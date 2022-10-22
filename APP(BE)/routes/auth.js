@@ -17,6 +17,7 @@ const { createHashedPassword, makePasswordHashed } = require('../lib/security.js
 
 router.post('/signup', async (req, res) => {
 	const body = req.body;
+
   	try {
 		const nowTime = moment().format("YYYY-M-D H:m:s");
 		const authenticatedInfo = ['id','pwd','class','name','authority','position']
@@ -55,7 +56,7 @@ router.post('/signup', async (req, res) => {
 		const { pwd, salt } = await createHashedPassword(body.pwd);
 		const userInfo = [body.id, pwd, body.class, body.name, body.authority, body.position, salt,  peer_url.data.url, nowTime, nowTime];
 		const affInfo = [null, body.id,body.cmd, body.cps ,body.division, body.br, body.bn, body.co, body.etc, nowTime, nowTime];
-		
+
 		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?,?,?)', userInfo);
 		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?,?,?)', affInfo);
 		
