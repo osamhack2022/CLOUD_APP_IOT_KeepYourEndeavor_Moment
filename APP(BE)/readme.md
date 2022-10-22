@@ -11,7 +11,7 @@
 DB의 CRUD를 위해 서버 관리자가 직접 에디터를 열어야 하는 경우는 firestore의 collection 삭제하는 경우를 제외하고는 없습니다. <br>
 DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority를 부여하는 token 인증 방식을 택했습니다.
 
-### 서버의 종류
+### 데이터베이스 서버의 종류
 **`Redis`** | **`MySQL`** | **`Firebase`**
 #### Redis
 token 정보를 저장합니다. Cloud Redis를 채택해 개발 단계의 부담을 줄였습니다.
