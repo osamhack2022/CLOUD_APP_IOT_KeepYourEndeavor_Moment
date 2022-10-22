@@ -11,11 +11,22 @@ class User {
   final String bn;
   final String co;
   final String etc;
+  final String authority = '병사';
 
-
-  User(
-      {required this.id, required this.pwd, required this.className, required this.name, required this.position, required this.cmd,
-        required this.cps, required this.division, required this.br, required this.bn, required this.co, required this.etc,});
+  User({
+    required this.id,
+    required this.pwd,
+    required this.className,
+    required this.name,
+    required this.position,
+    required this.cmd,
+    required this.cps,
+    required this.division,
+    required this.br,
+    required this.bn,
+    required this.co,
+    required this.etc,
+  });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -34,7 +45,6 @@ class User {
     );
   }
 
-
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -42,6 +52,7 @@ class User {
       'class': className,
       'name': name,
       'position': position,
+      'authority': authority,
       'cmd': cmd,
       'cps': cps,
       'division': division,

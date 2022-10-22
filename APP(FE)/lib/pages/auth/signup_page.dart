@@ -6,6 +6,7 @@ import 'package:ky2/core/base_screen.dart';
 import 'package:ky2/pages/auth/signinfo_page.dart';
 import 'package:ky2/utils/ky2_color.dart';
 import 'package:ky2/viewmodel/main_viewmodel.dart';
+import 'package:ky2/viewmodel/signup_viewmodel.dart';
 
 class SignupPage extends StatelessWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class SignupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen<MainViewModel>(
+    return BaseScreen<SignUpViewModel>(
       onModelReady: (model) {
         model.initState(context);
       },
@@ -41,7 +42,7 @@ class SignupPage extends StatelessWidget {
           ),
           resizeToAvoidBottomInset: true,
           backgroundColor: Colors.white,
-          body: _body(context),
+          body: _body(context, model),
         );
       },
     );
@@ -49,7 +50,7 @@ class SignupPage extends StatelessWidget {
 }
 
 extension on SignupPage {
-  Widget _body(BuildContext context) {
+  Widget _body(BuildContext context, SignUpViewModel model) {
     return Stack(
       children: [
         Padding(
@@ -76,7 +77,7 @@ extension on SignupPage {
               const SizedBox(height: 21),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
                     '군번',
                     style: TextStyle(
@@ -88,6 +89,7 @@ extension on SignupPage {
                   SizedBox(height: 6),
                   ky2.TextField(
                     textSize: 16,
+                    controller: model.id,
                     hintText: "군번을 입력해주세요",
                   ),
                 ],
@@ -95,7 +97,7 @@ extension on SignupPage {
               const SizedBox(height: 14),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
                     '이름',
                     style: TextStyle(
@@ -106,6 +108,7 @@ extension on SignupPage {
                   ),
                   SizedBox(height: 6),
                   ky2.TextField(
+                    controller: model.name,
                     textSize: 16,
                     hintText: "이름을 입력해주세요",
                   ),
@@ -114,7 +117,47 @@ extension on SignupPage {
               const SizedBox(height: 18),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
+                children: <Widget>[
+                  const Text(
+                    '직책',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                  SizedBox(height: 6),
+                  ky2.TextField(
+                    controller: model.position,
+                    textSize: 16,
+                    hintText: "직책을 입력해주세요",
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const Text(
+                    '계급',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                  SizedBox(height: 6),
+                  ky2.TextField(
+                    controller: model.className,
+                    textSize: 16,
+                    hintText: "계급을 입력해주세요",
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
                   Text(
                     '비밀번호',
                     style: TextStyle(
@@ -128,10 +171,11 @@ extension on SignupPage {
                     textSize: 16,
                     hintText: "비밀번호를 입력해주세요",
                     type: ky2.TextFieldType.password,
+                    controller: model.pwd,
                   ),
                 ],
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 50),
             ],
           ),
         ),
@@ -145,7 +189,7 @@ extension on SignupPage {
             fontSize: 16,
             borderRadius: const BorderRadius.all(Radius.circular(8)),
             onPressed: () {
-              Navigator.of(context).push(SigninfoPage.route());
+              model.onClickNext(context);
             },
           ),
         )

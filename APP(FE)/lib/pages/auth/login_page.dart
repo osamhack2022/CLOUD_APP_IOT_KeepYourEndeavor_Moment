@@ -61,7 +61,7 @@ extension on LoginPage {
               fontSize: 16,
               borderRadius: BorderRadius.all(Radius.circular(8)),
               onPressed: () {
-                model.onClickLogin();
+                model.onClickLogin(context);
               },
               positiveColors: ButtonColors(
                 backgroundColor: ky2Color.primary,

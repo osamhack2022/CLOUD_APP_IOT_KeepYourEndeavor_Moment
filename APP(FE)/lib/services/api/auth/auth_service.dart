@@ -9,12 +9,16 @@ final _AuthService authService = _AuthService();
 class _AuthService extends APIService with AuthAPI {
   @override
   Future<String> signIn(String id, String pwd) async {
-    Response res = await dio.post('/auth/signin', data: {
-      id: id,
-      pwd: pwd
+    Response res = await dio.post('/auth/signin/', data: {
+      'id': id,
+      'pwd': pwd
     });
 
     return res.data['token'];
   }
 
+  @override
+  Future<void> signup(User user) async{
+    Response res = await dio.post('/auth/signup/', data: user.toJson());
+  }
 }
