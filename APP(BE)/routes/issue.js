@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {verifyToken, managerAccess, supervisorAccess} = require('../middleware/accessController.js');
+const {verifyToken, supervisorAccess} = require('../middleware/accessController.js');
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
 const { makeHashedValue } = require('../lib/security.js');
@@ -11,7 +11,7 @@ require('../db/sqlCon.js')().then((res) => conn = res);
 const fireDB = require('../db/firestoreCon.js');
 
 
-router.get('/', verifyToken, managerAccess, async (req, res) => {
+router.get('/', verifyToken, supervisorAccess, async (req, res) => {
 	try {
 		const [issueSelectResult, field] = await conn.execute('SELECT * FROM issue');
 		res.status(200).json({
@@ -26,7 +26,7 @@ router.get('/', verifyToken, managerAccess, async (req, res) => {
 	}
 });
 
-router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
+router.get('/:issueId', verifyToken, supervisorAccess, async (req, res) => {
 	try {
 		const params = req.params;
 		
@@ -35,7 +35,7 @@ router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
 		if (standard._fieldsProto === undefined) {
 			return res.status(406).json({
 				error : "Not Acceptable", 
-				message: "이슈는 살아있으나 기준이 삭제된 이슈입니다. 1. 해당 이슈를 삭제 후 재생성 해주세요 2. 기준을 재생성 해주세요"
+				message: "존재하지 않는 기준에 대한 이슈입니다. 이슈를 삭제후 재생성해주세요"
 			});
 		}
 		
@@ -53,9 +53,9 @@ router.get('/:issueId', verifyToken, managerAccess, async (req, res) => {
 	}
 });
 
-router.post('/regist', verifyToken, managerAccess, async (req, res) => {
+router.post('/regist', verifyToken, supervisorAccess, async (req, res) => {
 	try {
-		const nowTime = moment().add(9,'h').format("YYYY-M-D H:m:s");
+		const nowTime = moment().format("YYYY-M-D H:m:s");
 		const token = req.decoded;
 		const id = await makeHashedValue(nowTime);
 		const body = req.body;
@@ -65,34 +65,17 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 		}
 
 		const bind = [id, body.type, body.subject, token.id, body.mandatory, nowTime, nowTime];
-		
-		let flag = true
-		let resultOfStandard = ""
-		
-		const DBstandard = await fireDB.collection(body.type).doc(body.subject).get();
-		
-		if (!DBstandard._fieldsProto) {
-			await conn.execute('INSERT INTO type VALUES (?,?,?)', [body.type, nowTime, nowTime]);
-		} else {
-			flag = false;
-		}
-
-
-		if (flag) {
-			await fireDB.collection(body.type).doc(body.subject).set(body.standard);
-			resultOfStandard = `요청하신 내용대로 기준을 생성했습니다.`
-		} else {
-			resultOfStandard = `기준은 이미 생성돼 있습니다. 수정을 원할 시 standard route에서 삭제 후 생성해주세요`;
-			flag = true;
-		}
-		
+		console.log(bind);
+		await conn.execute('INSERT INTO type VALUES (?,?,?)', [body.type, nowTime, nowTime]);
 		await conn.execute('INSERT INTO issue VALUES (?,?,?,?,?,?,?)', bind);
+		await fireDB.collection(body.type).doc(body.subject).set(body.standard);
+		const DBstandard = await fireDB.collection(body.type).doc(body.subject).get();
 		res.status(201).json(
 			{
 				message : "issue 등록이 완료됐습니다.",
 				issueId : id,
-				resultOfStandard,
-				mandatory : body.mandatory
+				mandatory : body.mandatory,
+				standard: convertStandard(DBstandard._fieldsProto)
 			}
 		);
 	} catch (err) {
@@ -106,22 +89,36 @@ router.post('/regist', verifyToken, managerAccess, async (req, res) => {
 	}
 });
 
-
 router.delete('/:issueId/', verifyToken, supervisorAccess, async (req, res) => {
 	try {
-		const issueId = req.params.issueId;
-		const deleteResult = await conn.execute(`DELETE FROM issue WHERE id = '${issueId}'`);
-		if (deleteResult[0].affectedRows === 0) {
-				res.status(406).json({
-				error: "Not Acceptable",
-				message: "존재하지 않는 이슈 넘버입니다."
-			});
+		const params = req.params;
+		const issueSelectResult = await conn.execute('SELECT type, subject from issue WHERE id = ?',[params.issueId]);
+		const isInFireStore = await fireDB.collection(issueSelectResult[0][0].type).doc(issueSelectResult[0][0].subject).get();
+		
+		if (!isInFireStore._fieldsProto) {
+			return res.status(406).json(
+				{
+					error:'Not Acceptable', 
+					message : '입력하신 collection과 doc의 이름에 해당하는 standard가 존재하지 않습니다.'
+				}
+			);
 		} else {
-			res.status(200).json({
-				message: '이슈 삭제가 완료됐습니다.'
-			});	
+			const deleteResult = await conn.execute(`DELETE FROM issue WHERE id = '${params.issueId}'`);
+			await fireDB.collection(issueSelectResult[0][0].type).doc(issueSelectResult[0][0].subject).delete();
+			if (deleteResult[0].affectedRows === 0) {
+					return res.status(406).json({
+						error: "Not Acceptable",
+						message: "존재하지 않는 이슈 넘버입니다."
+					});
+			} else {
+				return res.status(200).json({
+					message : ' 성공적으로 기준을 삭제했습니다. '
+				});
+			}
 		}
+		
 	} catch (err) {
+		console.error(err);
 		return res.status(409).json({
 			error: "Conflict",
 			message : "요청 처리 도중 충돌이 발생했습니다."

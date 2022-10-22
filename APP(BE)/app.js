@@ -15,7 +15,7 @@ app.set('port', process.env.PORT || 3000);
 const cors = require('cors');
 
 let corsOptions = {
-		origin: ['http://game.jerrykang.com', 'http://admin.jerrykang.com'],
+		origin: ['http://172.30.1.22:5000','http://game.jerrykang.com', 'http://admin.jerrykang.com', 'http://localhost:5000'],
 		credentials: true
 }
 

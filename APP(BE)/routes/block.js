@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {verifyToken,managerAccess } = require('../middleware/accessController.js');
+const {typeFilter} = require('../lib/func.js');
 const axios = require('axios');
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
@@ -9,28 +10,13 @@ let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
 const fireDB = require('../db/firestoreCon.js');
 
-const typeFilter = async (dbStandard, standard, flags) => {
-	Object.keys(dbStandard).forEach((v) => {
-		const data = dbStandard[v].stringValue	
-		if (data.split(":").length === 2) {
-			flags.type = "시간"
-			standard.push({'std' : v, 'data' : moment(data, "m:s").valueOf()});
-		} else if (data.split(":").length === 1) {
-			flags.type = "숫자"
-			standard.push({'std' : v, 'data' : data});
-		} else {
-			flags.type = "이수"
-		}
-	});
-}
-
 router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
   try {
 		const {user, record, issue_id} = req.body;
 
-		const [userSelectResult, fieldsUser] = await conn.execute('SELECT peer FROM user WHERE id = ?', [user]);
-		const peer = userSelectResult[0].peer;
-		res.peerInfo = peer;
+		//const [userSelectResult, fieldsUser] = await conn.execute('SELECT peer FROM user WHERE id = ?', [user]);
+		//const peer = userSelectResult[0].peer;
+		//res.peerInfo = peer;
 
 		const [issueSelectResult, fieldsIssue] = await conn.execute('SELECT * FROM issue WHERE id = ?', [issue_id]);
 		if (issueSelectResult.length === 0) {
@@ -53,30 +39,10 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 		standard.sort(function (a, b) { 
 			return a.data < b.data ? -1 : a.data > b.data ? 1 : 0;  
 		});
-
-		/*
-		Object.keys(DBStandard._fieldsProto).forEach((v) => {
-			const data = DBStandard._fieldsProto[v].stringValue	
-			if (data.split(":").length === 2) {
-				flags.type = "시간"
-				standard.push({'std' : v, 'data' : moment(data, "m:s").valueOf()});
-			} else if (data.split(":").length === 1) {
-				flags.type = "숫자"
-				standard.push({'std' : v, 'data' : data});
-			} else {
-				flags.type = "이수"
-			}
-		});
-		*/
-		
-	
+		console.log(standard);
 		if (flags.type === "시간") {
 			const checkTime = moment(record,"m:s").valueOf();
-			/*
-			standard.sort(function (a, b) { 
-				return a.data < b.data ? -1 : a.data > b.data ? 1 : 0;  
-			});
-			*/
+
 			standard.some((std) => {
 				if (std.data >= checkTime) {
 					flags.result = std.std;
@@ -85,11 +51,7 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 			});
 		} else if ( flags.type === "숫자" ) {
 			const check = parseInt(record,10);
-			/*
-			standard.sort(function (a, b) { 
-				return a.data < b.data ? -1 : a.data > b.data ? 1 : 0;  
-			});
-			*/
+
 			let stdFlag = true;
 			for(let i = 0; i < standard.length - 1 ; i++) {
 				if (parseInt(standard[i].data) <= check) {
@@ -101,16 +63,16 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 				}
 			}
 			if (stdFlag) {
-				result = "특"
+				flags.result = "특"
 			}
 		} else {
-			result = "PASS"
+			flags.result = "PASS"
 		}
 		
 		const userRecord = {
 			data : {
 				user,
-				result,
+				result : flags.result,
 				issue_id
 			}
 		}
@@ -125,7 +87,7 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 		);
 	} catch (err) {
 		console.error(err);
-		res.status(406).json(
+		return res.status(406).json(
 			{
 				error:'Not Acceptable', 
 				message : `${res.peerInfo} 가 존재하지 않거나 구동중이지 않습니다.`

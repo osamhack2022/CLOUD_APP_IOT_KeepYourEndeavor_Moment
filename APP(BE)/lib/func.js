@@ -37,3 +37,18 @@ exports.convertStandard = (standard) => {
 	});
 	return conversionStandard
 }
+
+exports.typeFilter = async (dbStandard, standard, flags) => {
+	Object.keys(dbStandard).forEach((v) => {
+		const data = dbStandard[v].stringValue	
+		if (data.split(":").length === 2) {
+			flags.type = "시간"
+			standard.push({'std' : v, 'data' : moment(data, "m:s").valueOf()});
+		} else if (data.split(":").length === 1) {
+			flags.type = "숫자"
+			standard.push({'std' : v, 'data' : data});
+		} else {
+			flags.type = "이수"
+		}
+	});
+}
