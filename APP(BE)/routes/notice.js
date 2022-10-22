@@ -10,8 +10,6 @@ require('../db/sqlCon.js')().then((res) => conn = res);
 const fireDB = require('../db/firestoreCon.js');
 
 
-
-
 router.get('/', verifyToken, normalAccess, async(req, res) => {
 	try {
 		const [noticeSelectResult, field] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id FROM notice INNER JOIN issue ON notice.issue_id = issue.id');
@@ -30,7 +28,7 @@ router.get('/', verifyToken, normalAccess, async(req, res) => {
 
 router.post('/regist', verifyToken ,managerAccess, async (req, res) => {
 	try {
-		const nowTime = moment().add(9,'h').format("YYYY-M-D H:m:s");
+		const nowTime = moment().format("YYYY-M-D H:m:s");
 		const token = req.decoded;
 		const {title, issue_id, manager_id ,test_date, apply_date, description} = req.body;
 		timeChecker(test_date, apply_date, res);
@@ -58,7 +56,7 @@ router.post('/regist', verifyToken ,managerAccess, async (req, res) => {
 router.get('/:noticeId', verifyToken ,managerAccess, async (req, res) => {
 	try {
 		const params = req.params;
-		const [noticeSelectResult, field] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description,type, subject, issuer_id  FROM notice INNER JOIN issue ON notice.issue_id = issue.id WHERE notice.id = ?', [params.noticeId]);
+		const [noticeSelectResult, field] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at,issue_id ,description,type, subject, issuer_id  FROM notice INNER JOIN issue ON notice.issue_id = issue.id WHERE notice.id = ?', [params.noticeId]);
 		const [issueSelectResult, Issuefield] = await conn.execute('SELECT * FROM issue WHERE id = ?', [noticeSelectResult[0].issue_id]);
 		const {type, subject} = issueSelectResult[0]
 		const standard = await fireDB.collection(type).doc(subject).get();
@@ -75,6 +73,7 @@ router.get('/:noticeId', verifyToken ,managerAccess, async (req, res) => {
 				message: "올바르지 않은 공지 넘버 입니다."
 			});
 		}
+
 		return res.status(200).json({
 			message : "notice를 성공적으로 전송했습니다.",
 			notice : noticeSelectResult[0],
@@ -94,7 +93,7 @@ router.post('/:noticeId/edit', verifyToken ,managerAccess, async (req, res) => {
 	try {
 		const params = req.params;
 		const body = req.body;
-		const nowTime = moment().add(9,'h').format("YYYY-M-D H:m:s");
+		const nowTime = moment().format("YYYY-M-D H:m:s");
 
 		const noticeAllowKeys = ['title','test_date','apply_date','description'];
 		const updateNoticeTable = [];

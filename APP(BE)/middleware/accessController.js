@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
-let redisCon = "";
-require('../db/redisCon.js')().then((res) => redisCon = res);
 
+let redisLocalCon = "";
+require('../db/redisLocalCon.js')().then((res) => redisLocalCon = res);
 exports.verifyToken = async (req, res, next) => {
 	try {
 		req.decoded = jwt.verify(req.headers.authorization, process.env.JWT_SECRET);
-		const DBSearchResult = await redisCon.get(req.decoded.id);
+		const DBSearchResult = await redisLocalCon.get(req.decoded.id);
 		if (DBSearchResult !== null) {
 			return next();	
 		} else {

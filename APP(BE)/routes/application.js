@@ -45,7 +45,7 @@ router.get('/:noticeId/',verifyToken,normalAccess, async (req, res) => {
 
 router.post('/:noticeId/regist',verifyToken,normalAccess, async (req, res) => {
 	try {
-		const nowTime = moment().add(9,'h').format("YYYY-M-D H:m:s");
+		const nowTime = moment().format("YYYY-M-D H:m:s");
 		const token = req.decoded;
 		const params = req.params;
 		const body = req.body;
@@ -94,7 +94,7 @@ router.post('/:noticeId/regist',verifyToken,normalAccess, async (req, res) => {
 });
 router.post('/:noticeId/edit',verifyToken,normalAccess, async (req, res) => {
 	try {
-		const nowTime = moment().add(9,'h').format("YYYY-M-D H:m:s");
+		const nowTime = moment().format("YYYY-M-D H:m:s");
 		const token = req.decoded;
 		const params = req.params;
 		const body = req.body;

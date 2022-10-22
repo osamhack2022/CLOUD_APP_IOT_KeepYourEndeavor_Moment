@@ -6,8 +6,11 @@ moment.tz.setDefault('Asia/Seoul');
 const axios = require('axios');
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
-let redisCon = "";
-require('../db/redisCon.js')().then((res) => redisCon = res);
+
+let redisLocalCon = "";
+require('../db/redisLocalCon.js')().then((res) => redisLocalCon = res);
+
+
 
 router.get('/', verifyToken, async(req, res) => {
 	try {
@@ -52,7 +55,7 @@ router.post('/edit', verifyToken, async (req, res) => {
 	try {
 		const token = req.decoded;
 		const body = req.body;
-		const nowTime = moment().add(9,'h').format("YYYY-M-D H:m:s");
+		const nowTime = moment().format("YYYY-M-D H:m:s");
 
 		const userAllowKeys = ['pwd','class','name','authority','position', 'grade_target_id'];
 		const affAllowKeys = ['cmd','cps','division','br','bn','co','etc'];
@@ -71,6 +74,7 @@ router.post('/edit', verifyToken, async (req, res) => {
 					updateUserTable.push([key, body[key], body["grade_target_id"]]);
 				}
 			} else if (userAllowKeys.includes(key)) {
+			
 				updateUserTable.push([key, body[key], token.id]);
 			} else if (affAllowKeys.includes(key)) {
 				updateAffTable.push([key, body[key], token.id]);
@@ -107,15 +111,18 @@ router.post('/edit', verifyToken, async (req, res) => {
 	}
 });
 
-router.delete('/', async (req, res) => {
+router.delete('/', verifyToken,async (req, res) => {
 	try {
 		const token = req.decoded;
-		await axios.delete(`${token.peer}/v1/peer/${token.id}`);
+		
+		//await axios.delete(`${token.peer}/v1/peer/${token.id}`);
 		await conn.execute(`DELETE FROM user WHERE id = '${token.id}'`);
 		await conn.execute(`DELETE FROM application WHERE rep_id = '${token.id}'`);
 		await conn.execute(`DELETE FROM issue WHERE issuer_id = '${token.id}'`);
 		await conn.execute(`DELETE FROM notice WHERE author_id = '${token.id}'`);
 		await redisCon.del(token.id);
+		
+		
 		res.status(200).json({
 			message: '회원 탈퇴가 완료됐습니다. 로그아웃합니다.'
 		});
