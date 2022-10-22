@@ -52,8 +52,9 @@ export default function useNoticeDetail(){
             const {data} = await api.getNotice(id);
             console.log(data);
             setNotice(data.notice);
-            setLoading(false)
+            setLoading(false);
         }catch(e){
+            console.log(e);
             const error = e as SystemError;
             const message = error.response?.data?.message ?? "예기치 못 한 오류가 발생했습니다."
             toast.error(message, {
@@ -67,9 +68,10 @@ export default function useNoticeDetail(){
             const id = router.match.params.id;
             const {data} = await api.getApplications(id); 
             console.log(data);
-            setApplicants(data.applicants[0].members ?? []);
+            setApplicants(data.applicants[0]?.members ?? []);
         }catch(e){
             const error = e as SystemError;
+            console.log(e);
             const message = error.response?.data?.message ?? "예기치 못 한 오류가 발생했습니다."
             toast.error(message, {
                 position: toast.POSITION.TOP_CENTER
