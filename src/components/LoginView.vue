@@ -2,7 +2,7 @@
   <v-app id="login">
     <v-main class="grey lighten-3">
       <v-container fluid fill-height>
-        <v-row justify="center">
+        <v-row justify="center" class="prevent_overflow">
           <v-card flat rounded="lg">
             <v-progress-linear
               :indeterminate="server_await"
@@ -15,7 +15,7 @@
               Login
             </h1>
             <v-card-title class="justify-center" style="width: 450px">
-              <v-col class="ma-1 pa-0" md="10">
+              <v-col class="ma-1 pa-0" cols="10">
                 <v-text-field
                   label="ID"
                   color="#3F51B5"
@@ -26,7 +26,7 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col class="ma-1 pa-0" md="10">
+              <v-col class="ma-1 pa-0" cols="10">
                 <v-text-field
                   :type="visibility ? 'text' : 'password'"
                   label="Password"
@@ -39,12 +39,12 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col class="ma-3 pa-0" md="10">
+              <v-col class="ma-3 pa-0" cols="10">
                 <v-btn block outlined color="indigo" @click.stop="loginclicked">
                   Login
                 </v-btn>
               </v-col>
-              <v-col class="mb-7 ma-1 pa-0" md="10">
+              <v-col class="mb-7 ma-1 pa-0" cols="10">
                 <router-link to="/signup" style="text-decoration: none">
                   <v-btn block outlined color="indigo"> Register </v-btn>
                 </router-link>
@@ -93,6 +93,7 @@ export default {
           this.id = null;
           this.pwd = null;
           this.server_await = false;
+          this.userdata.token = "asdf";
           this.$router.replace({
             name: "dashboard",
             params: { ...this.userdata },
@@ -113,3 +114,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.prevent_overflow {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+</style>

@@ -16,7 +16,7 @@
           :key="link"
           text
           :class="{ selected: section == link }"
-          @click.stop="section = link"
+          @click.stop="dbswitch(link)"
         >
           {{ link }}
         </v-btn>
@@ -37,7 +37,7 @@
 
     <v-main class="grey lighten-3 ma-0 pa-0">
       <v-container>
-        <v-row>
+        <v-row justify="center" class="prevent_overflow">
           <v-col cols="auto">
             <v-sheet rounded="lg">
               <v-list color="transparent">
@@ -45,15 +45,16 @@
                   <popup-view
                     @submit="create_issue"
                     :user="userdata.username"
+                    :section="section"
                   />
                 </v-list-item>
                 <v-list-item v-if="detail == true">
-                  <v-btn icon width="40" height="40" @click="modify_issue">
+                  <v-btn icon width="40" height="40" @click="modify_info">
                     <v-icon>mdi-file-edit</v-icon>
                   </v-btn>
                 </v-list-item>
                 <v-list-item v-if="detail == true">
-                  <v-btn icon width="40" height="40" @click="delete_issue">
+                  <v-btn icon width="40" height="40" @click="delete_info">
                     <v-icon>mdi-trash-can</v-icon>
                   </v-btn>
                 </v-list-item>
@@ -69,20 +70,53 @@
             </v-sheet>
           </v-col>
 
-          <v-col>
+          <v-col cols="auto">
             <v-row v-if="detail == false">
-              <v-col v-for="info in infos[section]" :key="info.id" cols="12">
+              <v-col v-for="info in infos[section]" :key="info.id">
                 <dashboardCardView
                   :info="info"
                   :icons="icons"
-                  @cardclicked="get_detail(info)"
+                  @cardclicked="get_detail(info.id)"
                 />
               </v-col>
-              <v-col v-if="section == 'profile'">
-                <SignUpView />
+            </v-row>
+            <v-row v-if="section == 'profile'" justify="center">
+              <v-col cols="auto">
+                <v-card flat style="width: 600px" rounded="lg">
+                  <profileFormView
+                    :readonly="profile_readonly"
+                    :password="!profile_readonly"
+                    :userInfo="{ ...curr_info }"
+                  >
+                    <template v-slot:button="{ submit }">
+                      <v-btn
+                        v-if="profile_readonly"
+                        block
+                        outlined
+                        color="indigo"
+                        @click.stop="profile_readonly = false"
+                      >
+                        Edit
+                      </v-btn>
+                      <v-btn
+                        v-else
+                        block
+                        outlined
+                        color="indigo"
+                        @click.stop="profile_readonly = submit()"
+                      >
+                        Submit
+                      </v-btn>
+                    </template>
+                  </profileFormView>
+                </v-card>
               </v-col>
             </v-row>
-            <DetailsView v-else :info="curr_issue" :icons="icons" />
+            <DetailsView
+              v-if="detail == true"
+              :info="curr_info"
+              :icons="icons"
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -94,13 +128,13 @@
 import dashboardCardView from "../components/dashboardCardView.vue";
 import popupView from "../components/popupView.vue";
 import DetailsView from "../components/DetailsView.vue";
-import SignUpView from "./SignUpView.vue";
+import profileFormView from "../components/profileFormView.vue";
 export default {
   components: {
     dashboardCardView,
     popupView,
     DetailsView,
-    SignUpView,
+    profileFormView,
   },
   data() {
     return {
@@ -109,6 +143,7 @@ export default {
       section: "issue",
       curr_info: null,
       links: ["issue", "notice", "standard", "application", "profile"],
+      profile_readonly: true,
       icons: [
         "mdi-music-accidental-sharp",
         "mdi-format-title",
@@ -145,38 +180,44 @@ export default {
     };
   },
   methods: {
-    get_detail(info) {
-      const url = "/${this.section}/";
+    dbswitch(link) {
+      this.curr_info = null;
+      this.section = link;
+      if (this.section == "profile") {
+        this.get_detail(this.userdata.username);
+      } else {
+        this.get_info();
+      }
+      this.detail = false;
+    },
+    get_detail(id) {
+      const url = `/${this.section}/`;
       this.$axios
         .get(url, {
           headers: {
             Authorization: this.userdata.token,
           },
           params: {
-            issueId: info.id,
+            Id: id,
           },
         })
         .then((response) => {
-          this.curr_info = response.data.issues;
-          this.curr_info["standard"] = response.data.standard;
+          this.curr_info = { ...response.data[this.section] };
+          if ("standard" in response.data) {
+            this.curr_info["standard"] = response.data.standard;
+          }
           this.detail = true;
         })
         .catch((error) => {
           alert(error.response.message);
         });
       this.detail = true;
-      this.curr_info = info;
-      this.curr_info["standard"] = {
-        "2급": "13:55",
-        "3급": "15:00",
-        특: "13:10",
-        "1급": "13:30",
-      };
+      this.curr_info = { id: "12-1234" };
     },
     create_issue(newissue) {
       this.$axios
         .post(
-          "/issue/regist",
+          `/${this.section}/regist`,
           {},
           {
             headers: {
@@ -188,26 +229,26 @@ export default {
         .catch((error) => {
           alert(error.response.message + error.response.resultOfStandard);
         });
-      this.get_issue();
+      this.get_info();
     },
-    delete_issue() {
+    delete_info() {
       this.$axios
-        .delete("/issue/", {
+        .delete(`/${this.section}/`, {
           headers: {
             Authorization: this.userdata.token,
           },
           data: {
-            issueId: this.curr_issue.id,
+            Id: this.curr_info.id,
           },
         })
         .catch((error) => {
           alert(error.response.message);
         });
-      this.get_issue();
+      this.get_info();
       this.detail = false;
-      this.curr_issue = null;
+      this.curr_info = null;
     },
-    modify_issue() {},
+    modify_info() {},
     logout() {
       this.$axios
         .post(
@@ -226,15 +267,15 @@ export default {
           alert(error.response.data.message);
         });
     },
-    get_issue() {
+    get_info() {
       this.$axios
-        .get("/issue/", {
+        .get(`/${this.section}/`, {
           headers: {
             Authorization: this.userdata.token,
           },
         })
         .then((response) => {
-          this.issue = { ...response.data.issues };
+          this.infos[this.section] = { ...response.data[this.section] };
         })
         .catch((error) => {
           alert(error.response.data.message);
@@ -244,7 +285,7 @@ export default {
   created() {
     console.log(this.userdata.token);
     console.log("created");
-    this.get_issue();
+    this.get_info();
   },
 };
 </script>
@@ -255,5 +296,9 @@ export default {
 }
 .selected {
   color: #3949ab;
+}
+.prevent_overflow {
+  flex-wrap: nowrap;
+  overflow-x: auto;
 }
 </style>

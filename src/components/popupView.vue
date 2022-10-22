@@ -74,6 +74,7 @@ export default {
   data: () => initialData(),
   props: {
     user: String,
+    section: String,
   },
   methods: {
     submit() {

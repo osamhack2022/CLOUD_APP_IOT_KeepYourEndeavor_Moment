@@ -1,5 +1,5 @@
 <template>
-  <v-card @click="$emit('cardclicked')" flat rounded="lg">
+  <v-card @click="$emit('cardclicked')" flat rounded="lg" width="1000">
     <v-card-title>{{ info.title }}</v-card-title>
     <v-list>
       <template v-for="(v, k, i) in info">
