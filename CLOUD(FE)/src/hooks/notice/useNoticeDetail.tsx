@@ -20,7 +20,7 @@ type NoticeType = {
 }
 export default function useNoticeDetail(){
     const [input, setInput] = useState({
-        result: 0
+        record: ''
     });
     const [notice, setNotice] = useState<NoticeType>({
         notice_id: "",
@@ -54,7 +54,6 @@ export default function useNoticeDetail(){
             setNotice(data.notice);
             setLoading(false);
         }catch(e){
-            console.log(e);
             const error = e as SystemError;
             const message = error.response?.data?.message ?? "예기치 못 한 오류가 발생했습니다."
             toast.error(message, {
@@ -68,8 +67,27 @@ export default function useNoticeDetail(){
             const id = router.match.params.id;
             const {data} = await api.getApplications(id); 
             console.log(data);
-            setApplicants(data.applicants[0]?.members ?? []);
+            setApplicants(data.applicants);
         }catch(e){
+            const error = e as SystemError;
+            const message = error.response?.data?.message ?? "예기치 못 한 오류가 발생했습니다."
+            toast.error(message, {
+                position: toast.POSITION.TOP_CENTER
+            });
+        }
+    }
+
+    const createBlock = async(input, user) => {
+        try{
+            await api.createBlock({
+                ...input,
+                user,
+                issue_id: notice.issue_id,
+            });
+            toast.success('시험 결과 등록이 완료되었습니다!', {
+                position: toast.POSITION.TOP_CENTER
+            });
+        } catch(e){
             const error = e as SystemError;
             console.log(e);
             const message = error.response?.data?.message ?? "예기치 못 한 오류가 발생했습니다."
@@ -88,6 +106,6 @@ export default function useNoticeDetail(){
         })
     }
     return {
-        onChangeInput, input, notice, loading, applicants
+        onChangeInput, input, notice, loading, applicants, createBlock
     }
 }

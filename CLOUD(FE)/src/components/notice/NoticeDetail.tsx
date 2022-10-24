@@ -1,5 +1,6 @@
 import moment from 'moment';
 import React from 'react';
+import { toast } from 'react-toastify';
 import { Button, Dimmer, Icon, Label, Loader, Pagination, Table } from 'semantic-ui-react';
 import styled from 'styled-components';
 import useModal from '../../hooks/common/useModal';
@@ -30,18 +31,33 @@ const NoticeDetailBlock = styled.div`
 `;
 
 const NoticeDetail = () => {
-    const {open, onClickModal, modals} = useModal();
-    const {onChangeInput, input, notice, loading, applicants} = useNoticeDetail();
+    const {open, onClickModal, modals, id} = useModal();
+    const {onChangeInput, input, notice, loading, applicants, createBlock} = useNoticeDetail();
 
-    const memberList = applicants.map(member => {
-        const {user_id, user_name} = member;
+    const memberList = applicants.map(applicant => {
+        const {members, onChain} = applicant;
+        const {user_id, user_name} = members;
+        console.log(onChain);
         return (
-            <Table.Row key={user_id} onClick={() => onClickModal(modals.resultNotice)}>
+            <Table.Row key={user_id} onClick={
+                () => {
+                    if(onChain === '0'){
+                        onClickModal(modals.resultNotice, user_id)
+                    }else {
+                        toast.warn('이미 블록체인에 등록된 데이터는 수정할 수 없습니다.', {
+                            position: toast.POSITION.TOP_CENTER
+                        });
+                    }
+                }
+            }>
                     <Table.Cell>{user_id}</Table.Cell>
                     <Table.Cell>{user_name}</Table.Cell>
                     <Table.Cell><Label size="medium" color="violet">1급</Label></Table.Cell>
                     <Table.Cell textAlign='left'>
-                        <Icon color='green' name='checkmark' size='large' />
+                        {onChain === '1' ? 
+                            <Icon color='green' name='checkmark' size='large' /> : 
+                            <Icon color='red' name='x' size='large' />
+                        }
                     </Table.Cell>
             </Table.Row>
         )
@@ -110,7 +126,7 @@ const NoticeDetail = () => {
                 </>
             )
             }
-            <ResultModal onChangeInput={onChangeInput} open={open.resultNotice} onClickModal={onClickModal} name={modals.resultNotice} input={input}/>
+            <ResultModal user={id} createBlock={createBlock} onChangeInput={onChangeInput} open={open.resultNotice} onClickModal={onClickModal} name={modals.resultNotice} input={input}/>
         </NoticeDetailBlock>
     )
 }

@@ -3,11 +3,11 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 const guestApi = axios.create({
-    baseURL: `http://172.30.1.6:8080/`,
+    baseURL: `http://172.30.1.48:8080/`,
 });
 
 const client = () => axios.create({
-    baseURL: `http://172.30.1.6:8080/`,
+    baseURL: `http://172.30.1.48:8080/`,
     headers: {'Authorization': `${localStorage.getItem('token')}`},
 });
 
@@ -157,6 +157,9 @@ const api = {
     getUsers: () => {
         return client().get(`/profile`);
     },
+    createBlock: (block) => {
+        return client().post('/block/push', block);
+    }
 }
 
 export default api;
