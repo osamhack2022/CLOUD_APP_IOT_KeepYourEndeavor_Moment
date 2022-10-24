@@ -45,14 +45,14 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="[(dialog = false), reset()]"
+            @click.stop="[(dialog = false), reset()]"
           >
             Close
           </v-btn>
           <v-btn
             color="blue darken-1"
             text
-            @click="[(dialog = false), submit()]"
+            @click.stop="[(dialog = false), submit()]"
           >
             Save
           </v-btn>
@@ -73,13 +73,11 @@ export default {
   name: "popupView",
   data: () => initialData(),
   props: {
-    user: String,
     section: String,
   },
   methods: {
     submit() {
-      this.test.issuer_id = this.user;
-      this.$emit("submit", { ...this.test });
+      this.$emit("create_info", { ...this.test });
       this.reset();
     },
     reset: function () {

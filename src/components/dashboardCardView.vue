@@ -1,6 +1,6 @@
 <template>
-  <v-card @click="$emit('cardclicked')" flat rounded="lg" width="1000">
-    <v-card-title>{{ info.title }}</v-card-title>
+  <v-card @click.stop="$emit('cardclicked')" flat rounded="lg">
+    <v-card-title> Title {{ info.title }}</v-card-title>
     <v-list>
       <template v-for="(v, k, i) in info">
         <v-list-item :key="k">
@@ -22,13 +22,24 @@
 
 <script>
 export default {
+  data: () => ({
+    icons: [
+      "mdi-music-accidental-sharp",
+      "mdi-format-title",
+      "mdi-account",
+      "mdi-receipt-text-check",
+      "mdi-calendar",
+      "mdi-calendar",
+      "mdi-calendar",
+    ],
+  }),
   props: {
     info: {
       type: Object,
       required: true,
     },
-    icons: {
-      type: Array,
+    section: {
+      type: String,
       required: true,
     },
   },

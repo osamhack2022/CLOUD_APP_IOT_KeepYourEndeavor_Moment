@@ -1,8 +1,10 @@
 <template>
   <v-row>
-    <v-col>
+    <v-col cols="8">
       <v-card flat rounded="lg">
-        <v-card-title>{{ info.title }}</v-card-title>
+        <v-card-title>
+          {{ info.id }}
+        </v-card-title>
         <v-list>
           <template v-for="(v, k, i) in info">
             <v-list-item :key="k">
@@ -11,17 +13,24 @@
               </v-list-item-icon>
 
               <v-list-item-content>
-                <v-list-item-title>{{ k }}</v-list-item-title>
-                <v-list-item-subtitle>
-                  {{ info[k] }}
-                </v-list-item-subtitle>
+                <editfieldView
+                  :label="k"
+                  :edit="edit"
+                  :value="info[k]"
+                  @change="
+                    (i) => {
+                      info_edited[k] = i;
+                    }
+                  "
+                />
+                <p>{{ info_edited[k] }}</p>
               </v-list-item-content>
             </v-list-item>
           </template>
         </v-list>
       </v-card>
     </v-col>
-    <v-col>
+    <v-col cols="4">
       <v-card flat rounded="lg">
         <v-card-title>participations</v-card-title>
       </v-card>
@@ -30,16 +39,45 @@
 </template>
 
 <script>
+import editfieldView from "./editfieldView.vue";
 export default {
+  name: "detailsView",
+  components: { editfieldView },
+  data: () => ({
+    icons: [
+      "mdi-music-accidental-sharp",
+      "mdi-format-title",
+      "mdi-account",
+      "mdi-receipt-text-check",
+      "mdi-calendar",
+      "mdi-calendar",
+      "mdi-calendar",
+    ],
+  }),
   props: {
     info: {
       type: Object,
       required: true,
     },
-    icons: {
-      type: Array,
+    section: {
+      type: String,
       required: true,
     },
+    edit: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+  },
+  computed: {
+    info_edited: {
+      get() {
+        return { ...this.info };
+      },
+    },
+  },
+  methods: {
+    save() {},
   },
 };
 </script>

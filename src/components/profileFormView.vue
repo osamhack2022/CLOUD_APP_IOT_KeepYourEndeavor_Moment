@@ -166,7 +166,7 @@
         </v-layout>
       </v-col>
       <v-col class="ma-0 px-5 pb-3 pt-0" md="15">
-        <slot name="button" :submit="submit"></slot>
+        <slot name="button" :submit="submit" :regdata="regdata"></slot>
       </v-col>
     </v-form>
   </div>
@@ -180,7 +180,6 @@ export default {
     visibility: false,
     rank_items: ["이병", "일병", "상병", "병장"],
     authority_items: ["군무원", "병사", "간부", "등록자", "개설자"],
-    peer_url: null,
     rule: [(v) => !!v || "required"],
   }),
   props: {
@@ -200,7 +199,6 @@ export default {
   methods: {
     IDformatting(event) {
       this.regdata.id = "";
-      console.log(this.regdata.id);
       event = event.replace(/[^0-9]/g, "");
       if (event.length >= 3) {
         event = event.substr(0, 2) + "-" + event.substr(2);
@@ -208,34 +206,22 @@ export default {
       if (event.length > 11) {
         event = event.substr(0, 11);
       }
-      console.log(event);
       this.regdata.id = event;
     },
-    submit: function () {
+    submit: function (request) {
       if (
         this.regdata.id == "" ||
         this.regdata.pwd === undefined ||
         this.regdata.pwd === ""
       ) {
         alert("ID와 비밀번호는 필수사항입니다.");
-        return false;
+        return;
       }
-      this.server_await = true;
       console.log({ ...this.regdata });
-      this.$axios
-        .post("/auth/signup/", { ...this.regdata })
-        .then((response) => {
-          alert(response.data.message);
-          this.peer_url = response.data.peer_url;
-          this.$router.replace("/");
-          this.server_await = false;
-          return true;
-        })
-        .catch((error) => {
-          alert(error.response.data.message);
-          this.server_await = false;
-          return false;
-        });
+      this.server_await = true;
+      request({ ...this.regdata }).finally(() => {
+        this.server_await = false;
+      });
     },
   },
   computed: {
