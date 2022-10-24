@@ -32,7 +32,7 @@ router.post('/regist', verifyToken ,managerAccess, async (req, res) => {
 		const token = req.decoded;
 		const {title, issue_id, manager_id ,test_date, apply_date, description} = req.body;
 		timeChecker(test_date, apply_date, res);
-		const id = await makeHashedValue(title); 
+		const id = await makeHashedValue(title);
 
 		const testTime = moment(test_date).add(9,'h').format("YYYY-M-D H:m:s");
 		const applyTime = moment(apply_date).add(9,'h').format("YYYY-M-D H:m:s");
