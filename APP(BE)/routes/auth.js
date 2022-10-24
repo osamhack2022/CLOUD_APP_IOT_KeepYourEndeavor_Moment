@@ -50,17 +50,16 @@ router.post('/signup', async (req, res) => {
 			"organization" : organization.pop(),
 			"password" : body.pwd
 		}
-		
-		// 테스트용 원래는 api.jerrykang.com
-		const peer_url = await axios.post("http://api.ky2chain.com/v1/peer", blockInfo, {timeout: 15000});
-		
+		console.log("블록 정보 생성 완료");
+		const peer_url = await axios.post("http://channel.ky2chain.com/v1/peer", blockInfo);
+		console.log("peer url 요청 성공", peer_url);
 		const { pwd, salt } = await createHashedPassword(body.pwd);
 		const userInfo = [body.id, pwd, body.class, body.name, body.authority, body.position, salt,  peer_url.data.url, nowTime, nowTime];
 		const affInfo = [null, body.id,body.cmd, body.cps ,body.division, body.br, body.bn, body.co, body.etc, nowTime, nowTime];
-
+		console.log(userInfo, affInfo);
 		await conn.execute('INSERT INTO user VALUES (?,?,?,?,?,?,?,?,?,?)', userInfo);
 		await conn.execute('INSERT INTO affiliation VALUES (?,?,?,?,?,?,?,?,?,?,?)', affInfo);
-		
+		console.log("회원 DB 저장 성공");
 		return res.status(201).json(
 			{
 				message : "회원가입에 성공했습니다. 회원의 비밀번호는 암호화 처리됩니다.",
@@ -103,18 +102,11 @@ router.post('/signin', async (req, res) => {
 			await redisLocalCon.set(recordedUserInfo.id, token);
 			await redisLocalCon.expire(recordedUserInfo.id, 259200) // 로그인 유효 시간 6시간
 			
-			if (start_peer.data.message === undefined) {
-				return res.status(408).json({
-					error: "Requset time out",
-					message : "peer 시작에 실패했습니다. 다시 로그인 해주세요."
-				});
-			}
 			return res.status(200).json(
 				{
 					message : "로그인 성공! 토큰은 DB에 저장되어 관리됩니다. 로그인 유효시간은 6시간 입니다.",
 					issue : "암호화 시간이 조금 소요될 수 있으니 기다려주세요.",
-					token,
-					start_result : `${start_peer.data.status}`
+					token
 				}
 			);	
 			

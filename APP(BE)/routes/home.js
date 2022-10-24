@@ -11,14 +11,19 @@ require('../db/sqlCon.js')().then((res) => conn = res);
 /* GET home page. */ 
 router.get('/', verifyToken ,normalAccess, async (req, res) => {
   try {
-		const peer = req.decoded.peer;
-		const response = await axios.get(`${peer}/v1/block?user=${req.decoded.id}`); //실제론 여기
-		console.log(response.data.blocks);
+		const token = req.decoded;
+		const [userSelectResult, fieldUser] = await conn.execute('SELECT * FROM user WHERE id =?', [token.id]);
+		const peer = userSelectResult[0].peer;
+		const response = await axios.get(`${peer}/v1/block?user=${token.id}`); //실제론 여기
+		console.log(response.data);
+		//console.log(response.data.blocks);
 		const usersData = []
-		response.data.blocks.forEach((data) =>{			
-			data.data["generated_time"] = data.header.generated_time
-			usersData.push(data.data);
-		});
+		if (!response.data) {
+			response.data.blocks.forEach((data) =>{			
+				data.data["generated_time"] = data.header.generated_time
+				usersData.push(data.data);
+			});
+		}
 		
 		console.log(usersData);
 		
@@ -33,7 +38,7 @@ router.get('/', verifyToken ,normalAccess, async (req, res) => {
 		return res.status(406).json(
 			{
 				error:'Not Acceptable', 
-				message : `${peer} 원장이 존재하지 않습니다.`
+				message : `원장이 존재하지 않습니다.`
 			}
 		);
 	}

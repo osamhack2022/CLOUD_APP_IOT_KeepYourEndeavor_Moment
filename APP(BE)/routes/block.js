@@ -76,7 +76,7 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 				issue_id
 			}
 		}
-		
+		console.log(userRecord);
 		await axios.post(`${peer}/v1/block`, userRecord); 
 		//const response = await axios.post(`http://api.jerrykang.com/v1/block`, userRecord); // 테스트에만 일로
 		await conn.execute(`UPDATE application SET onChain = '1' WHERE rep_id = '${user}'`);
