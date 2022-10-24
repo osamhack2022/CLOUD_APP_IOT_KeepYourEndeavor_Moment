@@ -3,11 +3,11 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 const guestApi = axios.create({
-    baseURL: `https://api-server.run.goorm.io`,
+    baseURL: `http://172.30.1.48:8080/`,
 });
 
 const client = () => axios.create({
-    baseURL: `https://api-server.run.goorm.io`,
+    baseURL: `http://172.30.1.48:8080/`,
     headers: {'Authorization': `${localStorage.getItem('token')}`},
 });
 
@@ -155,8 +155,11 @@ const api = {
         return client().post(`/standard/post`, standard);
     },
     getUsers: () => {
-        return client().post(`/profile`);
+        return client().get(`/profile`);
     },
+    createBlock: (block) => {
+        return client().post('/block/push', block);
+    }
 }
 
 export default api;

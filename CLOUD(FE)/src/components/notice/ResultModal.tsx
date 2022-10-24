@@ -12,7 +12,7 @@ const options = [
     { key: 3, text: '정신전력 평가', value: 3 },
     { key: 3, text: '사격 평가', value: 3 },
   ]
-const ResultModal = ({open, onClickModal, onChangeInput, input, name}) => (
+const ResultModal = ({open, onClickModal, onChangeInput, input, name, createBlock, user}) => (
     
     <ResultModalBlock>
         <Modal
@@ -29,10 +29,10 @@ const ResultModal = ({open, onClickModal, onChangeInput, input, name}) => (
                     </Form.Field>
                     <Form.Field>
                         <label>점수</label>
-                        <input placeholder='점수' defaultValue='0' name='result' onChange={onChangeInput} />
+                        <input placeholder='점수' defaultValue='0' name='record' onChange={onChangeInput} />
                     </Form.Field>
                     <Form.Field>
-                        <Progress value={input.result} success total='100' progress='ratio' >Label</Progress>
+                        <Progress value={input.record} success total='100' progress='ratio' >Label</Progress>
                     </Form.Field>
                 </Form>
             </Modal.Content>
@@ -41,7 +41,7 @@ const ResultModal = ({open, onClickModal, onChangeInput, input, name}) => (
                     content="등록하기"
                     labelPosition='right'
                     icon="lock"
-                    onClick={() => onClickModal(name)}
+                    onClick={() => createBlock(input, user)}
                     positive />
             </Modal.Actions>
         </Modal>

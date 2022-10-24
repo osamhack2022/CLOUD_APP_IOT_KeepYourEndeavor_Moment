@@ -80,7 +80,7 @@ extension on CalendarPage {
             locale: 'ko-KR',
             eventLoader: (day) {
               return model.eventList
-                  .where((element) => isSameDay(element.date, day))
+                  .where((element) => isSameDay(element.testDate, day))
                   .toList();
             },
           ),
@@ -119,15 +119,15 @@ extension on CalendarPage {
                           ],
                         ),
                         const SizedBox(height: 6),
-                        const Text(
-                          '체력검정',
-                          style: TextStyle(
+                        Text(
+                          model.selectedEvent[index].title,
+                          style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 2),
-                        const Text(
-                          '체력검정 평가',
-                          style: TextStyle(
+                        Text(
+                          model.selectedEvent[index].subject,
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Color(0xffBDC1CB),
                           ),
@@ -152,6 +152,9 @@ extension on CalendarPage {
                             ),
                             padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
                           ),
+                          onTap: (){
+                            model.registerNotice(context, model.selectedEvent[index].noticeId);
+                          },
                         )
                       ],
                     )

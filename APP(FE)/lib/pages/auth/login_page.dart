@@ -52,6 +52,7 @@ extension on LoginPage {
               textSize: 16,
               hintText: "비밀번호를 입력해주세요",
               controller: model.pwd,
+              type: ky2.TextFieldType.password,
             ),
             const SizedBox(height: 18),
             Button(
@@ -60,7 +61,7 @@ extension on LoginPage {
               fontSize: 16,
               borderRadius: BorderRadius.all(Radius.circular(8)),
               onPressed: () {
-                model.onClickLogin();
+                model.onClickLogin(context);
               },
               positiveColors: ButtonColors(
                 backgroundColor: ky2Color.primary,

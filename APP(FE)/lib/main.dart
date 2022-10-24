@@ -27,7 +27,7 @@ class Ky2App extends StatelessWidget {
       Platform.isIOS ? Brightness.light : Brightness.dark,
     ));
     return MaterialApp(
-      title: 'GatewayApp',
+      title: 'ky2',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: ky2Color.primary,

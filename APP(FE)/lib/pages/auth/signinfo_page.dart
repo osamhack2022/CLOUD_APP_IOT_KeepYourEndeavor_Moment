@@ -6,19 +6,47 @@ import 'package:ky2/core/base_screen.dart';
 import 'package:ky2/pages/auth/bio_auth_page.dart';
 import 'package:ky2/utils/ky2_color.dart';
 import 'package:ky2/viewmodel/main_viewmodel.dart';
+import 'package:ky2/viewmodel/signinfo_viewmodel.dart';
 
 class SigninfoPage extends StatelessWidget {
-  const SigninfoPage({Key? key}) : super(key: key);
+  final String id;
+  final String pwd;
+  final String name;
+  final String position;
+  final String className;
 
-  static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => const SigninfoPage());
+  const SigninfoPage(
+      {Key? key,
+      required this.id,
+      required this.pwd,
+      required this.name,
+      required this.position,
+      required this.className})
+      : super(key: key);
+
+  static Route route({
+    required String id,
+    required String pwd,
+    required String name,
+    required String position,
+    required String className,
+  }) {
+    return MaterialPageRoute<void>(
+      builder: (_) => SigninfoPage(
+        id: id,
+        pwd: pwd,
+        name: name,
+        position: position,
+        className: className,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen<MainViewModel>(
+    return BaseScreen<SignInfoViewModel>(
       onModelReady: (model) {
-        model.initState(context);
+        model.initState(context, id, pwd, name, position, className);
       },
       builder: (context, model, child) {
         return Scaffold(
@@ -41,7 +69,7 @@ class SigninfoPage extends StatelessWidget {
           ),
           resizeToAvoidBottomInset: true,
           backgroundColor: Colors.white,
-          body: _body(context),
+          body: _body(context, model),
         );
       },
     );
@@ -49,7 +77,7 @@ class SigninfoPage extends StatelessWidget {
 }
 
 extension on SigninfoPage {
-  Widget _body(BuildContext context) {
+  Widget _body(BuildContext context, SignInfoViewModel model) {
     return Stack(
       children: [
         Padding(
@@ -95,7 +123,7 @@ extension on SigninfoPage {
               const SizedBox(height: 14),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
                     '군단',
                     style: TextStyle(
@@ -108,13 +136,14 @@ extension on SigninfoPage {
                   ky2.TextField(
                     textSize: 16,
                     hintText: "00군단",
+                    controller: model.cps,
                   ),
                 ],
               ),
               const SizedBox(height: 18),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
                     '사단',
                     style: TextStyle(
@@ -127,14 +156,14 @@ extension on SigninfoPage {
                   ky2.TextField(
                     textSize: 16,
                     hintText: "00사단",
-                    type: ky2.TextFieldType.password,
+                    controller: model.division,
                   ),
                 ],
               ),
               const SizedBox(height: 18),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
                     '여단',
                     style: TextStyle(
@@ -147,14 +176,14 @@ extension on SigninfoPage {
                   ky2.TextField(
                     textSize: 16,
                     hintText: "00여단",
-                    type: ky2.TextFieldType.password,
+                    controller: model.br,
                   ),
                 ],
               ),
               const SizedBox(height: 18),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
                     '대대',
                     style: TextStyle(
@@ -167,7 +196,7 @@ extension on SigninfoPage {
                   ky2.TextField(
                     textSize: 16,
                     hintText: "00대대",
-                    type: ky2.TextFieldType.password,
+                    controller: model.bn,
                   ),
                 ],
               ),
@@ -185,7 +214,7 @@ extension on SigninfoPage {
             fontSize: 16,
             borderRadius: const BorderRadius.all(Radius.circular(8)),
             onPressed: () {
-              Navigator.of(context).push(BioAuthPage.route());
+              model.onClickNext(context);
             },
           ),
         )
