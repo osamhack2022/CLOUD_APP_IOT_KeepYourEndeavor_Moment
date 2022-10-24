@@ -20,6 +20,7 @@ router.get('/', verifyToken, async(req, res) => {
 			userInfo : selectResult[0]
 		});
 	} catch (err) {
+		console.error(err);
 		return res.status(506).json({
 			error: "DATABASE ERROR / Variant Also Negotiates",
 			message : "DB query 도중 문제가 발생했습니다."

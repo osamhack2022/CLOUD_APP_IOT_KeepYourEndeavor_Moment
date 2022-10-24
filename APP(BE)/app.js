@@ -6,8 +6,10 @@ const logger = require('morgan');
 const nunjucks = require('nunjucks');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+
 const app = express();
 const fs = require('fs');
+
 
 require('dotenv').config();
 app.set('port', process.env.PORT || 3000);
@@ -15,12 +17,11 @@ app.set('port', process.env.PORT || 3000);
 const cors = require('cors');
 
 let corsOptions = {
-		origin: ['http://172.30.1.22:5000','http://game.jerrykang.com', 'http://admin.jerrykang.com', 'http://localhost:5000'],
+		origin: ['http://172.30.1.20:5000','http://game.jerrykang.com', 'http://admin.jerrykang.com', 'http://localhost:5000'],
 		credentials: true
 }
 
 app.use(cors(corsOptions));
-
 
 // view engine setup
 app.set('view engine', 'html');
