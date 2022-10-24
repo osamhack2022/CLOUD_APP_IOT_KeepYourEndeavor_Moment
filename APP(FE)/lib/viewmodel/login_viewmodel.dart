@@ -21,6 +21,7 @@ class LoginViewModel extends BaseViewModel {
       var prefs = await SharedPreferences.getInstance();
       String token = await authService.signIn(id.value.text, pwd.value.text);
       prefs.setString('accessToken', token);
+      prefs.setString('id', id.value.text);
       Navigator.of(context).push(MainTab.route());
     } on DioError catch (e){
       print(e);
