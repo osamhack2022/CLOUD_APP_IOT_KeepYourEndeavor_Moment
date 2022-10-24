@@ -14,9 +14,9 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
   try {
 		const {user, record, issue_id} = req.body;
 
-		//const [userSelectResult, fieldsUser] = await conn.execute('SELECT peer FROM user WHERE id = ?', [user]);
-		//const peer = userSelectResult[0].peer;
-		//res.peerInfo = peer;
+		const [userSelectResult, fieldsUser] = await conn.execute('SELECT peer FROM user WHERE id = ?', [user]);
+		const peer = userSelectResult[0].peer;
+		res.peerInfo = peer;
 
 		const [issueSelectResult, fieldsIssue] = await conn.execute('SELECT * FROM issue WHERE id = ?', [issue_id]);
 		if (issueSelectResult.length === 0) {
@@ -79,10 +79,12 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 		
 		await axios.post(`${peer}/v1/block`, userRecord); 
 		//const response = await axios.post(`http://api.jerrykang.com/v1/block`, userRecord); // 테스트에만 일로
+		await conn.execute(`UPDATE application SET onChain = '1' WHERE rep_id = '${user}'`);
 		return res.status(201).json(
 			{
 				message : `${peer}에 해당 데이터를 온체인 시켰습니다.`,
-				userRecord
+				userRecord,
+				onChainResult : "true"
 			}
 		);
 	} catch (err) {
@@ -90,7 +92,8 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 		return res.status(406).json(
 			{
 				error:'Not Acceptable', 
-				message : `${res.peerInfo} 가 존재하지 않거나 구동중이지 않습니다.`
+				message : `${res.peerInfo} 가 존재하지 않거나 구동중이지 않습니다.`,
+				onChainResult: "false"
 			}
 		);
 	}

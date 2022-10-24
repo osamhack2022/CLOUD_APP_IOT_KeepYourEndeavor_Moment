@@ -14,6 +14,7 @@ let redisLocalCon = "";
 require('../db/redisLocalCon.js')().then((res) => redisLocalCon = res);
 
 const { createHashedPassword, makePasswordHashed } = require('../lib/security.js');
+const { start } = require('pm2');
 
 router.post('/signup', async (req, res) => {
 	const body = req.body;
@@ -51,7 +52,7 @@ router.post('/signup', async (req, res) => {
 		}
 		
 		// 테스트용 원래는 api.jerrykang.com
-		const peer_url = await axios.post("http://api.ky2chain.com/v1/peer", blockInfo);
+		const peer_url = await axios.post("http://api.ky2chain.com/v1/peer", blockInfo, {timeout: 15000});
 		
 		const { pwd, salt } = await createHashedPassword(body.pwd);
 		const userInfo = [body.id, pwd, body.class, body.name, body.authority, body.position, salt,  peer_url.data.url, nowTime, nowTime];
@@ -94,13 +95,15 @@ router.post('/signin', async (req, res) => {
 			}, process.env.JWT_SECRET, {
 				issuer: 'api-server'
 			});
-
-			const start_peer = await axios.post("http://api.ky2chain.com/v1/peer/start",{"id" : body.id});
-
+			
+			// flag on -> not to do
+			// flag off -> const start_peer = await axios.post("http://api.ky2chain.com/v1/peer/start",{"id" : body.id});
+			
+			
 			await redisLocalCon.set(recordedUserInfo.id, token);
 			await redisLocalCon.expire(recordedUserInfo.id, 259200) // 로그인 유효 시간 6시간
 			
-			if (start_peer.data.status === undefined) {
+			if (start_peer.data.message === undefined) {
 				return res.status(408).json({
 					error: "Requset time out",
 					message : "peer 시작에 실패했습니다. 다시 로그인 해주세요."

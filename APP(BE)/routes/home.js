@@ -22,7 +22,6 @@ router.get('/', verifyToken ,normalAccess, async (req, res) => {
 		
 		console.log(usersData);
 		
-		
 		return res.status(200).json(
 			{
 				message : `${peer} 원장을 가져왔습니다.`,

@@ -6,8 +6,10 @@ const logger = require('morgan');
 const nunjucks = require('nunjucks');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+
 const app = express();
 const fs = require('fs');
+
 
 require('dotenv').config();
 app.set('port', process.env.PORT || 3000);
@@ -20,7 +22,6 @@ let corsOptions = {
 }
 
 app.use(cors(corsOptions));
-
 
 // view engine setup
 app.set('view engine', 'html');

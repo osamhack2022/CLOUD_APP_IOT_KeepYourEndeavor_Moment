@@ -4,7 +4,6 @@ const {verifyToken,normalAccess } = require('../middleware/accessController.js')
 const moment = require('moment-timezone');
 moment.tz.setDefault('Asia/Seoul');
 
-
 let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
 
@@ -27,12 +26,13 @@ router.get('/',verifyToken,normalAccess, async (req, res) => {
 
 router.get('/:noticeId/',verifyToken,normalAccess, async (req, res) => {
 	try {
-		const noticeId = req.params.noticeId;
-		const issueId = await conn.execute('SELECT issue_id FROM notice WHERE id = ?', [noticeId]);
-		const [members, fields] = await conn.execute('SELECT rep_id, members, message FROM application WHERE issue_id = ?', [issueId[0][0].issue_id]);
+		const params = req.params;
+		const issueId = await conn.execute('SELECT issue_id FROM notice WHERE id = ?', [params.noticeId]);
+		const [member, fields] = await conn.execute('SELECT members, message, onChain FROM application WHERE issue_id = ?', [issueId[0][0].issue_id]);
+		
 		res.status(200).json({
 			message: "해당 공지에 신청한 인원 현황입니다",
-			applicants : members
+			applicants : member
 		});
 	} catch (err) {
 		console.error(err);
@@ -49,7 +49,6 @@ router.post('/:noticeId/regist',verifyToken,normalAccess, async (req, res) => {
 		const token = req.decoded;
 		const params = req.params;
 		const body = req.body;
-
 		const issueId = await conn.execute('SELECT issue_id FROM notice WHERE id = ?', [params.noticeId]);
 		if (issueId[0].length === 0) {
 			return res.status(406).json({
@@ -57,10 +56,9 @@ router.post('/:noticeId/regist',verifyToken,normalAccess, async (req, res) => {
 				message: "잘못된 공지 정보입니다."
 			});
 		}
-
-		
-		const members = [];
-		for await (let member of JSON.parse(body.members)) {
+		/** const members = [];
+		for await (let member of body.members) {
+			console.log(member);
 			const memberList = await conn.execute('SELECT * FROM user WHERE id = ?',[member]);
 			if (memberList[0].length === 0) {
 				return res.status(406).json({
@@ -74,14 +72,31 @@ router.post('/:noticeId/regist',verifyToken,normalAccess, async (req, res) => {
 				memberAff[0][0]['class'] = memberList[0][0].class;
 				members.push(memberAff[0][0]);
 			}
-		}
+		}*/
 
-		const bind = [null, issueId[0][0].issue_id, token.id, JSON.stringify(members), body.message, nowTime, nowTime]
-		await conn.execute('INSERT INTO application VALUES (?,?,?,?,?,?,?)', bind);
 		
-		res.status(200).json({
+		const member = [];
+		const memberList = await conn.execute('SELECT * FROM user WHERE id = ?',[body.member]);
+		if (memberList[0].length === 0) {
+			return res.status(406).json({
+				error : "Not Acceptable", 
+				message: "신청자 목록에 존재하지 않는 유저가 있습니다."
+			});
+		} else {
+			const memberAff = await conn.execute('SELECT * from affiliation WHERE user_id = ?',[memberList[0][0].id]);
+			delete memberAff[0][0].id
+			memberAff[0][0]['user_name'] = memberList[0][0].name;
+			memberAff[0][0]['class'] = memberList[0][0].class;
+			member.push(memberAff[0][0]);
+		}
+		
+		
+		const bind = [null, issueId[0][0].issue_id, token.id, JSON.stringify(member[0]), body.message, nowTime, nowTime, "0"]
+		await conn.execute('INSERT INTO application VALUES (?,?,?,?,?,?,?,?)', bind);
+
+		res.status(201).json({
 			message: "해당 공지에 신청을 완료했습니다.",
-			members
+			member: member[0]
 		});	
 	} catch (err) {
 		console.error(err);

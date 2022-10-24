@@ -33,6 +33,8 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "pm2": "^5.2.2",
-    "redis": "^4.3.1"
+    "redis": "^4.3.1",
+    "sanitize-html": "^2.7.2",
+    "sql-sanitizer": "^1.0.0"
   }
 }
