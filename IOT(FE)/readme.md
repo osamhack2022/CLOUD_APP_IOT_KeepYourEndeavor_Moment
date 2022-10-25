@@ -112,7 +112,7 @@
 
 3. 다음 참가자 차례가 되면 **`RESET_BTN`** 을 누른다. LED가 들어오면 1초뒤 리셋이 된다.
 <p  align="center">
-<img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/beforerestbtn.jpg'/> <img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/resultofresetbtn.jpg'/> 
+<img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/beforereset.jpg'/> <img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/resultofresetbtn.jpg'/> 
 </p>
 
 
