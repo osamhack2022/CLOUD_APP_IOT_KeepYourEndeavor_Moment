@@ -25,7 +25,6 @@
 
 | USB to C HUB x 1 | USB to C type 허브 |
 
-  
 
 #### 조립방법
 
