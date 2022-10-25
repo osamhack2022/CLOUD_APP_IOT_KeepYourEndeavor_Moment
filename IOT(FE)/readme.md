@@ -28,9 +28,7 @@
 </p>
 
 <p  align="center">
-
 <img  width="700px"  height = "700px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/bluepicture.PNG'/>
-
 </p>
 
   
