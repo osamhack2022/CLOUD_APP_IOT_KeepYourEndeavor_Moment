@@ -15,7 +15,7 @@
 #### 조립방법
 
 <p  align="center">
-<img width="700px" height = "700px" src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/Swanky%20Migelo.png'/>
+<img width="1000px" height = "500px" src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/Swanky%20Migelo.png'/>
 </p>
 <p  align="center">
 <img width="700px" height = "700px" src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/bluepicture.PNG'/>
