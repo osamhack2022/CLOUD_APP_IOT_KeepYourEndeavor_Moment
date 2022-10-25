@@ -14,9 +14,12 @@
 
 #### 조립방법
 
-
-<설계도 사진 1>
-<설계도 사진 2>
+<p  align="center">
+<img width="700px" height = "700px" src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/Swanky%20Migelo.png'/>
+</p>
+<p  align="center">
+<img width="700px" height = "700px" src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/bluepicture.PNG'/>
+</p>
 
 위 설계도와 같이 회로를 연결한다.
 
@@ -26,7 +29,9 @@
 
 
 #### 실물 예시
-<전체 사진 1>
+<p  align="center">
+<img width="700px" height = "700px" src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/allpics.jpg'/>
+</p>
 
 ### 소프트웨어
 
