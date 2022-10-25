@@ -25,9 +25,11 @@ token 정보를 저장합니다. Memory Base DB로 token data 처리에 용이�
 ### 환경 설정
 |service|version|
 |--|--|
-|**NodeJS**|v16|
-|**MySQL**|5.7.x|
+|**NodeJS**|v16.x|
 |**EXPRESS**|v4.x|
+|**REDIS**|v3.0.x|
+|**Firebase**|cloud_service|
+|**MySQL**|5.7.x|
 
 ### 설치
 ```ssh
