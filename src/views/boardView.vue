@@ -20,12 +20,7 @@
               </v-btn>
             </v-list-item>
             <v-list-item v-if="detail == true && edit == true">
-              <v-btn
-                icon
-                width="40"
-                height="40"
-                @click.stop="(obj) => modify({ ...obj })"
-              >
+              <v-btn icon width="40" height="40" @click.stop="modify">
                 <v-icon>mdi-content-save</v-icon>
               </v-btn>
             </v-list-item>
@@ -63,9 +58,11 @@
           :info="curr_info"
           :section="section"
           :edit="edit"
+          ref="detailsView"
         />
       </v-col>
     </v-row>
+    <p>{{ sectionAPI[this.section] }}</p>
   </v-container>
 </template>
 
@@ -73,6 +70,7 @@
 import dashboardCardView from "../components/dashboardCardView.vue";
 import popupView from "../components/popupView.vue";
 import DetailsView from "../components/DetailsView.vue";
+import sectionAPI from "../attributes/apiAttributes.json";
 export default {
   components: {
     dashboardCardView,
@@ -81,6 +79,7 @@ export default {
   },
   data: () => ({
     edit: false,
+    sectionAPI: sectionAPI,
   }),
   props: {
     curr_info: {
@@ -101,14 +100,8 @@ export default {
     },
   },
   methods: {
-    modify(obj) {
-      this.$axios.post(
-        "url",
-        { ...obj },
-        {
-          headers: {},
-        }
-      );
+    modify() {
+      this.$emit("modify_info", { ...this.$refs.detailsView.save() });
       this.edit = false;
     },
   },

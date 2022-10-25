@@ -1,0 +1,59 @@
+{
+    "notice":
+    {
+        "create": {
+            "title" : "mdi-format-title",
+            "test_date" : "mdi-calendar",
+            "apply_date" : "mdi-calendar",
+            "description" : "mdi-receipt-text-check"
+        },
+        "read": {
+            "title": "mdi-format-title",
+            "test_date": "mdi-calendar",
+            "apply_date": "mdi-calendar",
+            "description": "mdi-receipt-text-check",
+            "type": "mdi-subject",
+            "subject": "mdi-subject"
+        },
+        "detail": {
+            "title": "mdi-format-title",
+            "notice_author_id": "mdi-account",
+            "test_date": "mdi-calendar",
+            "apply_date": "mdi-calendar",
+            "description": "mdi-receipt-text-check",
+            "type": "mdi-format-list-bulleted-type",
+            "subject": "mdi-format-list-bulleted-type",
+            "issuer_id": "mdi-account",
+            "notice_created_at": "mdi-calendar",
+            "notice_updated_at": "mdi-calendar"
+        },
+        "update": {
+            "title": "mdi-format-title",
+            "test_date": "mdi-calendar",
+            "apply_date": "mdi-calendar",
+            "description": "mdi-receipt-text-check"
+        }
+    },
+    "issue":
+    {
+        "create": {
+            "type" : "mdi-format-list-bulleted-type",
+            "subject" : "mdi-format-list-bulleted-type",
+            "mandatory" : "mdi-check"
+        },
+        "read": {
+			"type" : "mdi-format-list-bulleted-type",
+            "subject" : "mdi-format-list-bulleted-type",
+            "mandatory" : "mdi-check"
+        },
+        "detail": {
+			"type": "mdi-format-list-bulleted-type",
+			"subject": "mdi-format-list-bulleted-type",
+			"issuer_id": "mdi-account",
+			"created_at": "mdi-calendar",
+			"updated_at": "mdi-calendar"
+        }
+    },
+    "standard":{},
+    "application":{}
+}

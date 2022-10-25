@@ -1,19 +1,16 @@
 <template>
-  <p v-if="!edit">{{ value }}</p>
-  <v-text-field
-    v-else
-    color="#3F51B5"
-    :label="label"
-    :prepend-inner-icon="icon"
-    v-model="retval"
-    required
-    :rules="rules"
-  ></v-text-field>
+  <div>
+    <p v-if="!edit">{{ value }}</p>
+    <slot v-else name="input_field"></slot>
+  </div>
 </template>
 
 <script>
 export default {
   name: "editfieldView",
+  data() {
+    return {};
+  },
   props: {
     edit: {
       type: Boolean,
@@ -29,20 +26,6 @@ export default {
     },
     icon: {
       type: String,
-    },
-    rules: {
-      type: Array,
-    },
-  },
-  computed: {
-    retval: {
-      get() {
-        return this.value;
-      },
-      set() {
-        this.$emit("change", this.retval);
-        console.log(this.retval);
-      },
     },
   },
 };

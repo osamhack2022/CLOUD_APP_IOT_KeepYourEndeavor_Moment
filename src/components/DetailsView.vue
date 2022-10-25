@@ -13,17 +13,17 @@
               </v-list-item-icon>
 
               <v-list-item-content>
-                <editfieldView
-                  :label="k"
-                  :edit="edit"
-                  :value="info[k]"
-                  @change="
-                    (i) => {
-                      info_edited[k] = i;
-                    }
-                  "
-                />
-                <p>{{ info_edited[k] }}</p>
+                <editfieldView :label="k" :edit="edit" :value="info[k]">
+                  <template v-slot:input_field>
+                    <v-text-field
+                      color="#3F51B5"
+                      :label="k"
+                      :prepend-inner-icon="icons[i]"
+                      v-model="info_edited[k]"
+                      required
+                    ></v-text-field>
+                  </template>
+                </editfieldView>
               </v-list-item-content>
             </v-list-item>
           </template>
@@ -77,7 +77,9 @@ export default {
     },
   },
   methods: {
-    save() {},
+    save() {
+      return { ...this.info_edited };
+    },
   },
 };
 </script>

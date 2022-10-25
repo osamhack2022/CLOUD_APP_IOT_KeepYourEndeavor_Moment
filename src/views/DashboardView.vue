@@ -189,7 +189,25 @@ export default {
         });
       this.detail = false;
     },
-    modify_info() {},
+    modify_info(modified_info) {
+      this.$axios
+        .post(
+          `/${this.section}/${this.curr_info.id}/edit`,
+          { ...modified_info },
+          {
+            headers: {
+              Authorization: this.userdata.token,
+            },
+          }
+        )
+        .then(() => {
+          this.get_detail(this.curr_info.id);
+        })
+        .catch((error) => {
+          alert(error.response.message + error.response.resultOfStandard);
+          this.get_detail(this.curr_info.id);
+        });
+    },
     logout() {
       this.$axios
         .post(
