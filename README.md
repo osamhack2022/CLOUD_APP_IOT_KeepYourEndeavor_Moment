@@ -1,7 +1,7 @@
 #  Keep_Your_Endeavor ( 너의 노력을 지켜라 )
 
 <p  align="center">
- <img  width="700px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/banner.png'/>
+ <img  width="700px"  height = "200px"  src='https://github.com/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/banner.png'/>
 </p>
 
 **블록체인 기반 장병 자격 인증 시스템**
@@ -13,7 +13,7 @@
 
 **이 두 장병은 같은 날, 같은 곳에서 함께 진급합니다.**  
 
-저희 KeepYourEndeavor(이하 KY2)는 이러한 상황을 단순히 병사들을 교육해서 될 문제라고 보지 않고 **새로운 솔루션** 을 제시하고자 합니다.  
+저희 KeepYourEndeavor(이하 KY2)는 이러한 상황을 단순히 장병들을 교육해서 될 문제라고 보지 않고 **새로운 솔루션** 을 제시하고자 합니다.  
 
 KY2 서비스는 **측정, 기록, 열람까지의 과정을 통합** 하고 블록 체인과 연계하여 중간 과정에서 벌어질 수 있는 누락, 조작 사고를 예방합니다.  
 
