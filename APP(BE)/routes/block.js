@@ -63,7 +63,7 @@ router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
 				}
 			}
 			if (stdFlag) {
-				flags.result = "특"
+				flags.result = "특급"
 			}
 		} else {
 			flags.result = "PASS"
