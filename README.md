@@ -194,13 +194,9 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 ## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 
 |device|low ability|
-
 |--|--|
-
 |**CPU**|Intel Core i5|
-
 |**RAM ( 사용자 )**|8.00GB|
-
 |**RAM ( 체인 서버 )**|32.00GB|
 
   
@@ -208,11 +204,8 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 ---
 
 |browser|version|
-
 |--|--|
-
 |**Chrome**|106.0.5249.119(64bit)|
-
 |**MS Edge**|106.0.1370.52(64bit)|
 
   
@@ -223,11 +216,8 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 ### `CLOUD - WEB(FE)`
 
 |service|version|
-
 |--|--|
-
 |**React**|v18.x|
-
 |**Semantic UI**|v2.x|
 
   
@@ -235,17 +225,11 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 ### `CLOUD - BlockChain(BE)`
 
 |service|version|
-
 |--|--|
-
 |**NodeJS**|v14.x|
-
 |**NGINX**|v1.23.x|
-
 |**Docker Compose**|v20.x|
-
 |**Kafka**|v3.2.x|
-
 |**Couchbase**|v2.x|
 
   
@@ -253,17 +237,11 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 ### `Server - APP(BE)`
 
 |service|version|
-
 |--|--|
-
 |**NodeJS**|v16.x|
-
 |**EXPRESS**|v4.x|
-
 |**REDIS**|v3.0.x|
-
 |**Firebase**|cloud_service|
-
 |**MySQL**|5.7.x|
 
   
@@ -271,11 +249,8 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 ### `FE - APP`
 
 |service|version|
-
 |--|--|
-
 |**Flutter**|v3.x|
-
 |**Figma**|web_service|
 
   
@@ -283,11 +258,8 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 ### `FE - WEB`
 
 |service|version|
-
 |--|--|
-
 |**React**|v18.x|
-
 |**Semantic UI**|v2.x|
 
   
@@ -295,9 +267,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 ### `FE - IOT`
 
 |service|version|
-
 |--|--|
-
 |**Arduino IDE**|v2.x|
 
   
