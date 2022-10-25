@@ -6,23 +6,14 @@
 #### 사용부품
 
 |부품|용도|
-
 |--|--|
-
 |solderless plugboard x 1|회로 연결용 판|
-
 |arduino 25pcs push button x 2|관리자 제어 스위치|
-
 |arduino HC-06 Bluetooth module x 1|측정 앱 연동용 블루투스모듈|
-
 |arduino LCD display x 1|시간/측정개수 확인용 디스플레이 보드|
-
 |arduino HC-SR04 x 1|초음파 거리 감지 센서|
-
 |arduino uno PCB x 1|아두이노 메인 보드|
-
 |COM to USB cable x 1|COM to USB 케이블|
-
 |USB to C HUB x 1|USB to C type 허브|
 
 
