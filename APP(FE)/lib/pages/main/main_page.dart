@@ -6,6 +6,7 @@ import 'package:ky2/core/base_screen.dart';
 import 'package:ky2/viewmodel/main_viewmodel.dart';
 import 'package:ky2/components/Card.dart' as ky2;
 import 'package:ky2/utils/ky2_color.dart';
+import 'package:intl/intl.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class MainPage extends StatelessWidget {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          body: _body(context),
+          body: _body(context, model),
         );
       },
     );
@@ -32,11 +33,10 @@ class MainPage extends StatelessWidget {
 }
 
 extension on MainPage {
-  Widget _body(BuildContext context) {
-    return Padding(
+  Widget _body(BuildContext context, MainViewModel model) {
+    return RefreshIndicator(child: Padding(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
         children: [
           Padding(
             padding: EdgeInsets.only(top: 12),
@@ -86,21 +86,21 @@ extension on MainPage {
             ],
           ),
           const SizedBox(height: 15),
-          ky2.Card(
-            title: '체력측정',
-            rank: '특급',
-            date: DateTime(2022, 5, 11),
-            backgroundColor: ky2Color.primary,
-          ),
-          SizedBox(height: 11),
-          ky2.Card(
-            title: '인권교육',
-            rank: '이수',
-            date: DateTime(2022, 5, 11),
-            backgroundColor: Color(0xff58C922),
+          ...model.homes.map(
+                  (e) => Column(
+                children: [
+                  ky2.Card(
+                    title: e.issue_subject,
+                    rank: e.result,
+                    date: DateTime.now(),
+                    backgroundColor: e.issue_type == '측정시험' ? ky2Color.primary : const Color(0xff58C922),
+                  ),
+                  const SizedBox(height: 15,)
+                ],
+              )
           )
         ],
       ),
-    );
+    ), onRefresh: ()async => model.initState(context) );
   }
 }

@@ -39,12 +39,12 @@ const Issue = () => {
         <IssueBlock>
             { loading && 
                 (<Dimmer active inverted>
-                    <Loader size='large'>시험 불러오는 중...</Loader>
+                    <Loader size='large'>자격 목록 불러오는 중...</Loader>
                 </Dimmer>)
             }
             <div className='sub-header'>
-                <h1>시험관리</h1>
-                <Button primary onClick={()=>onClickModal(modals.addIssue)}>시험 추가</Button>
+                <h1>자격 목록</h1>
+                <Button primary onClick={()=>onClickModal(modals.addIssue)}>자격 추가</Button>
             </div>
              <Table celled>
                 <Table.Header>
