@@ -4,16 +4,9 @@ import styled from 'styled-components';
 const ResultModalBlock = styled.div`
 
 `;
-const options = [
-    { key: 1, text: '체력 측정', value: 1 },
-    { key: 2, text: '화생방 평가', value: "화생방 평가" },
-    { key: 3, text: '경계 평가', value: 3 },
-    { key: 3, text: '구급법 평가', value: 3 },
-    { key: 3, text: '정신전력 평가', value: 3 },
-    { key: 3, text: '사격 평가', value: 3 },
-  ]
-const ResultModal = ({open, onClickModal, onChangeInput, input, name, createBlock, user}) => (
+const ResultModal = ({result, open, onClickModal, onChangeInput, input, name, createBlock, user}) => {
     
+    return (
     <ResultModalBlock>
         <Modal
             onClose={() => onClickModal(name)}
@@ -32,7 +25,7 @@ const ResultModal = ({open, onClickModal, onChangeInput, input, name, createBloc
                         <input placeholder='점수' defaultValue='0' name='record' onChange={onChangeInput} />
                     </Form.Field>
                     <Form.Field>
-                        <Progress value={input.record} success total='100' progress='ratio' >Label</Progress>
+                        <Progress value={input.record} color={result === 0 ? 'red' : result === 1 ? "yellow" : result === 2 ? "blue" : "green"  } total='100' progress='ratio' >{result === 0 ? '불합격' : result === 1 ? "2급" : result === 2 ? "1급" : "특급" }</Progress>
                     </Form.Field>
                 </Form>
             </Modal.Content>
@@ -45,7 +38,7 @@ const ResultModal = ({open, onClickModal, onChangeInput, input, name, createBloc
                     positive />
             </Modal.Actions>
         </Modal>
-    </ResultModalBlock>
-)
+    </ResultModalBlock>);
+}
 
 export default ResultModal;

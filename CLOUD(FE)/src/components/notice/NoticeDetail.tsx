@@ -32,12 +32,11 @@ const NoticeDetailBlock = styled.div`
 
 const NoticeDetail = () => {
     const {open, onClickModal, modals, id} = useModal();
-    const {onChangeInput, input, notice, loading, applicants, createBlock} = useNoticeDetail();
+    const {onChangeInput, input, notice, loading, applicants, createBlock, result} = useNoticeDetail();
 
     const memberList = applicants.map(applicant => {
         const {members, onChain} = applicant;
         const {user_id, user_name} = members;
-        console.log(onChain);
         return (
             <Table.Row key={user_id} onClick={
                 () => {
@@ -126,7 +125,7 @@ const NoticeDetail = () => {
                 </>
             )
             }
-            <ResultModal user={id} createBlock={createBlock} onChangeInput={onChangeInput} open={open.resultNotice} onClickModal={onClickModal} name={modals.resultNotice} input={input}/>
+            <ResultModal result={result} user={id} createBlock={createBlock} onChangeInput={onChangeInput} open={open.resultNotice} onClickModal={onClickModal} name={modals.resultNotice} input={input}/>
         </NoticeDetailBlock>
     )
 }

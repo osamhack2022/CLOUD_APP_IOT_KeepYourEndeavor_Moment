@@ -36,9 +36,11 @@ export default function useNoticeDetail(){
         subject: "",
         issuer_id: ""
     });
+    const [standard, setStandard] = useState<any>();
     const [applicants, setApplicants] = useState([]);
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [result, setResult] = useState(0);
 
     useEffect(()=>{
         handleNotice();
@@ -52,6 +54,7 @@ export default function useNoticeDetail(){
             const {data} = await api.getNotice(id);
             console.log(data);
             setNotice(data.notice);
+            setStandard(data.standard);
             setLoading(false);
         }catch(e){
             const error = e as SystemError;
@@ -99,13 +102,23 @@ export default function useNoticeDetail(){
     
     const onChangeInput = (e) => {
         const {name, value} = e.target;
-
+        if(name === 'record'){
+            if(parseInt(standard['특']) <= value){
+                setResult(3);
+            }else if(parseInt(standard['특']) > value && parseInt(standard['1급']) <= value){
+                setResult(2);
+            }else if(parseInt(standard['1급']) > value && parseInt(standard['2급']) <= value){
+                setResult(1);
+            }else if(parseInt(standard['2급']) > value ){
+                setResult(0);
+            }
+        }
         setInput({
             ...input,
             [name]: value,
         })
     }
     return {
-        onChangeInput, input, notice, loading, applicants, createBlock
+        onChangeInput, input, notice, loading, applicants, createBlock, result
     }
 }

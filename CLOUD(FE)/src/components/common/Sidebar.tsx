@@ -101,11 +101,11 @@ const Sidebar = ({children}) => {
                 </Nav>
                 <Nav select={select === 2 ? true : false }>
                     <NavLink to='/issue/' className="main-nav" onClick={()=>{chagneSelect(2)}}>
-                        - 시험 관리
+                        - 자격 관리
                     </NavLink>
                     <div className="sub-nav" > 
                         <NavList to='/issue/'onClick={()=>{setSubSelect(1)}} subselect={subSelect === 1 ? 1 : undefined }>
-                            - 시험 목록
+                            - 자격 목록
                         </NavList>
                     </div>
                 </Nav>
