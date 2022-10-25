@@ -39,5 +39,5 @@
 1. COM to USB 케이블을 사용해 UNO PCB와 PC를 연결해준다.
 2. PC에서 [arduino.cc](https://www.arduino.cc/en/software)에 접속한 후 Arduino IDE를 설치하고 실행한다.
 3. Select Board 토글에서 Arduino uno 를 선택한다
-4. 코드를 작성한 뒤 IDE 좌측 상단에 있는 버튼을 Compile -> Upload 순서대로 눌러준다
+4. [코드]('https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/OSAM.ino')를 작성한 뒤 IDE 좌측 상단에 있는 버튼을 Compile -> Upload 순서대로 눌러준다
 5. IDE 우측 상단 Serial Monitor를 열어 AT를 입력해 블루투스 모듈이 잘 작동하는지 확인한다.
