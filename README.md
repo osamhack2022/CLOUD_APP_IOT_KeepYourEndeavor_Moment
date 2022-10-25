@@ -44,7 +44,9 @@ KY2 서비스는 **측정, 기록, 열람까지의 과정을 통합** 하고 블
 
 
 ## 기능 설명
-<flow 사진>
+<p  align="center">
+ <img  width="700px"  height = "1000px"  src='https://github.com/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/service_flow.png'/>
+</p>
 
 ### `CLOUD - BlockChain(BE)`
 
