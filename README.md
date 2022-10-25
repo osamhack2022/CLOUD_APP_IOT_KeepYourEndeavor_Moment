@@ -1,7 +1,7 @@
 #  Keep_Your_Endeavor ( 너의 노력을 지켜라 )
 
 <p  align="center">
- <img  width="700px"  height = "300px"  src='https://github.com/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/banner.png'/>
+ <img  width="700px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/banner.png'/>
 </p>
 
 **블록체인 기반 장병 자격 인증 시스템**
