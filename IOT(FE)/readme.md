@@ -65,7 +65,13 @@
 <img  width="700px"  height = "700px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/allpics.jpg'/>
 
 </p>
-<board 사진> <hypersoundwave 사진> < btns 사진>
+
+<p  align="center">
+
+<img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/board.jpg'/> <img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/hypersoundwave.jpg'/> <img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/btns.jpg'/> 
+
+</p>
+
   
 
 ### 소프트웨어
@@ -85,19 +91,29 @@
 5. IDE 우측 상단 Serial Monitor를 열어 AT를 입력해 블루투스 모듈이 잘 작동하는지 확인한다.
 
 ### 작동 방식
-<btns 사진 >
+<p  align="center">
+<img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/btns.jpg'/> 
+</p>
+
 **파란색** : **`START_BTN`** <br>
 **노란색** : **`RESET_BTN`**
 
 1. 측정 준비가 되면 **`START_BTN`** 을 누른다. LED가 들어오면 1초뒤 측정이 시작된다
+<p  align="center">
+<img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/startbtn.jpg'/> <img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/resultstartbtn.jpg'/> 
+</p>
 
-<startbtn 사진> <resultstartbtn 사진>
 
 2. 시간이 모두 지나면 **Timeout!!!** 이 LCD 패널에 표시된다. 이 시점에 블루투스 모듈이 측정자의 핸드폰으로 결과를 보낸다.
-<timeoutLCD 사진>
+<p  align="center">
+<img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/timeoutLCD.jpg'/> 
+</p>
+
 
 3. 다음 참가자 차례가 되면 **`RESET_BTN`** 을 누른다. LED가 들어오면 1초뒤 리셋이 된다.
-<beforerestbtn 사진> <resultofresetbtn 사진>
+<p  align="center">
+<img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/beforerestbtn.jpg'/> <img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/resultofresetbtn.jpg'/> 
+</p>
 
 
 
