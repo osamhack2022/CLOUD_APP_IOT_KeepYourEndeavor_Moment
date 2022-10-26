@@ -26,14 +26,19 @@
 장병 B는 이런 노력을 바보 같은 짓으로 치부하고 부정행위와 청탁을 통해 통과합니다.
 
 <br>
-
  <p  align="center"><b>이 두 장병은 같은 날, 같은 곳에서 함께 진급합니다.</b></p>
-
 <br>
+
+<p  align="center">
+
+<img  width="900px"  height = "400px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/notgoodcase1.png'/>
+<img  width="900px"  height = "400px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/notgoodcase2.png'/>
+
+</p>
+
 
 저희 KeepYourEndeavor(이하 KY2)는 이러한 상황을 단순히 장병들을 교육해서 될 문제라고 보지 않고 **새로운 솔루션** 을 제시하고자 합니다.
 
-  
 
 KY2 서비스는 **측정, 기록, 열람까지의 과정을 통합** 하고 블록 체인과 연계하여 중간 과정에서 벌어질 수 있는 누락, 조작 사고를 예방합니다.
 
