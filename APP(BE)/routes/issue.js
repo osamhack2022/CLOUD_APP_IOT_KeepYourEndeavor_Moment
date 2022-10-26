@@ -90,6 +90,11 @@ router.post('/regist', verifyToken, supervisorAccess, async (req, res) => {
 });
 
 router.delete('/:issueId/', verifyToken, supervisorAccess, async (req, res) => {
+	return res.status(405).json({
+		error: "Method Not Allowed",
+		message : "접근할 수 없는 라우터입니다."
+	});
+
 	try {
 		const params = req.params;
 		const issueSelectResult = await conn.execute('SELECT type, subject from issue WHERE id = ?',[params.issueId]);

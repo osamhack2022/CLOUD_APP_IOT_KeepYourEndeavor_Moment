@@ -3,7 +3,6 @@
 db/*.json
 db/*.sql
 
-LICENSE
 
 node_modules/
 

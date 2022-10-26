@@ -13,6 +13,7 @@ const fireDB = require('../db/firestoreCon.js');
 router.get('/', verifyToken, normalAccess, async(req, res) => {
 	try {
 		const [noticeSelectResult, field] = await conn.execute('SELECT notice.id as notice_id, title, author_id as notice_author_id, test_date, apply_date, notice.created_at as notice_created_at , notice.updated_at as notice_updated_at, description, issue_id ,type, subject, issuer_id FROM notice INNER JOIN issue ON notice.issue_id = issue.id');
+		
 		res.status(200).json({
 			message : "등록된 notice들을 성공적으로 전송했습니다.",
 			notices : noticeSelectResult
