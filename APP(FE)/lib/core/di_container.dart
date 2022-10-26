@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:ky2/viewmodel/bio_viewmodel.dart';
 import 'package:ky2/viewmodel/calendar_viewmodel.dart';
+import 'package:ky2/viewmodel/issue_list_viewmodel.dart';
 import 'package:ky2/viewmodel/issue_viewmodel.dart';
 import 'package:ky2/viewmodel/login_viewmodel.dart';
 import 'package:ky2/viewmodel/main_viewmodel.dart';
@@ -19,4 +20,5 @@ void setupDiContainer() {
   diContainer.registerFactory(() => BioViewModel());
   diContainer.registerFactory(() => SignUpViewModel());
   diContainer.registerFactory(() => SignInfoViewModel());
+  diContainer.registerFactory(() => IssueListViewModel());
 }

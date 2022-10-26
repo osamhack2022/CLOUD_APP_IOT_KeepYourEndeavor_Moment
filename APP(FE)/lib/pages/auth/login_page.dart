@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ky2/components/Button.dart';
 import 'package:ky2/components/TextField.dart' as ky2;
 import 'package:ky2/core/base_screen.dart';
+import 'package:ky2/core/base_viewmodel.dart';
 import 'package:ky2/pages/auth/signup_page.dart';
 import 'package:ky2/utils/ky2_color.dart';
 import 'package:ky2/viewmodel/login_viewmodel.dart';
@@ -55,6 +56,21 @@ extension on LoginPage {
               type: ky2.TextFieldType.password,
             ),
             const SizedBox(height: 18),
+            model.state == ViewState.BUSY ? Container(
+              decoration: BoxDecoration(
+                color: ky2Color.primary,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              height: 48,
+              width: double.infinity,
+              child: Center(
+                child: SizedBox(
+                  height: 25,
+                  width: 25,
+                  child: CircularProgressIndicator(color: ky2Color.white, strokeWidth: 2.0,),
+                ),
+              ),
+            ) :
             Button(
               text: '로그인',
               height: 48,

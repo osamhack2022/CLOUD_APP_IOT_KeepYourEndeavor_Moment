@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ky2/components/Button.dart';
 import 'package:ky2/components/TextField.dart' as ky2;
 import 'package:ky2/core/base_screen.dart';
+import 'package:ky2/core/base_viewmodel.dart';
 import 'package:ky2/pages/auth/signinfo_page.dart';
 import 'package:ky2/utils/ky2_color.dart';
 import 'package:ky2/viewmodel/main_viewmodel.dart';
@@ -42,7 +43,16 @@ class SignupPage extends StatelessWidget {
           ),
           resizeToAvoidBottomInset: true,
           backgroundColor: Colors.white,
-          body: _body(context, model),
+          body: model.state == ViewState.BUSY ? Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('블록체인 노드를 생성중...'),
+                SizedBox(height: 15),
+                CircularProgressIndicator()
+              ],
+            ),
+          ):  _body(context, model),
         );
       },
     );
