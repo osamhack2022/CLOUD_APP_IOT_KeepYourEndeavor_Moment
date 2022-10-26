@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:ky2/models/auth/user.dart';
+import 'package:ky2/models/home/home.dart';
 import 'package:ky2/services/api/auth/auth_api.dart';
 import 'package:ky2/services/api/service.dart';
 
@@ -22,10 +23,10 @@ class _AuthService extends APIService with AuthAPI {
   }
 
   @override
-  Future<void> home(String accessToken) async {
+  Future<List<Home>> home(String accessToken) async {
     Response res = await dio.get('/home', options: Options(
         headers: {"Authorization": accessToken}));
 
-    print(res.data);
+    return (res.data['usersData'] as List).map((e) => Home.fromJson(e)).toList();
   }
 }

@@ -14,19 +14,19 @@ const IssueModal = ({open, onClickModal, name, getIssueList}) => {
             <p>4단계로 등급을 나눠서 측정하게됩니다. 3급 이하의 점수를 받으면 불합격 처리됩니다.</p>
             <Form.Field>
                 <label>특급</label>
-                <input placeholder='85' onChange={onChangeInput} type='number' name='s'/>
+                <input placeholder='85' onChange={onChangeInput} type='text' name='s'/>
             </Form.Field>
             <Form.Field>
                 <label>1급</label>
-                <input placeholder='70' onChange={onChangeInput} type='number' name='a'/>
+                <input placeholder='70' onChange={onChangeInput} type='text' name='a'/>
             </Form.Field>
             <Form.Field>
                 <label>2급</label>
-                <input placeholder='60' onChange={onChangeInput} type='number' name='b'/>
+                <input placeholder='60' onChange={onChangeInput} type='text' name='b'/>
             </Form.Field>
             <Form.Field>
                 <label>3급</label>
-                <input placeholder='50'onChange={onChangeInput} type='number' name='c'/>
+                <input placeholder='50'onChange={onChangeInput} type='text' name='c'/>
             </Form.Field>
         </>
     )
@@ -44,17 +44,17 @@ const IssueModal = ({open, onClickModal, name, getIssueList}) => {
                 onOpen={() => onClickModal(name)}
                 open={open}
             >
-                <Modal.Header>시험추가</Modal.Header>
+                <Modal.Header>자격 추가</Modal.Header>
                 <Modal.Content>
                     <Form>
-                    <h3>과목정보</h3>
+                    <h3>자격 정보</h3>
                         <Form.Field>
-                            <label>과목 이름</label>
+                            <label>자격 이름</label>
                             <input placeholder='과목이름' name='subject' onChange={onChangeInput} />
                         </Form.Field>
                         <Form.Field>
                         <Form.Group inline>
-                            <label>과목 형식</label>
+                            <label>자격 형식</label>
                             <Form.Radio
                                 label='강연'
                                 value='강연'
@@ -72,7 +72,7 @@ const IssueModal = ({open, onClickModal, name, getIssueList}) => {
                             </Form.Group>
                         </Form.Field>
                         <Form.Field>
-                            <Checkbox label='필수응시 과목' name="mandatory" onChange={onChangeInput} />
+                            <Checkbox label='필수응시 자격' name="mandatory" onChange={onChangeInput} />
                         </Form.Field>
 
                         <h3>평가기준</h3>

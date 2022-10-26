@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ky2/components/Button.dart';
-import 'package:ky2/components/TextField.dart' as ky2;
 import 'package:ky2/core/base_screen.dart';
-import 'package:ky2/pages/auth/signup_page.dart';
 import 'package:ky2/utils/ky2_color.dart';
-import 'package:ky2/viewmodel/main_viewmodel.dart';
 
 import '../../viewmodel/issue_viewmodel.dart';
 
@@ -26,7 +21,7 @@ class IssuePage extends StatelessWidget {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          body: _body(context),
+          body: _body(context, model),
           appBar: AppBar(
             leading: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -51,15 +46,33 @@ class IssuePage extends StatelessWidget {
 }
 
 extension on IssuePage {
-  Widget _body(BuildContext context) {
+  Widget _body(BuildContext context, IssueViewModel model) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
+        children: [
+          const Text(
             '체력측정',
             style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.start,
+          ),
+          SizedBox(height: 8),
+          const Text(
+            '생체인증 정보를 등록해서\n간편하게 로그인해보세요',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+            ),
+            textAlign: TextAlign.start,
+          ),
+          SizedBox(height: 8),
+          Text(
+            model.count.toString(),
+            style: const TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
             ),

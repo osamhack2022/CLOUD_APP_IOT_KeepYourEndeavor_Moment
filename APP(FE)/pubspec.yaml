@@ -16,7 +16,7 @@ dependencies:
   flutter_svg: ^1.1.5
   table_calendar: 3.0.7
   intl: 0.17.0
-  flutter_blue: 0.8.0
+  flutter_bluetooth_serial: 0.4.0
   local_auth: ^2.1.2
 
 dev_dependencies:

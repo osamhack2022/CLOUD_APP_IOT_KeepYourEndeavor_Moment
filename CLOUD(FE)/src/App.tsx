@@ -15,7 +15,7 @@ const App: React.FC = () => {
   return (
     <div>
       <Switch>
-        <Route exact component={MainPage} path='/'></Route>
+        <Route exact component={UserPage} path='/'></Route>
         <Route exact component={AuthPage} path='/login'></Route>
         <Route exact component={RegisterPage} path='/register'></Route>
         <Route exact component={NoticePage} path='/notice'></Route>
