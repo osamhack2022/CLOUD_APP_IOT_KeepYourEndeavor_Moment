@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {verifyToken,managerAccess } = require('../middleware/accessController.js');
+const {verifyToken, normalAccess } = require('../middleware/accessController.js');
 const {typeFilter} = require('../lib/func.js');
 const axios = require('axios');
 const moment = require('moment-timezone');
@@ -10,7 +10,7 @@ let conn = "";
 require('../db/sqlCon.js')().then((res) => conn = res);
 const fireDB = require('../db/firestoreCon.js');
 
-router.post('/push', verifyToken ,managerAccess, async (req, res, next) => {
+router.post('/push', verifyToken ,normalAccess, async (req, res, next) => {
   try {
 		const {user, record, issue_id} = req.body;
 
