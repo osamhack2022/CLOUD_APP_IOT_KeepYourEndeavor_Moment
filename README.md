@@ -27,7 +27,7 @@
 이렇게 되면 특정 인물이나 세력이 임의로 자료를 수정하거나 누락시키는 행위는 불가능해집니다.
   
 
-## 개요
+## 📄 개요
 장병 A와 장병 B는 이번 달 자격 인증 평가를 봐야 진급할 수 있습니다.  
 한 명은 정직하게 모든 시험을 준비해 평가를 통과하고 다른 한 명은 부정행위와 청탁을 통해 통과합니다.
 
@@ -55,7 +55,7 @@ KY2 서비스는 **측정, 기록, 열람까지의 과정을 통합** 하고 블
   
   
 
-## 프로젝트 소개
+## 🛣 프로젝트 소개
 
   
 
@@ -73,11 +73,11 @@ KY2 서비스는 **측정, 기록, 열람까지의 과정을 통합** 하고 블
 
   
 
-## KY2 체인의 장점
+## 🔗KY2 체인의 장점
 
   
 
-### KY2 체인의 확장성
+### 📈 KY2 체인의 확장성
 
 저희가 직접 개발한 KY2 블록 체인은 단순히 장병 자격 인증 시스템에 머물지 않습니다.
 
@@ -91,7 +91,7 @@ KY2 서비스는 **측정, 기록, 열람까지의 과정을 통합** 하고 블
 
   
 
-### KY2 체인의 데이터 안전성
+### 🛡 KY2 체인의 데이터 안전성
 
 - 평가 데이터들은 노드를 통해 분산돼있기 때문에 하나의 노드에서 위변조가 발생하더라도 다른 노드가 검증을 통해 위변조된 데이터를 차단할 수 있습니다.
 
@@ -100,7 +100,7 @@ KY2 서비스는 **측정, 기록, 열람까지의 과정을 통합** 하고 블
   
   
 
-## 기능 설명
+## ⚙️ 기능 설명
 
 <p  align="center">
 <img  width="700px"  height = "1000px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/service_flow.png'/>
@@ -108,7 +108,7 @@ KY2 서비스는 **측정, 기록, 열람까지의 과정을 통합** 하고 블
 
   
 
-### `CLOUD - BlockChain(BE)`
+### 🖇 `CLOUD - BlockChain(BE)`
 
   
 
@@ -128,7 +128,7 @@ KY2 서비스는 **측정, 기록, 열람까지의 과정을 통합** 하고 블
 
   
 
-#### dashboard
+#### 📊 dashboard
 
   
 
@@ -149,7 +149,7 @@ KYE Client ( FE - APP/WEB ) 에서 가입한 아이디를 그대로 사용 가�
 
   
 
-### `Server - APP(BE)`
+### 🚏 `Server - APP(BE)`
 
 `KY2-API Server` 는 **Keep Your Endeavor (블록체인 기반 장병 자격 인증 서비스)** 와 관련된 **`모든 DB들의 유기적 CRUD`** 를 목표로 설계됐습니다.
 
@@ -161,7 +161,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 
   
 
-### `APP(FE)`
+### 📱 `APP(FE)`
 
 `KY2-UserApp` 은 생체인증 기반 로그인을 지원하며 KY2 서비스 중 하나인 자격인증평가의 조회, 신청의 편의성을 목표로 설계됐습니다.
 
@@ -179,7 +179,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 
   
 
-### `CLOUD(FE)`
+### 💻 `CLOUD(FE)`
 
 `KY2-Supervisor-Explore` 는 자격증을 OPEN 할 수 있고 열린 자격증에 대한 시험 실시 일정을 등록해 사용자들에 해당 공지에 신청을 할 수 있도록 관리할 수 있습니다.
 
@@ -189,7 +189,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 
   
 
-### `IOT(FE)`
+### 🕹 `IOT(FE)`
 
 `KY2-Machine` 은 병 자격 인증 평가에 한하여 설계된 체력 시험 측정 기기입니다.
 
@@ -204,7 +204,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
   
   
 
-## 컴퓨터 구성 / 필수 조건 안내
+## 💻 컴퓨터 구성 / 필수 조건 안내
 
 |device|low ability|
 |--|--|
@@ -224,8 +224,8 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
   
   
 
-## 기술 스택
-### `CLOUD - WEB(FE)`
+## ⚙️ 기술 스택
+### 📊 `CLOUD - DASHBOARD`
 
 |service|version|
 |--|--|
@@ -234,7 +234,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 
   
 
-### `CLOUD - BlockChain(BE)`
+### 🖇  `CLOUD - BlockChain(BE)`
 
 |service|version|
 |--|--|
@@ -246,7 +246,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 
   
 
-### `Server - APP(BE)`
+### 🚏 `Server - APP(BE)`
 
 |service|version|
 |--|--|
@@ -258,7 +258,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 
   
 
-### `FE - APP`
+### 📱 `FE - APP`
 
 |service|version|
 |--|--|
@@ -267,7 +267,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 
   
 
-### `FE - WEB`
+### 💻 `FE - WEB`
 
 |service|version|
 |--|--|
@@ -276,7 +276,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 
   
 
-### `FE - IOT`
+### 🕹 `FE - IOT`
 
 |service|version|
 |--|--|
@@ -285,9 +285,9 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
   
   
 
-## 설치 안내
+## ⚙️ 설치 안내
 
-### `CLOUD - WEB(FE)`
+### 📊 `CLOUD - DASHBOARD`
 
 ```bash
 $ npm install ky2
@@ -295,17 +295,17 @@ $ npm install
 $ npm start
 ```
 
-### `CLOUD - BlockChain(BE)`
+### 🖇 `CLOUD - BlockChain(BE)`
 
 AWS 상에서 실행되고 있기 때문에 Client로 접근만 하면 됩니다.
 
-### `Server - APP(BE)`
+### 🚏 `Server - APP(BE)`
 
 AWS 상에서 실행되고 있기 때문에 Client로 접근만 하면 됩니다.
 
 **demo url** : **`api.ky2chain.com`**
 
-### `FE - APP`
+### 📱 `FE - APP`
 
 ```bash
 
@@ -319,7 +319,7 @@ flutter build apk
 
   
 
-### `FE - WEB`
+### 💻 `FE - WEB`
 
 ```bash
 
@@ -332,7 +332,7 @@ npm start
 
   
 
-## 프로젝트 사용법
+## 📚 프로젝트 사용법
 
   
 
@@ -344,7 +344,7 @@ npm start
 
 - IOT - (gif)
 
-## 팀 정보
+## 👪 팀 정보
 - 반영환 (lopahn2@gmail.com), Github Id: lopahn2 (Server, Database, IoT)
 
 - 강은솔 (eunsol2953@gmail.com), Github Id: eunsolkang (Cloud, Web, App)
@@ -353,14 +353,9 @@ npm start
 
   
 
-## 저작권 및 사용권 정보
+## ⚖️ 저작권 및 사용권 정보
 
-* [MIT](https://github.com/osam2020-WEB/Sample-ProjectName-TeamName/blob/master/license.md)
 
 * [GNU]()
-
-  
-
-This project is licensed under the terms of the MIT license.
 
 This project is licensed under the terms of the GNU license.
