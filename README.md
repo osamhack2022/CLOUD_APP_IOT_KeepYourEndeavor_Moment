@@ -5,29 +5,31 @@
 
 <p  align="center">
 
-<img  width="700px"  height = "200px"  src='https://github.com/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/banner.png'/>
+<img  width="900px"  height = "200px"  src='https://github.com/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/banner.png'/>
 
 </p>
 
-  
+ 
+<center><b>블록체인 기반 장병 자격 인증 시스템</b></center>  
 
-**블록체인 기반 장병 자격 인증 시스템**
 
+`KY2-Chain` 의 use case 중 하나인 **장병 자격 인증 서비스**는 관리자가 자격을 열고 공지를 등록하면 사용자 APP에서 이를 간편하게 신청하고 자신의 자격을 확인할 수 있습니다.
+또한 특정 과목 ( 체력시험 )의 경우 IoT를 이용한 측정 기기를 이용해 중간 개입 없이 바로 결과를 온체인 시킬 수 있습니다.
+
+`KY2-Chain` 은 **Keep Your Endeavor (**블록체인 기반 장병 자격 인증 서비스**)** 서비스의 데이터 무결성을 보증하기 위해 만들어진 허가형 블록체인 입니다.
   
 
 ## 개요
 
-군 장병은 진급하기 위해서는 자격 인증 평가를 통과해야 합니다.
-
-장병 A는 이를 자신의 시간과 노력을 투자해 통과합니다.
-
+군 장병은 진급하기 위해서는 자격 인증 평가를 통과해야 합니다. <Br>
+장병 A는 이를 자신의 시간과 노력을 투자해 통과합니다. <Br>
 장병 B는 이런 노력을 바보 같은 짓으로 치부하고 부정행위와 청탁을 통해 통과합니다.
 
-  
+<br>
 
-**이 두 장병은 같은 날, 같은 곳에서 함께 진급합니다.**
+  <center><b>이 두 장병은 같은 날, 같은 곳에서 함께 진급합니다.</b></center>  
 
-  
+<br>
 
 저희 KeepYourEndeavor(이하 KY2)는 이러한 상황을 단순히 장병들을 교육해서 될 문제라고 보지 않고 **새로운 솔루션** 을 제시하고자 합니다.
 
@@ -191,7 +193,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
   
   
 
-## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
+## 컴퓨터 구성 / 필수 조건 안내
 
 |device|low ability|
 |--|--|
@@ -211,8 +213,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
   
   
 
-## 기술 스택 (Technique Used)
-
+## 기술 스택
 ### `CLOUD - WEB(FE)`
 
 |service|version|
@@ -273,18 +274,14 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
   
   
 
-## 설치 안내 (Installation Process)
+## 설치 안내
 
 ### `CLOUD - WEB(FE)`
 
 ```bash
-
 $ npm install ky2
-
 $ npm install
-
 $ npm start
-
 ```
 
 ### `CLOUD - BlockChain(BE)`
@@ -318,16 +315,13 @@ flutter build apk
 git clone https://github.com/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment.git
 
 cd CLOUDE\(FE\)
-
 npm install
-
 npm start
-
 ```
 
   
 
-## 프로젝트 사용법 (Getting Started)
+## 프로젝트 사용법
 
   
 
@@ -339,8 +333,7 @@ npm start
 
 - IOT - (gif)
 
-## 팀 정보 (Team Information)
-
+## 팀 정보
 - 반영환 (lopahn2@gmail.com), Github Id: lopahn2 (Server, Database, IoT)
 
 - 강은솔 (eunsol2953@gmail.com), Github Id: eunsolkang (Cloud, Web, App)
@@ -349,7 +342,7 @@ npm start
 
   
 
-## 저작권 및 사용권 정보 (Copyleft / End User License)
+## 저작권 및 사용권 정보
 
 * [MIT](https://github.com/osam2020-WEB/Sample-ProjectName-TeamName/blob/master/license.md)
 
