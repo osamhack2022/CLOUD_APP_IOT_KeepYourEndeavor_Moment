@@ -34,73 +34,94 @@ class MainPage extends StatelessWidget {
 
 extension on MainPage {
   Widget _body(BuildContext context, MainViewModel model) {
-    return RefreshIndicator(child: Padding(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-      child: ListView(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  child: SvgPicture.asset(
-                    'assets/ic_notification.svg',
-                    width: 24,
-                  ),
-                )
-              ],
-            ),
-          ),
-          SizedBox(height: 18),
-          const Text(
-            '강은솔님의',
-            style: TextStyle(
-              fontSize: 32,
-            ),
-          ),
-          Row(
+    return RefreshIndicator(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+          child: ListView(
             children: [
-              Column(
-                children: const [
-                  SizedBox(
-                    height: 3,
+              Padding(
+                padding: EdgeInsets.only(top: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      child: SvgPicture.asset(
+                        'assets/ic_notification.svg',
+                        width: 24,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 18),
+              const Text(
+                '강은솔님의',
+                style: TextStyle(
+                  fontSize: 32,
+                ),
+              ),
+              Row(
+                children: [
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      Text(
+                        model.homes.length.toString(),
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    '2',
+                  const Text(
+                    '개의 활동',
                     style: TextStyle(
-                      color: Colors.blue,
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                     ),
-                  ),
+                  )
                 ],
               ),
-              const Text(
-                '개의 활동',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
+              const SizedBox(height: 15),
+              model.homes.length == 0
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 100),
+                        Text(
+                          '아직 발급받은 자격이 없습니다.\n평가에 응시하고 자격을 발급받으세요!',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: ky2Color.placeholder,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    )
+                  : SizedBox(),
+              ...model.homes.map((e) => Column(
+                    children: [
+                      ky2.Card(
+                        title: e.issue_subject,
+                        rank: e.result,
+                        date: DateTime.now(),
+                        backgroundColor: e.issue_type == '측정시험'
+                            ? ky2Color.primary
+                            : const Color(0xff58C922),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      )
+                    ],
+                  ))
             ],
           ),
-          const SizedBox(height: 15),
-          ...model.homes.map(
-                  (e) => Column(
-                children: [
-                  ky2.Card(
-                    title: e.issue_subject,
-                    rank: e.result,
-                    date: DateTime.now(),
-                    backgroundColor: e.issue_type == '측정시험' ? ky2Color.primary : const Color(0xff58C922),
-                  ),
-                  const SizedBox(height: 15,)
-                ],
-              )
-          )
-        ],
-      ),
-    ), onRefresh: ()async => model.initState(context) );
+        ),
+        onRefresh: () async => model.initState(context));
   }
 }

@@ -10,7 +10,7 @@ class LoginViewModel extends BaseViewModel {
   final TextEditingController pwd = TextEditingController();
 
   void initState(BuildContext context) async {
-
+    setState(ViewState.IDLE);
   }
 
   void onClickLogin(BuildContext context) async{
@@ -18,10 +18,12 @@ class LoginViewModel extends BaseViewModel {
     print(pwd.value.text);
 
     try{
+      setState(ViewState.BUSY);
       var prefs = await SharedPreferences.getInstance();
       String token = await authService.signIn(id.value.text, pwd.value.text);
       prefs.setString('accessToken', token);
       prefs.setString('id', id.value.text);
+      setState(ViewState.IDLE);
       Navigator.of(context).push(MainTab.route());
     } on DioError catch (e){
       print(e);

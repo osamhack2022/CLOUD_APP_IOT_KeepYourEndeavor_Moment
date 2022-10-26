@@ -6,4 +6,8 @@ abstract class AuthAPI {
   Future<void> signup(User user);
 
   Future<void> home(String accessToken);
+
+  Future<void> issueList(String accessToken);
+
+  Future<void> createBlock(String accessToken, String userId, String issueId, String record);
 }

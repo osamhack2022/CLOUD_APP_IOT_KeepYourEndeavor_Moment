@@ -70,7 +70,9 @@ class SignInfoViewModel extends BaseViewModel {
       );
 
       try{
+        setState(ViewState.BUSY);
         await authService.signup(user);
+        setState(ViewState.IDLE);
         Navigator.of(context).push(BioAuthPage.route());
       } on DioError catch (e){
         print(e);

@@ -21,7 +21,7 @@ type SignupInputType = {
     etc: string;
 }
 export default function useSignup(){
-    
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
     const [input, setInput] = useState<SignupInputType>({
         id: '',
@@ -72,14 +72,17 @@ export default function useSignup(){
             return;
         }
         try{
+            setLoading(true);
             await api.signup(input);
             toast.success('회원가입이 완료되었습니다.', {
                 position: toast.POSITION.TOP_CENTER
             });
+            setLoading(false);
             router.history.push('/login');
         }catch(e){
             const error = e as SystemError;
             const message = error.response?.data?.message ?? "예기치 못 한 오류가 발생했습니다."
+            setLoading(false);
             toast.error(message, {
                 position: toast.POSITION.TOP_CENTER
             });
@@ -87,6 +90,6 @@ export default function useSignup(){
     }
 
     return {
-        handdleSignup, onChange, input, error, isLoading
+        handdleSignup, onChange, input, error, isLoading, loading
     }
 }

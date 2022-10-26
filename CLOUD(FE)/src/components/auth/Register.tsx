@@ -53,12 +53,12 @@ const options = [
 
 
 const Register = () => {
-    const {onChange, handdleSignup, input, error, isLoading} = useSignup();
+    const {onChange, handdleSignup, input, error, isLoading, loading} = useSignup();
 
  
     return (
         <RegisterBlock>
-            { isLoading && 
+            { loading && 
                 (<Dimmer active inverted>
                     <Loader size='large'>블록체인 계정 생성중</Loader>
                 </Dimmer>)

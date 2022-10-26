@@ -4,6 +4,7 @@ import 'package:ky2/components/Button.dart';
 import 'package:ky2/components/TextField.dart' as ky2;
 import 'package:ky2/core/base_screen.dart';
 import 'package:ky2/pages/auth/signup_page.dart';
+import 'package:ky2/pages/issue/issue_list_page.dart';
 import 'package:ky2/pages/issue/issue_page.dart';
 import 'package:ky2/utils/ky2_color.dart';
 import 'package:ky2/viewmodel/main_viewmodel.dart';
@@ -51,7 +52,7 @@ extension on MorePage {
           ),
           const SizedBox(height: 20),
           const Text(
-            '시험',
+            '평가',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.normal,
@@ -67,13 +68,13 @@ extension on MorePage {
           SizedBox(height: 10),
           GestureDetector(
             onTap: (){
-              Navigator.of(context).push(IssuePage.route());
+              Navigator.of(context).push(IssueListPage.route());
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '체력측정',
+                  '내가 신청한 평가',
                   style: TextStyle(color: ky2Color.black, fontSize: 16),
                 ),
                 SvgPicture.asset('assets/ic_right.svg')
