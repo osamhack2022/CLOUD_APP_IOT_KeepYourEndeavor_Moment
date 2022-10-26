@@ -5,7 +5,7 @@
 
 <p  align="center">
 
-<img  width="900px"  height = "200px"  src='https://github.com/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/banner.png'/>
+<img  width="900px"  height = "200px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/banner.png'/>
 
 </p>
 
