@@ -1,6 +1,7 @@
+
  <p  align="center">
 <a  href="https://github.com/osamhack2022/CLOUD_WEB_IOT_KeepYourEndeavor_Moment"  target="_blank"  rel="noopener noreferrer">
-<img width="700px" height = "300px" src='https://github.com/osamhack2022/CLOUD_APP_WEB_IOT_KeepYourEndeavor_Moment/blob/server/APP(BE)/images/logo.png'/>
+<img src='https://github.com/osamhack2022/CLOUD_WEB_IOT_KeepYourEndeavor_Moment/raw/CLOUD/images/logo.png'/>
 </a>
 </p>
 <h1  align="center">KY2 API SERVER</h1>
@@ -11,8 +12,9 @@
 DB의 CRUD를 위해 서버 관리자가 직접 에디터를 열어야 하는 경우는 firestore의 collection 삭제하는 경우를 제외하고는 없습니다. <br>
 DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority를 부여하는 token 인증 방식을 택했습니다.
 
-### 데이터베이스 서버의 종류
+### 서버의 종류
 **`Redis`** | **`MySQL`** | **`Firebase`**
+
 #### Redis
 token 정보를 저장합니다. Memory Base DB로 token data 처리에 용이합니다.
 #### MySQL
@@ -30,7 +32,6 @@ token 정보를 저장합니다. Memory Base DB로 token data 처리에 용이�
 |**REDIS**|v3.0.x|
 |**Firebase**|cloud_service|
 |**MySQL**|5.7.x|
-
 ### 설치
 ```ssh
 git pull https://github.com/osamhack2022/CLOUD_APP_WEB_IOT_KeepYourEndeavor_Moment
@@ -38,8 +39,12 @@ git pull https://github.com/osamhack2022/CLOUD_APP_WEB_IOT_KeepYourEndeavor_Mome
 ```ssh
 cd APP\(BE\)
 ```
+### 환경변수 값 기입
+.env.example 파일 확인
+
 ### 시작
 ```ssh
+npm i
 npm start
 ```
 

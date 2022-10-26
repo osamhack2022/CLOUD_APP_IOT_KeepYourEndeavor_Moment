@@ -1,6 +1,7 @@
 const cmd = require('node-cmd');
 const redis = require('redis');
-cmd.run('start C:/Users/lopah/Desktop/Redis-x64-3.0.504/redis-server.exe',
+require('dotenv').config({ path: '../.env' });
+cmd.run(`start ${process.env.REDIS_PROGRAM_ABS_LOCATION}`,
         function(err, data, stderr){
             console.log(data,'local-redis start!');
         }
