@@ -43,16 +43,7 @@ class SignupPage extends StatelessWidget {
           ),
           resizeToAvoidBottomInset: true,
           backgroundColor: Colors.white,
-          body: model.state == ViewState.BUSY ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('블록체인 노드를 생성중...'),
-                SizedBox(height: 15),
-                CircularProgressIndicator()
-              ],
-            ),
-          ):  _body(context, model),
+          body: _body(context, model),
         );
       },
     );
