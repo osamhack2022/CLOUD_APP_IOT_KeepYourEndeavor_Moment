@@ -73,6 +73,7 @@ class CalendarViewModel extends BaseViewModel {
         context: context,
         builder: (BuildContext context) {
           // return object of type Dialog
+          print(e.response);
           return AlertDialog(
             title: const Text('오류발생'),
             content: Text(e.message),

@@ -51,7 +51,6 @@ const NoticeDetail = () => {
             }>
                     <Table.Cell>{user_id}</Table.Cell>
                     <Table.Cell>{user_name}</Table.Cell>
-                    <Table.Cell><Label size="medium" color="violet">1급</Label></Table.Cell>
                     <Table.Cell textAlign='left'>
                         {onChain === '1' ? 
                             <Icon color='green' name='checkmark' size='large' /> : 
@@ -102,7 +101,6 @@ const NoticeDetail = () => {
                     <Table.Row>
                         <Table.HeaderCell textAlign='left'>군번</Table.HeaderCell>
                         <Table.HeaderCell>이름</Table.HeaderCell>
-                        <Table.HeaderCell>점수</Table.HeaderCell>
                         <Table.HeaderCell width={2}>블록체인 인증</Table.HeaderCell>
                     </Table.Row>
                     </Table.Header>

@@ -3,11 +3,11 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 const guestApi = axios.create({
-    baseURL: `http://172.30.1.48:8080/`,
+    baseURL: `http://api.ky2chain.com/`,
 });
 
 const client = () => axios.create({
-    baseURL: `http://172.30.1.48:8080/`,
+    baseURL: `http://api.ky2chain.com/`,
     headers: {'Authorization': `${localStorage.getItem('token')}`},
 });
 
