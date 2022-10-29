@@ -8,6 +8,25 @@
 </p>
 
  <p  align="center"><b>블록체인 기반 장병 자격 인증 시스템</b></p>
+ <p  align="center">
+<a href="https://moment-ky2.gitbook.io/keep_your_endeavor/"><img  width = "200px" height = "50px" src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/gitbook.PNG'/>  </a>
+<a href="https://oasm2022.notion.site/75e1bb51ab8d43ddafd41082465e64d3"><img width = "200px" height = "50px" src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/notion.PNG'/>
+</a>
+<a href="admin.ky2chain.com"><img width = "200px" height = "50px" src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/demo.PNG'/>
+</a>
+</p>
+ 
+<p align="center">
+<b>데모ID : supervisor | 데모 PW : 1q2w3e4r</b>
+</p>
+<p align="center">
+	<a href="https://github.com/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment/search?l=TSX&type=code"><img alt="GitHub language count" src="https://img.shields.io/github/languages/count/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment"></a>
+	<a href="https://github.com/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment"></a>
+	<a href="https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/master/issues"><img alt="GitHub license" src="https://img.shields.io/github/issues/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment"></a>
+<a href="https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/master/issues"><img alt="GitHub license" src="https://img.shields.io/github/issues-closed/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment"></a>
+<a href="https://github.com/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment"></a>
+</p>
+
 
 저희 Moment 팀은 장병들의 노력을 지키기 위해서 **자격 인증 시스템**을 개발하였습니다.  
 
