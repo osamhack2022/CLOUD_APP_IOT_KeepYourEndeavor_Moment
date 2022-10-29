@@ -4,7 +4,7 @@
 
 #### JSON으로 요청 해주세요
 ```json
-curl --location --request POST 'https://api-server.run.goorm.io/notice/regist/' \
+curl --location --request POST 'https://api.ky2chain.com/notice/regist/' \
 
 {
 	"title" : "정기 3차 테스트 시험 공지",
@@ -70,7 +70,7 @@ curl --location --request POST 'https://api-server.run.goorm.io/notice/regist/' 
 
 #### 여기로 요청을 보내주세요
 ```json
-curl --location --request GET 'https://api-server.run.goorm.io/notice/'
+curl --location --request GET 'https://api.ky2chain.com/notice/'
 ```
 ---
 #### 응답 내용
@@ -110,7 +110,7 @@ curl --location --request GET 'https://api-server.run.goorm.io/notice/'
 ### 특정 공지를 보여주는 라우터입니다.
 #### 여기로 요청을 보내주세요
 ```json
-curl --location --request GET 'https://api-server.run.goorm.io/notice/:noticeId'
+curl --location --request GET 'https://api.ky2chain.com/notice/:noticeId'
 ```
 ---
 
@@ -159,7 +159,7 @@ curl --location --request GET 'https://api-server.run.goorm.io/notice/:noticeId'
 ### 공지 삭제 라우터입니다.
 #### 여기로 요청을 보내주세요
 ```json
-curl --location --request POST 'https://api-server.run.goorm.io/notice/:noticeId/delete'
+curl --location --request POST 'https://api.ky2chain.com/notice/:noticeId/delete'
 ```
 ---
 
@@ -193,7 +193,7 @@ curl --location --request POST 'https://api-server.run.goorm.io/notice/:noticeId
 ### 공지 수정 라우터입니다.
 #### JSON으로 요청 해주세요
 ```json
-curl --location --request POST 'https://api-server.run.goorm.io/notice/:noticeId/edit' \ 
+curl --location --request POST 'https://api.ky2chain.com/notice/:noticeId/edit' \ 
 
 {
 	"title" : "테스트 공지를 수정합니다.",
