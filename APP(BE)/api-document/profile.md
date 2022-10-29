@@ -1,4 +1,22 @@
 # /profile
+
+## 10월 29일 기준 사용되지 않은 라우터이므로 deprecated
+
+<br>
+<br><br>
+<br><br><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+  
 ## /profile/ [GET] 제한 없음 
 ### 모든 사용자 정보 요청 라우터입니다.
 
