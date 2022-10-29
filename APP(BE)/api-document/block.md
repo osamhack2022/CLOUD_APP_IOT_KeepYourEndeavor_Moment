@@ -5,7 +5,7 @@
 등급은 **`PASS/FAIL`** **`특/1급/2급/3급`** 로 통일합니다.
 #### JSON으로 요청 해주세요
 ```json
-curl --location --request POST 'https://api-server.run.goorm.io/block/push' \ 
+curl --location --request POST 'https://api.ky2chain.com/block/push' \ 
 
 {
 	"user" : "21-11112222",
