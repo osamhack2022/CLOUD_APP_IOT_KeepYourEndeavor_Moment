@@ -11,7 +11,7 @@
 
 #### JSON으로 요청 해주세요
 ```json
-curl --location --request POST 'https://api-server.run.goorm.io/issue/regist' \ 
+curl --location --request POST 'https://api.ky2chain.com/issue/regist' \ 
 
 {
 	"type" : "측정시험",
@@ -60,7 +60,7 @@ curl --location --request POST 'https://api-server.run.goorm.io/issue/regist' \
 ### 모든 이슈를 가져오는 라우터입니다.
 #### 이 곳으로 요청을 보내주세요 
 ```json
-curl --location --request GET 'https://api-server.run.goorm.io/issue/'
+curl --location --request GET 'https://api.ky2chain.com/issue/'
 ```
 ---
 #### 응답 내용
@@ -115,7 +115,7 @@ curl --location --request GET 'https://api-server.run.goorm.io/issue/'
 
 #### 이 곳으로 요청을 보내주세요 
 ```json
-curl --location --request GET 'https://api-server.run.goorm.io/issue/:issueId'
+curl --location --request GET 'https://api.ky2chain.com/issue/:issueId'
 ```
 ---
 #### 응답 내용
@@ -163,35 +163,5 @@ curl --location --request GET 'https://api-server.run.goorm.io/issue/:issueId'
 
 ## /issue/:issueId/ [DELETE]
 ### 이슈 삭제 라우터입니다.
-#### 이 곳으로 요청을 보내주세요 
-```json
-curl --location --request POST 'https://api-server.run.goorm.io/issue/:issueId/delete'
-```
----
 
-#### 응답 내용
-
-##### 성공시 status : 200
-
-```json
-{
-    "message": "이슈 삭제가 완료됐습니다."
-}
-```
----
-##### 존재하지 않는 이슈 넘버 적용 시 status : 406
-
-```json
-{
-    "error": "Not Acceptable",
-    "message": "존재하지 않는 이슈 넘버입니다."
-}
-```
----
-##### 실패시 status : 500
-```json
-{
-    "error": "Internal Server Error",
-    "message": "예기치 못한 에러가 발생했습니다."
-}
-```
+블록체인 연동 이슈로 deprecated
