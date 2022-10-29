@@ -4,7 +4,7 @@
 
 ### 이곳에 요청 해주세요
 ```bash
-curl --location --request GET 'https://api-server.run.goorm.io/profile/' \
+curl --location --request GET 'https://api.ky2chain.com/profile/' \
 ```
 #### 응답 내용
 
@@ -42,7 +42,7 @@ curl --location --request GET 'https://api-server.run.goorm.io/profile/' \
 
 #### 이곳에 요청 해주세요
 ```bash
-curl --location --request GET 'https://api-server.run.goorm.io/profile/:userId' \
+curl --location --request GET 'https://api.ky2chain.com/profile/:userId' \
 ```
 #### 응답 내용
 
@@ -88,6 +88,8 @@ curl --location --request GET 'https://api-server.run.goorm.io/profile/:userId' 
 ```
 
 ## /profile/edit [POST] 제한 없음
+## 10월 1일 부 사용하지 않으므로 deprecated
+
 ### 사용자 정보 수정 라우터입니다.
 
 #### JSON으로 요청 해주세요
@@ -148,6 +150,8 @@ curl --location --request POST 'https://api-server.run.goorm.io/profile/edit' \
 ```
 
 ## /profile/ [DELETE] 제한 없음
+## 10월 1일 부 사용하지 않으므로 deprecated
+
 ### 회원탈퇴 라우터입니다.
 token을 이용해 회원 탈퇴를 진행하기 때문에 사용자가 잘못 입력한 데이터에 의해 에러가 발생하지 않습니다.
 #### body에 넣어주세요 
