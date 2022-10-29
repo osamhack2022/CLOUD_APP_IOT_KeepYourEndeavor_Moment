@@ -80,7 +80,7 @@ const Main = () => {
         return (
             <Table.Row key={id}>
                 <Table.Cell>{id}</Table.Cell>
-                <Table.Cell>{moment(new Date(generated_time*1000)).format('YYYY-MM-DD hh:mm:ss')}</Table.Cell>
+                <Table.Cell>{moment(parseInt(generated_time)).format('YYYY-MM-DD hh:mm:ss')}</Table.Cell>
                 <Table.Cell>{event_id}</Table.Cell>
                 <Table.Cell>{JSON.stringify(data)}</Table.Cell>
             </Table.Row>

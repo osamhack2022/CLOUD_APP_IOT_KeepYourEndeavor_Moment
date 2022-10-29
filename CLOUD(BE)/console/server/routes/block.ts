@@ -8,6 +8,7 @@ const router: Router = Router();
 router.post('/', async(req: any, res) => {
     try {
         const data = req.body.data;
+        console.log(data);
         if (!data) throw Error('Invalid block data.');
         await req.sdk.sendNewBlock(data);
         return res.json(true);

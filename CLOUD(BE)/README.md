@@ -1,6 +1,6 @@
  <p  align="center">
 <a  href="https://github.com/osamhack2022/CLOUD_WEB_IOT_KeepYourEndeavor_Moment"  target="_blank"  rel="noopener noreferrer">
-<img src='https://github.com/osamhack2022/CLOUD_WEB_IOT_KeepYourEndeavor_Moment/raw/CLOUD/images/logo.png'/>
+<img src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/logo.png?raw=true'/>
 </a>
 </p>
 <h1  align="center">KY2 Chain</h1>
@@ -27,13 +27,8 @@
 |Docker|20.10.14|
 
 프로젝트 실행방법은 `npm` 과 `docker` 두 가지 방식이 있습니다.
-### 1. 도커 실행 방식
-[KY2 도커 이미지](https://hub.docker.com/) 를 빌드해서 자동으로 개발환경을 세팅한 후 피어로 호스팅 해줍니다.
-```
-$ docker run --name peer001 \
--p 8000:8000 \
-```
-### 2. NPM 방식
+
+### 노드 실행 방법
 [NPM 저장소](https://www.npmjs.com/) 에서 `KY2 Chain`을 다운 받습니다.
 ```
 $ npm install ky2
@@ -42,23 +37,36 @@ $ npm install ky2
 ```
 $ npm start
 ```
+
+### 카프카 실행
+기본적으로 [카프카 Channel 서버가](http://kafka.ky2chain.com) 실행중이지만
+만약 Ky2 서비스 이외에 다른 목적으로 사용하려면 `docker-compsoe/kafka.yaml` 을 실행시켜서 카프카 서버를 구동시켜줍니다.
+
+```
+$ cd docker-compose
+```
+```
+$ docker-compose -f kafka.yaml -f network.yaml up
+```
+
 ## REST API ( Channel )
+채널은 일반 피어 노드와 달리 데이터베이스를 가지지 않고 피어노드들을 관리하는 역할을 수행합니다. 
 ### Create Peer
-피어를 생성합니다. 
+블록체인 피어 노드를 생성합니다. 
 **Request**
 `POST` `/v1/peer/`
 ```json
 {
 	"id": "userID",
 	"organization": "0사단 0중대 0소대",
-	"authentication": "" // 생체인증 정보
+	"password": ""
 }
 ```
 **Response** 
 `200`
 ```json
 {
-	"url": "http://peer1.jerrykang.com" // 생성된 노드의 주소
+	"url": "http://peer1.ky2chain.com" // 생성된 노드의 주소
 }
 ```
 ### Start Peer
@@ -67,34 +75,32 @@ $ npm start
 `POST` `/v1/peer/start`
 ```json
 {
-	"id": "userID",
+	"id": "peer1"
+	"password": "",
 }
 ```
 **Response** 
 `200`
 ```json
 {
-	"url": "http://peer1.jerrykang.com" // 시작된 노드의 주소
+	"url": "http://peer1.ky2chain.com" // 시작된 노드의 주소
 }
 ```
 
-### Start Peer
-피어노드를 종료합니다.
+### Delete Peer
+노드를 삭제합니다.
 **Request**
-`POST` `/v1/peer/stop`
-```json
-{
-	"id": "userID",
-}
-```
+`DELETE` `/v1/peer/:id`
 **Response** 
 `200`
 ```json
 {
-	"url": "http://peer1.jerrykang.com" // 종료된 노드의 주소
+	"meesage" : "clearly delete node!!"
 }
 ```
 ## REST API ( Peer )
+피어노드는 Docker 를 통해서 실행되며 카프카와 연결되어 블록을 다른 노드들과 주고받습니다. 데이터베이스는 Couchbase 에 저장됩니다.
+
 ### Get Blocks
 블록을 조회할 때 사용하는 API 입니다.
 

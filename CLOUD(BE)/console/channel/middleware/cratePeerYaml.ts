@@ -18,7 +18,7 @@ export default function (
             volumes: ['../../../:/app'],
             environment: [
               `DATABASE_USERNAME=${username}`,
-              `DATABASE_PASSWORD=${dbpassword}`,
+              `DATABASE_PASSWORD=${dbpassword.replace('\\', '').trim()}`,
               `DATABASE_HOST=couchbase://${dbHost}`,
               `DATABASE_BUKET=${bucket}`,
               'KAFKA_HOST=172.24.255.31:29092',
