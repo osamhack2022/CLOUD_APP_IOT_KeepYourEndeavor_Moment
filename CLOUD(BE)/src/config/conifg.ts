@@ -8,7 +8,7 @@ require("dotenv-safe").config({
 
 const config = {
   env: process.env.NODE_ENV,
-  port: 5000,
+  port: process.env.PORT,
   id: process.env.PEERID,
   role: process.env.ROLE,
   console: false,

@@ -15,7 +15,7 @@ export default class {
                 const data = await BlockModel.find();
                 return data;
             }
-            const query = new Query({}, 'test-buket t')
+            const query = new Query({}, 'test-bucket t')
                             .select('t.*')
                             .where({ '`data`.`user`': user })
                             .offset(offset ?? 0)
@@ -38,8 +38,9 @@ export default class {
     async addBlock(block: Block){
 
         const myBlock = new BlockModel(block);
-
+        console.log(block);
         const runAsync = async () => {
+            console.log('saving...');
             await myBlock.save();
             console.log(`SUCCESS: user ${block.header.index} added!`);
         }
