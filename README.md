@@ -17,7 +17,7 @@
 </p>
  
 <p align="center">
- 데모ID : supervisor | 데모 PW : 1q2w3e4r**
+<b>데모ID : supervisor | 데모 PW : 1q2w3e4r</b>
 </p>
 <p align="center">
 	<a href="https://github.com/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment/search?l=TSX&type=code"><img alt="GitHub language count" src="https://img.shields.io/github/languages/count/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment"></a>
@@ -92,7 +92,7 @@ KY2 서비스는 **측정, 기록, 열람까지의 과정을 통합** 하고 블
 
 - 평가 결과는 사용자가 원할 때 앱을 통해서 언제든지 열람할 수 있습니다
 
-## 📚 프로젝트 사용법
+## 📚 프로젝트 시연
 
 ### 관리자 WEB 시연
 <p  align="center">
