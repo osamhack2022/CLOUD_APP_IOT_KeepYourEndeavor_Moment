@@ -1,28 +1,10 @@
 # /profile
-
-## 10월 29일 기준 사용되지 않은 라우터이므로 deprecated
-
-<br>
-<br><br>
-<br><br><br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
-  
 ## /profile/ [GET] 제한 없음 
 ### 모든 사용자 정보 요청 라우터입니다.
 
 ### 이곳에 요청 해주세요
 ```bash
-curl --location --request GET 'https://api-server.run.goorm.io/profile/' \
+curl --location --request GET 'https://api.ky2chain.com/profile/' \
 ```
 #### 응답 내용
 
@@ -60,7 +42,7 @@ curl --location --request GET 'https://api-server.run.goorm.io/profile/' \
 
 #### 이곳에 요청 해주세요
 ```bash
-curl --location --request GET 'https://api-server.run.goorm.io/profile/:userId' \
+curl --location --request GET 'https://api.ky2chain.com/profile/:userId' \
 ```
 #### 응답 내용
 
@@ -104,13 +86,15 @@ curl --location --request GET 'https://api-server.run.goorm.io/profile/:userId' 
 	"message": "예상치 못한 에러가 발생했습니다."
 }
 ```
+## 이하 eidt, delete 라우터 미구현으로 인한 deprecated
+
 
 ## /profile/edit [POST] 제한 없음
 ### 사용자 정보 수정 라우터입니다.
 
 #### JSON으로 요청 해주세요
 ```bash
-curl --location --request POST 'https://api-server.run.goorm.io/profile/edit' \ 
+curl --location --request POST 'https://api.ky2chain.com/profile/edit' \ 
 
 {
 "pwd" : "",
@@ -170,7 +154,7 @@ curl --location --request POST 'https://api-server.run.goorm.io/profile/edit' \
 token을 이용해 회원 탈퇴를 진행하기 때문에 사용자가 잘못 입력한 데이터에 의해 에러가 발생하지 않습니다.
 #### body에 넣어주세요 
 ```bash
-curl --location --request POST 'https://api-server.run.goorm.io/profile/delete'
+curl --location --request POST 'https://api.ky2chain.com/profile/delete'
 ```
 ---
 #### 응답 내용
