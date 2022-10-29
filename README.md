@@ -12,12 +12,12 @@
 <a href="https://moment-ky2.gitbook.io/keep_your_endeavor/"><img  width = "200px" height = "50px" src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/gitbook.PNG'/>  </a>
 <a href="https://oasm2022.notion.site/75e1bb51ab8d43ddafd41082465e64d3"><img width = "200px" height = "50px" src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/notion.PNG'/>
 </a>
-<a href="admin.ky2chain.com"><img width = "200px" height = "50px" src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/demo.PNG'/>
+<a href="http://admin.ky2chain.com"><img width = "200px" height = "50px" src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/demo.PNG'/>
 </a>
 </p>
  
 <p align="center">
-<b>데모ID : supervisor | 데모 PW : 1q2w3e4r</b>
+ 데모ID : supervisor | 데모 PW : 1q2w3e4r**
 </p>
 <p align="center">
 	<a href="https://github.com/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment/search?l=TSX&type=code"><img alt="GitHub language count" src="https://img.shields.io/github/languages/count/osamhack2022-v2/CLOUD_APP_IOT_KeepYourEndeavor_Moment"></a>
@@ -107,6 +107,11 @@ KY2 서비스는 **측정, 기록, 열람까지의 과정을 통합** 하고 블
 ### BlockChain 결과 시연
 <p  align="center">
 <img  width="500px"  height = "350px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/result_gif.gif'/>
+</p>
+
+### IoT 기기 시연
+<p  align="center">
+<img  width="500px"  height = "350px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/iot_result.gif'/>
 </p>
 
 ## 🔗KY2 체인의 장점
@@ -237,7 +242,6 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 
 결과에 대해서 블루투스 모듈로 사용자의 APP을 Gateway로 사용해 바로 API-SERVER를 통해 결과가 BlockChain으로 온체인됩니다.
 
-IOT 구성은 [해당문서](./IOT(FE)/readme.md)를 참고해주세요
   
   
 
@@ -334,13 +338,9 @@ $ npm start
 
 ### 🖇 `CLOUD - BlockChain(BE)`
 
-추가적인 정보는 [서버 문서](./APP(BE)/readme.md)를 참고해주세요!
-
 AWS 상에서 실행되고 있기 때문에 Client로 접근만 하면 됩니다.
 
 ### 🚏 `Server - APP(BE)`
-
-추가적인 정보는 [블록체인 문서](./CLOUD(BE)/README.md)를 참고해주세요!
 
 AWS 상에서 실행되고 있기 때문에 Client로 접근만 하면 됩니다.
 
