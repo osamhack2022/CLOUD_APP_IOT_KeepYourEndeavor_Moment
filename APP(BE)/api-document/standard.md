@@ -13,7 +13,7 @@
 
 #### 여기에 요청해 주세요
 ```bash
-curl --location --request GET 'https://api-server.run.goorm.io/standard/'
+curl --location --request GET 'https://api.ky2chain.com/standard/'
 ```
 
 ---
@@ -136,6 +136,14 @@ curl --location --request GET 'https://api-server.run.goorm.io/standard/'
 ```
 
 ## /standard/post [POST] 개설자 가능
+
+## 10월 10일 기준 issue/post/ 라우터와 통합으로 deprecated
+
+<br>
+<br>
+<br>
+<br>
+
 ### 기준생성 라우터입니다.
 `개수/점수 측정이 필요한 시험의 경우`  
 ```json
@@ -168,7 +176,7 @@ curl --location --request GET 'https://api-server.run.goorm.io/standard/'
 
 #### JSON 으로 요청 해주세요
 ```bash
-curl --location --request POST 'https://api-server.run.goorm.io/standard/post' \ 
+curl --location --request POST 'https://api.ky2chain.com/standard/post' \ 
 
 {
 	"type" : "강연",
@@ -225,7 +233,7 @@ curl --location --request POST 'https://api-server.run.goorm.io/standard/post' \
 / 에서 가져온 기준 정보로 기준을 삭제할 수 있습니다.
 #### JSON으로 요청 해주세요
 ```bash
-curl --location --request POST 'https://api-server.run.goorm.io/standard/delete' \
+curl --location --request POST 'https://api.ky2chain.com/standard/delete' \
 
 {
 	"collection" : "강연",
