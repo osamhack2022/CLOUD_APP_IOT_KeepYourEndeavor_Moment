@@ -4,9 +4,7 @@
   
 
 <p  align="center">
-
 <img  width="900px"  height = "200px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/banner.png'/>
-
 </p>
 
  <p  align="center"><b>블록체인 기반 장병 자격 인증 시스템</b></p>
@@ -26,6 +24,10 @@
 
 이렇게 되면 특정 인물이나 세력이 임의로 자료를 수정하거나 누락시키는 행위는 불가능해집니다.
   
+<p  align="center">
+<img  width="500px"  height = "350px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/intro.gif'/>
+</p>
+ 
 
 ## 📄 개요
 장병 A와 장병 B는 이번 달 자격 인증 평가를 봐야 진급할 수 있습니다.  
@@ -71,7 +73,22 @@ KY2 서비스는 **측정, 기록, 열람까지의 과정을 통합** 하고 블
 
 - 평가 결과는 사용자가 원할 때 앱을 통해서 언제든지 열람할 수 있습니다
 
-  
+## 📚 프로젝트 사용법
+
+### 관리자 WEB 시연
+<p  align="center">
+<img  width="500px"  height = "350px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/superviser_web_gif.gif'/>
+</p>
+ 
+### 사용자 APP 시연
+<p  align="center">
+<img  width="500px"  height = "350px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/user_app_gif.gif'/>
+</p>
+
+### BlockChain 결과 시연
+<p  align="center">
+<img  width="500px"  height = "350px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/result_gif.gif'/>
+</p>
 
 ## 🔗KY2 체인의 장점
 
@@ -147,7 +164,7 @@ KYE Client ( FE - APP/WEB ) 에서 가입한 아이디를 그대로 사용 가�
 
 - 모든 peer의 데이터들을 같이 볼 수 있으며 이 데이터들은 원장일치알고리즘에 의해 동기화됩니다.
 
-  
+ ---
 
 ### 🚏 `Server - APP(BE)`
 
@@ -159,7 +176,7 @@ DB의 CRUD를 위해 서버 관리자가 직접 에디터를 열어야 하는 �
 
 DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority를 부여하는 token 인증 방식을 택했습니다.
 
-  
+---  
 
 ### 📱 `APP(FE)`
 
@@ -177,7 +194,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 
 또한 홈 화면에서 자신의 자격증들을 한눈에 확인할 수 있습니다.
 
-  
+---
 
 ### 💻 `CLOUD(FE)`
 
@@ -187,7 +204,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 
 공지에 들어가면 해당 공지에 신청한 인원들에 대해 점수를 기입할 수 있고, 한 번 기입한 인원은 데이터가 바로 온체인 되기 때문에 수정할 수 없습니다.
 
-  
+---
 
 ### 🕹 `IOT(FE)`
 
@@ -329,20 +346,7 @@ cd CLOUDE\(FE\)
 npm install
 npm start
 ```
-
-  
-
-## 📚 프로젝트 사용법
-
-  
-
-- APP (gif)
-
-- WEB (gif)
-
-- WEB -BC (gif)
-
-- IOT - (gif)
+**demo url** : **`admin.ky2chain.com`**
 
 ## 👪 팀 정보
 - 반영환 (lopahn2@gmail.com), Github Id: lopahn2 (Server, Database, IoT)
@@ -356,6 +360,6 @@ npm start
 ## ⚖️ 저작권 및 사용권 정보
 
 
-* [GNU]()
+* [GNU](https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/LICENSE)
 
 This project is licensed under the terms of the GNU license.
