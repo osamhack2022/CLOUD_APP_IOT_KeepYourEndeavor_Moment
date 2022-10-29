@@ -5,7 +5,7 @@
 
 #### 여기로 요청해 주세요
 ```bash
-curl --location --request GET 'https://api-server.run.goorm.io/home/?user=userId'
+curl --location --request GET 'https://api.ky2chain.com/home/?user=userId'
 ```
 
 ---
