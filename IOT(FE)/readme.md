@@ -1,4 +1,5 @@
 
+
 # IoT
 
 ### 하드웨어
@@ -103,7 +104,10 @@
 <img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/beforereset.jpg'/> <img  width="300px"  height = "300px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/IOT(FE)/IOT(FE)/img/resultofresetbtn.jpg'/> 
 </p>
 
-
+### IoT 기기 시연
+<p  align="center">
+<img  width="500px"  height = "350px"  src='https://github.com/osamhack2022/CLOUD_APP_IOT_KeepYourEndeavor_Moment/blob/main/images/iot_result.gif'/>
+</p>
 
 
 
