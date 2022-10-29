@@ -237,6 +237,7 @@ DB 접근에 권한을 나누어 관리하기 위해 각 user들에게 authority
 
 결과에 대해서 블루투스 모듈로 사용자의 APP을 Gateway로 사용해 바로 API-SERVER를 통해 결과가 BlockChain으로 온체인됩니다.
 
+IOT 구성은 [해당문서](./IOT(FE)/readme.md)를 참고해주세요
   
   
 
