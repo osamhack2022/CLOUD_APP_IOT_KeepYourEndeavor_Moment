@@ -333,9 +333,13 @@ $ npm start
 
 ### 🖇 `CLOUD - BlockChain(BE)`
 
+추가적인 정보는 [서버 문서](./APP(BE)/README.md)를 참고해주세요!
+
 AWS 상에서 실행되고 있기 때문에 Client로 접근만 하면 됩니다.
 
 ### 🚏 `Server - APP(BE)`
+
+추가적인 정보는 [블록체인 문서](./CLOUD(BE)/README.md)를 참고해주세요!
 
 AWS 상에서 실행되고 있기 때문에 Client로 접근만 하면 됩니다.
 
