@@ -21,7 +21,7 @@ id와 pwd는 필수입니다. 프론트 단에서 하이라이트해주세요.
 
 ```bash
 
-curl --location --request POST 'https://api-server.run.goorm.io/auth/signup/'  \
+curl --location --request POST 'https://api.ky2chain.com/auth/signup/'  \
   
 {
 	"id": "supervisor",
@@ -110,7 +110,7 @@ peer 컨테이너 실행 기능도 담당합니다.
 
 ```bash
 
-curl --location --request POST 'https://api-server.run.goorm.io/auth/signin'  \
+curl --location --request POST 'https://api.ky2chain.com/auth/signin'  \
 
   
 
@@ -210,7 +210,7 @@ curl --location --request POST 'https://api-server.run.goorm.io/auth/signin'  \
 
 ```bash
 
-curl --location --request POST 'https://api-server.run.goorm.io/auth/logout'
+curl --location --request POST 'https://api.ky2chain.com/auth/logout'
 
 ```
 
